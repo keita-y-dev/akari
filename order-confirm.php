@@ -158,13 +158,14 @@ if ($deliveryDate !== '') {
 
   <main>
 
-    <div class="breadcrumb">
-      <a href="index.php">TOP</a>
-      <span>&gt;</span>
-      <a href="cart.php">カート</a>
-      <span>&gt;</span>
-      <span>ご注文内容確認</span>
-    </div>
+    <?php
+      $breadcrumbs = [
+        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'カート', 'url' => 'cart.php'],
+        ['label' => 'ご注文内容確認', 'url' => null],
+      ];
+      include __DIR__ . '/includes/breadcrumb.php';
+    ?>
 
     <section class="page-heading">
       <p class="page-heading__en">ORDER CONFIRMATION</p>

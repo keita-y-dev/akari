@@ -26,12 +26,13 @@
 
   <main>
 
-    <!-- breadcrumb -->
-    <div class="breadcrumb">
-      <a href="index.php">TOP</a>
-      <span>&gt;</span>
-      <span>ABOUT</span>
-    </div>
+    <?php
+      $breadcrumbs = [
+        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'ABOUT', 'url' => null],
+      ];
+      include __DIR__ . '/includes/breadcrumb.php';
+    ?>
 
     <!-- page title -->
     <section class="about-heading">

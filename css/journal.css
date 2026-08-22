@@ -43,25 +43,6 @@ img {
    header
 ============================== */
 
-.breadcrumb {
-  display: flex;
-  gap: 5px;
-  padding: 3px 20px 0;
-  font-family: Arial, sans-serif;
-  font-size: 10px;
-  line-height: 1.4;
-}
-
-.breadcrumb a {
-  color: #333;
-  text-decoration: none;
-}
-
-.breadcrumb span {
-  color: #333;
-}
-
-
 /* ==============================
    heading
 ============================== */

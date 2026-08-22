@@ -43,23 +43,6 @@ textarea {
    HEADER
 ========================= */
 
-.breadcrumb {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  padding: 25px 43px 0;
-  color: #333;
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  line-height: 1.4;
-}
-
-.breadcrumb a {
-  color: #333;
-  text-decoration: none;
-}
-
-
 /* =========================
    HEADING
 ========================= */
@@ -767,11 +750,6 @@ a:focus-visible {
     padding-left: 24px;
   }
 
-  .breadcrumb {
-    padding-right: 24px;
-    padding-left: 24px;
-  }
-
   .form-row {
     grid-template-columns: 1fr;
   }
@@ -795,11 +773,6 @@ a:focus-visible {
 @media (max-width: 380px) {
 
   .checkout {
-    padding-right: 18px;
-    padding-left: 18px;
-  }
-
-  .breadcrumb {
     padding-right: 18px;
     padding-left: 18px;
   }

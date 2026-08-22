@@ -318,11 +318,13 @@ $recommendProducts = $stmt->fetchAll();
 
   <main>
 
-    <div class="breadcrumb">
-      <a href="index.php">TOP</a>
-      <span>&gt;</span>
-      <span>カート</span>
-    </div>
+    <?php
+      $breadcrumbs = [
+        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'カート', 'url' => null],
+      ];
+      include __DIR__ . '/includes/breadcrumb.php';
+    ?>
 
     <section class="cart-heading">
       <p class="cart-heading__en">SHOPPING CART</p>

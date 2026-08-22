@@ -67,11 +67,13 @@ $categoryMap = [
 
   <main>
 
-    <div class="breadcrumb">
-      <a href="index.php">TOP</a>
-      <span>&gt;</span>
-      <span>商品一覧</span>
-    </div>
+    <?php
+      $breadcrumbs = [
+        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => '商品一覧', 'url' => null],
+      ];
+      include __DIR__ . '/includes/breadcrumb.php';
+    ?>
 
     <section class="products-heading">
 

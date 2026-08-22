@@ -310,29 +310,14 @@ function errorMessage(array $errors, string $key): string
 
   <main>
 
-    <!-- =========================
-         BREADCRUMB
-    ========================== -->
-
-    <div class="breadcrumb">
-
-      <a href="index.php">
-        TOP
-      </a>
-
-      <span>&gt;</span>
-
-      <a href="cart.php">
-        カート
-      </a>
-
-      <span>&gt;</span>
-
-      <span>
-        ご購入手続き
-      </span>
-
-    </div>
+    <?php
+      $breadcrumbs = [
+        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'カート', 'url' => 'cart.php'],
+        ['label' => 'ご購入手続き', 'url' => null],
+      ];
+      include __DIR__ . '/includes/breadcrumb.php';
+    ?>
 
 
     <!-- =========================

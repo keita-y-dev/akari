@@ -127,23 +127,13 @@ $paymentLabel =
 
   <main>
 
-    <!-- =========================
-         BREADCRUMB
-    ========================== -->
-
-    <div class="breadcrumb">
-
-      <a href="index.php">
-        TOP
-      </a>
-
-      <span>&gt;</span>
-
-      <span>
-        ご注文完了
-      </span>
-
-    </div>
+    <?php
+      $breadcrumbs = [
+        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'ご注文完了', 'url' => null],
+      ];
+      include __DIR__ . '/includes/breadcrumb.php';
+    ?>
 
 
     <!-- =========================

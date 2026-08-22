@@ -200,35 +200,14 @@ $categoryLabel =
 
   <main>
 
-    <!-- breadcrumb -->
-
-    <div class="breadcrumb">
-
-      <a href="index.php">
-        TOP
-      </a>
-
-      <span>&gt;</span>
-
-      <a href="products.php">
-        <?= htmlspecialchars(
-            $categoryLabel,
-            ENT_QUOTES,
-            'UTF-8'
-        ) ?>
-      </a>
-
-      <span>&gt;</span>
-
-      <span>
-        <?= htmlspecialchars(
-            $product['name'],
-            ENT_QUOTES,
-            'UTF-8'
-        ) ?>
-      </span>
-
-    </div>
+    <?php
+      $breadcrumbs = [
+        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => $categoryLabel, 'url' => 'products.php'],
+        ['label' => $product['name'], 'url' => null],
+      ];
+      include __DIR__ . '/includes/breadcrumb.php';
+    ?>
 
 
     <!-- product -->

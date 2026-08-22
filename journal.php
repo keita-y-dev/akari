@@ -73,12 +73,13 @@ $sceneProducts = [
 
   <main>
 
-    <!-- breadcrumb -->
-    <div class="breadcrumb">
-      <a href="index.php">TOP</a>
-      <span>&gt;</span>
-      <span>特集</span>
-    </div>
+    <?php
+      $breadcrumbs = [
+        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => '特集', 'url' => null],
+      ];
+      include __DIR__ . '/includes/breadcrumb.php';
+    ?>
 
 
     <!-- page heading -->

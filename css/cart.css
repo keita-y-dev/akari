@@ -39,22 +39,6 @@ input {
    header
 ============================== */
 
-.breadcrumb {
-  display: flex;
-  gap: 5px;
-  padding: 25px 43px 0;
-  color: #333;
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  line-height: 1.4;
-}
-
-.breadcrumb a {
-  color: #333;
-  text-decoration: none;
-}
-
-
 /* ==============================
    heading
 ============================== */
