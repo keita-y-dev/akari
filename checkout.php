@@ -94,6 +94,44 @@ $shipping = $subtotal >= FREE_SHIPPING_THRESHOLD
 
 $total = $subtotal + $shipping;
 
+$prefectures = [
+    '北海道',
+    '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
+    '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県',
+    '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県',
+    '岐阜県', '静岡県', '愛知県', '三重県',
+    '滋賀県', '京都府', '大阪府', '兵庫県', '奈良県', '和歌山県',
+    '鳥取県', '島根県', '岡山県', '広島県', '山口県',
+    '徳島県', '香川県', '愛媛県', '高知県',
+    '福岡県', '佐賀県', '長崎県', '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県',
+];
+
+$deliveryTimeOptions = [
+    '午前中' => '午前中',
+    '14-16' => '14:00〜16:00',
+    '16-18' => '16:00〜18:00',
+    '18-20' => '18:00〜20:00',
+];
+
+$weekdayLabels = ['日', '月', '火', '水', '木', '金', '土'];
+
+/*
+ * お届け希望日
+ * 「3営業日以内に発送」を考慮し、3日後から7日分を表示。
+ * 毎回現在日から生成するため、過去日は候補に入りません。
+ */
+$deliveryDateOptions = [];
+$today = new DateTimeImmutable('today');
+
+for ($i = 3; $i <= 9; $i++) {
+    $date = $today->modify("+{$i} days");
+    $value = $date->format('Y-m-d');
+    $weekday = $weekdayLabels[(int)$date->format('w')];
+
+    $deliveryDateOptions[$value] =
+        $date->format('n月j日') . "（{$weekday}）";
+}
+
 if (empty($_SESSION['checkout_csrf_token'])) {
     $_SESSION['checkout_csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -166,12 +204,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['postal'] = '郵便番号は7桁で入力してください。';
     }
 
-    if (!in_array($form['prefecture'], ['北海道','東京都','大阪府','福岡県','鹿児島県'], true)) {
+    if (!in_array($form['prefecture'], $prefectures, true)) {
         $errors['prefecture'] = '都道府県を選択してください。';
+    }
+
+    if (!in_array($form['delivery'], ['normal'], true)) {
+        $errors['delivery'] = '配送方法が正しくありません。';
+    }
+
+    if (
+        $form['deliveryDate'] !== '' &&
+        !array_key_exists($form['deliveryDate'], $deliveryDateOptions)
+    ) {
+        $errors['deliveryDate'] = 'お届け希望日を選び直してください。';
+    }
+
+    if (
+        $form['deliveryTime'] !== '' &&
+        !array_key_exists($form['deliveryTime'], $deliveryTimeOptions)
+    ) {
+        $errors['deliveryTime'] = 'お届け希望時間を選び直してください。';
     }
 
     if (!in_array($form['payment'], ['card', 'cod'], true)) {
         $errors['payment'] = 'お支払い方法が正しくありません。';
+    }
+
+    $maxLengths = [
+        'lastName' => 100,
+        'firstName' => 100,
+        'lastNameKana' => 100,
+        'firstNameKana' => 100,
+        'email' => 255,
+        'phone' => 30,
+        'postal' => 10,
+        'address' => 255,
+        'building' => 255,
+        'note' => 1000,
+    ];
+
+    foreach ($maxLengths as $key => $maxLength) {
+        if (mb_strlen((string)$form[$key]) > $maxLength) {
+            $errors[$key] = '入力文字数が上限を超えています。';
+        }
     }
 
     if (!$form['agreement']) {
@@ -188,6 +263,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 function old(array $form, string $key): string
 {
     return htmlspecialchars((string)($form[$key] ?? ''), ENT_QUOTES, 'UTF-8');
+}
+
+function hasError(array $errors, string $key): bool
+{
+    return isset($errors[$key]);
+}
+
+function errorMessage(array $errors, string $key): string
+{
+    return htmlspecialchars((string)($errors[$key] ?? ''), ENT_QUOTES, 'UTF-8');
 }
 
 ?>
@@ -404,24 +489,36 @@ function old(array $form, string $key): string
 
             <div class="form-field">
 
-              <input
+              <input class="<?= hasError($errors, 'lastName') ? 'form-error' : '' ?>"
                 type="text"
                 name="lastName"
+                autocomplete="family-name"
+                maxlength="100"
                 placeholder="姓"
                 required
                value="<?= old($form, 'lastName') ?>">
+
+              <?php if (hasError($errors, 'lastName')): ?>
+                <p class="error-message"><?= errorMessage($errors, 'lastName') ?></p>
+              <?php endif; ?>
 
             </div>
 
 
             <div class="form-field">
 
-              <input
+              <input class="<?= hasError($errors, 'firstName') ? 'form-error' : '' ?>"
                 type="text"
                 name="firstName"
+                autocomplete="given-name"
+                maxlength="100"
                 placeholder="名"
                 required
                value="<?= old($form, 'firstName') ?>">
+
+              <?php if (hasError($errors, 'firstName')): ?>
+                <p class="error-message"><?= errorMessage($errors, 'firstName') ?></p>
+              <?php endif; ?>
 
             </div>
 
@@ -444,24 +541,36 @@ function old(array $form, string $key): string
 
             <div class="form-field">
 
-              <input
+              <input class="<?= hasError($errors, 'lastNameKana') ? 'form-error' : '' ?>"
                 type="text"
                 name="lastNameKana"
+                maxlength="100"
+                pattern="[ァ-ヶー　 ]+"
                 placeholder="セイ"
                 required
                value="<?= old($form, 'lastNameKana') ?>">
+
+              <?php if (hasError($errors, 'lastNameKana')): ?>
+                <p class="error-message"><?= errorMessage($errors, 'lastNameKana') ?></p>
+              <?php endif; ?>
 
             </div>
 
 
             <div class="form-field">
 
-              <input
+              <input class="<?= hasError($errors, 'firstNameKana') ? 'form-error' : '' ?>"
                 type="text"
                 name="firstNameKana"
+                maxlength="100"
+                pattern="[ァ-ヶー　 ]+"
                 placeholder="メイ"
                 required
                value="<?= old($form, 'firstNameKana') ?>">
+
+              <?php if (hasError($errors, 'firstNameKana')): ?>
+                <p class="error-message"><?= errorMessage($errors, 'firstNameKana') ?></p>
+              <?php endif; ?>
 
             </div>
 
@@ -479,13 +588,19 @@ function old(array $form, string $key): string
             <span class="required">必須</span>
           </label>
 
-          <input
+          <input class="<?= hasError($errors, 'email') ? 'form-error' : '' ?>"
             id="email"
             type="email"
             name="email"
+              autocomplete="email"
+              maxlength="255"
             placeholder="example@email.com"
             required
            value="<?= old($form, 'email') ?>">
+
+          <?php if (hasError($errors, 'email')): ?>
+            <p class="error-message"><?= errorMessage($errors, 'email') ?></p>
+          <?php endif; ?>
 
         </div>
 
@@ -499,13 +614,20 @@ function old(array $form, string $key): string
             <span class="required">必須</span>
           </label>
 
-          <input
+          <input class="<?= hasError($errors, 'phone') ? 'form-error' : '' ?>"
             id="phone"
             type="tel"
             name="phone"
+              autocomplete="tel"
+              inputmode="tel"
+              maxlength="14"
             placeholder="09012345678"
             required
            value="<?= old($form, 'phone') ?>">
+
+          <?php if (hasError($errors, 'phone')): ?>
+            <p class="error-message"><?= errorMessage($errors, 'phone') ?></p>
+          <?php endif; ?>
 
         </div>
 
@@ -535,14 +657,21 @@ function old(array $form, string $key): string
 
           <div class="postal-row">
 
-            <input
+            <input class="<?= hasError($errors, 'postal') ? 'form-error' : '' ?>"
               id="postal"
               type="text"
               name="postal"
+                autocomplete="postal-code"
+                inputmode="numeric"
+                pattern="\d{3}-?\d{4}"
               placeholder="123-4567"
               maxlength="8"
               required
              value="<?= old($form, 'postal') ?>">
+
+            <?php if (hasError($errors, 'postal')): ?>
+              <p class="error-message postal-error"><?= errorMessage($errors, 'postal') ?></p>
+            <?php endif; ?>
 
             <button
               class="postal-button"
@@ -566,9 +695,10 @@ function old(array $form, string $key): string
             <span class="required">必須</span>
           </label>
 
-          <select
+          <select class="<?= hasError($errors, 'prefecture') ? 'form-error' : '' ?>"
             id="prefecture"
             name="prefecture"
+            autocomplete="address-level1"
             required
           >
 
@@ -576,27 +706,19 @@ function old(array $form, string $key): string
               選択してください
             </option>
 
-            <option value="北海道" <?= (($form['prefecture'] ?? '') === '北海道') ? 'selected' : '' ?>>
-              北海道
-            </option>
-
-            <option value="東京都" <?= (($form['prefecture'] ?? '') === '東京都') ? 'selected' : '' ?>>
-              東京都
-            </option>
-
-            <option value="大阪府" <?= (($form['prefecture'] ?? '') === '大阪府') ? 'selected' : '' ?>>
-              大阪府
-            </option>
-
-            <option value="福岡県" <?= (($form['prefecture'] ?? '') === '福岡県') ? 'selected' : '' ?>>
-              福岡県
-            </option>
-
-            <option value="鹿児島県" <?= (($form['prefecture'] ?? '') === '鹿児島県') ? 'selected' : '' ?>>
-              鹿児島県
-            </option>
+            <?php foreach ($prefectures as $prefecture): ?>
+              <option
+                value="<?= htmlspecialchars($prefecture, ENT_QUOTES, 'UTF-8') ?>"
+                <?= (($form['prefecture'] ?? '') === $prefecture) ? 'selected' : '' ?>
+              >
+                <?= htmlspecialchars($prefecture, ENT_QUOTES, 'UTF-8') ?>
+              </option>
+            <?php endforeach; ?>
 
           </select>
+          <?php if (hasError($errors, 'prefecture')): ?>
+            <p class="error-message"><?= errorMessage($errors, 'prefecture') ?></p>
+          <?php endif; ?>
 
         </div>
 
@@ -610,12 +732,18 @@ function old(array $form, string $key): string
             <span class="required">必須</span>
           </label>
 
-          <input
+          <input class="<?= hasError($errors, 'address') ? 'form-error' : '' ?>"
             id="address"
             type="text"
             name="address"
+              autocomplete="address-level2"
+              maxlength="255"
             required
            value="<?= old($form, 'address') ?>">
+
+          <?php if (hasError($errors, 'address')): ?>
+            <p class="error-message"><?= errorMessage($errors, 'address') ?></p>
+          <?php endif; ?>
 
         </div>
 
@@ -633,6 +761,8 @@ function old(array $form, string $key): string
             id="building"
             type="text"
             name="building"
+            autocomplete="address-line2"
+            maxlength="255"
            value="<?= old($form, 'building') ?>">
 
         </div>
@@ -695,7 +825,7 @@ function old(array $form, string $key): string
             <span class="optional">任意</span>
           </label>
 
-          <select
+          <select class="<?= hasError($errors, 'deliveryDate') ? 'form-error' : '' ?>"
             id="deliveryDate"
             name="deliveryDate"
           >
@@ -704,19 +834,19 @@ function old(array $form, string $key): string
               指定なし
             </option>
 
-            <option value="2026-08-22" <?= (($form['deliveryDate'] ?? '') === '2026-08-22') ? 'selected' : '' ?>>
-              8月22日（土）
-            </option>
-
-            <option value="2026-08-23" <?= (($form['deliveryDate'] ?? '') === '2026-08-23') ? 'selected' : '' ?>>
-              8月23日（日）
-            </option>
-
-            <option value="2026-08-24" <?= (($form['deliveryDate'] ?? '') === '2026-08-24') ? 'selected' : '' ?>>
-              8月24日（月）
-            </option>
+            <?php foreach ($deliveryDateOptions as $value => $label): ?>
+              <option
+                value="<?= htmlspecialchars($value, ENT_QUOTES, 'UTF-8') ?>"
+                <?= (($form['deliveryDate'] ?? '') === $value) ? 'selected' : '' ?>
+              >
+                <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
+              </option>
+            <?php endforeach; ?>
 
           </select>
+          <?php if (hasError($errors, 'deliveryDate')): ?>
+            <p class="error-message"><?= errorMessage($errors, 'deliveryDate') ?></p>
+          <?php endif; ?>
 
         </div>
 
@@ -730,7 +860,7 @@ function old(array $form, string $key): string
             <span class="optional">任意</span>
           </label>
 
-          <select
+          <select class="<?= hasError($errors, 'deliveryTime') ? 'form-error' : '' ?>"
             id="deliveryTime"
             name="deliveryTime"
           >
@@ -739,23 +869,19 @@ function old(array $form, string $key): string
               指定なし
             </option>
 
-            <option value="午前中" <?= (($form['deliveryTime'] ?? '') === '午前中') ? 'selected' : '' ?>>
-              午前中
-            </option>
-
-            <option value="14-16" <?= (($form['deliveryTime'] ?? '') === '14-16') ? 'selected' : '' ?>>
-              14:00〜16:00
-            </option>
-
-            <option value="16-18" <?= (($form['deliveryTime'] ?? '') === '16-18') ? 'selected' : '' ?>>
-              16:00〜18:00
-            </option>
-
-            <option value="18-20" <?= (($form['deliveryTime'] ?? '') === '18-20') ? 'selected' : '' ?>>
-              18:00〜20:00
-            </option>
+            <?php foreach ($deliveryTimeOptions as $value => $label): ?>
+              <option
+                value="<?= htmlspecialchars($value, ENT_QUOTES, 'UTF-8') ?>"
+                <?= (($form['deliveryTime'] ?? '') === $value) ? 'selected' : '' ?>
+              >
+                <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
+              </option>
+            <?php endforeach; ?>
 
           </select>
+          <?php if (hasError($errors, 'deliveryTime')): ?>
+            <p class="error-message"><?= errorMessage($errors, 'deliveryTime') ?></p>
+          <?php endif; ?>
 
         </div>
 
@@ -829,6 +955,7 @@ function old(array $form, string $key): string
               type="text"
               inputmode="numeric"
               placeholder="0000 0000 0000"
+              autocomplete="off"
             >
 
           </div>
@@ -901,6 +1028,7 @@ function old(array $form, string $key): string
               id="cardName"
               type="text"
               placeholder="TARO YAMADA"
+              autocomplete="off"
             >
 
           </div>
@@ -924,6 +1052,7 @@ function old(array $form, string $key): string
               inputmode="numeric"
               maxlength="4"
               placeholder="000"
+              autocomplete="off"
             >
 
           </div>
@@ -972,6 +1101,7 @@ function old(array $form, string $key): string
           <textarea
             id="note"
             name="note"
+            maxlength="1000"
             rows="5"
           ><?= old($form, 'note') ?></textarea>
 
@@ -1030,6 +1160,12 @@ function old(array $form, string $key): string
         </span>
 
       </label>
+
+      <?php if (hasError($errors, 'agreement')): ?>
+        <p class="error-message agreement-error">
+          <?= errorMessage($errors, 'agreement') ?>
+        </p>
+      <?php endif; ?>
 
 
       <!-- =========================

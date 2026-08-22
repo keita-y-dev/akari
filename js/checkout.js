@@ -1,221 +1,238 @@
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    /* =========================
-       ELEMENTS
-    ========================== */
+  /* =========================
+     ELEMENTS
+  ========================== */
 
-    const cardForm =
-      document.querySelector(
-        "#cardForm"
-      );
+  const cardForm =
+    document.querySelector("#cardForm");
 
-    const paymentInputs =
-      document.querySelectorAll(
-        'input[name="payment"]'
-      );
+  const paymentInputs =
+    document.querySelectorAll(
+      'input[name="payment"]'
+    );
 
-    const postal =
-      document.querySelector(
-        "#postal"
-      );
+  const postal =
+    document.querySelector("#postal");
 
-    const postalButton =
-      document.querySelector(
-        "#postalButton"
-      );
+  const postalButton =
+    document.querySelector("#postalButton");
 
-    const cardNumber =
-      document.querySelector(
-        "#cardNumber"
-      );
+  const prefecture =
+    document.querySelector("#prefecture");
 
+  const address =
+    document.querySelector("#address");
 
-    /* =========================
-       PAYMENT CHANGE
-    ========================== */
+  const phone =
+    document.querySelector("#phone");
 
-    function updatePaymentForm() {
+  const cardNumber =
+    document.querySelector("#cardNumber");
 
-      if (!cardForm) {
-        return;
-      }
+  const securityCode =
+    document.querySelector("#securityCode");
 
 
-      const selectedPayment =
-        document.querySelector(
-          'input[name="payment"]:checked'
-        );
+  /* =========================
+     PAYMENT
+  ========================== */
 
+  function updatePaymentForm() {
 
-      if (!selectedPayment) {
-        return;
-      }
-
-
-      if (
-        selectedPayment.value ===
-        "card"
-      ) {
-
-        cardForm.classList.remove(
-          "is-hidden"
-        );
-
-      } else {
-
-        cardForm.classList.add(
-          "is-hidden"
-        );
-
-      }
-
+    if (!cardForm) {
+      return;
     }
 
+    const selectedPayment =
+      document.querySelector(
+        'input[name="payment"]:checked'
+      );
 
-    paymentInputs.forEach(
-      (input) => {
+    const showCardForm =
+      selectedPayment?.value === "card";
 
-        input.addEventListener(
-          "change",
-          updatePaymentForm
+
+    cardForm.classList.toggle(
+      "is-hidden",
+      !showCardForm
+    );
+
+
+    cardForm.setAttribute(
+      "aria-hidden",
+      String(!showCardForm)
+    );
+
+  }
+
+
+  paymentInputs.forEach((input) => {
+
+    input.addEventListener(
+      "change",
+      updatePaymentForm
+    );
+
+  });
+
+
+  /* =========================
+     PHONE
+  ========================== */
+
+  phone?.addEventListener(
+    "input",
+    () => {
+
+      const digits =
+        phone.value
+          .replace(/\D/g, "")
+          .slice(0, 11);
+
+
+      phone.value =
+        digits;
+
+    }
+  );
+
+
+  /* =========================
+     POSTAL CODE FORMAT
+  ========================== */
+
+  postal?.addEventListener(
+    "input",
+    () => {
+
+      const digits =
+        postal.value
+          .replace(/\D/g, "")
+          .slice(0, 7);
+
+
+      postal.value =
+        digits.length > 3
+          ? `${digits.slice(0, 3)}-${digits.slice(3)}`
+          : digits;
+
+    }
+  );
+
+
+  /* =========================
+     POSTAL ADDRESS SEARCH
+  ========================== */
+
+  postalButton?.addEventListener(
+    "click",
+    async () => {
+
+      const postalValue =
+        postal.value.replace(
+          /\D/g,
+          ""
         );
 
-      }
-    );
 
+      /* -------------------------
+         郵便番号チェック
+      -------------------------- */
 
-    /* =========================
-       CARD NUMBER
-    ========================== */
+      if (postalValue.length !== 7) {
 
-    cardNumber?.addEventListener(
-      "input",
-      () => {
+        alert(
+          "郵便番号を7桁で入力してください。"
+        );
 
-        let value =
-          cardNumber.value.replace(
-            /\D/g,
-            ""
-          );
+        postal.focus();
 
-
-        value =
-          value.substring(
-            0,
-            16
-          );
-
-
-        value =
-          value.replace(
-            /(\d{4})(?=\d)/g,
-            "$1 "
-          );
-
-
-        cardNumber.value =
-          value;
+        return;
 
       }
-    );
 
 
-    /* =========================
-       POSTAL CODE
-    ========================== */
+      /* -------------------------
+         検索中
+      -------------------------- */
 
-    postal?.addEventListener(
-      "input",
-      () => {
+      postalButton.disabled = true;
 
-        let value =
-          postal.value.replace(
-            /\D/g,
-            ""
+      const originalText =
+        postalButton.textContent;
+
+      postalButton.textContent =
+        "検索中...";
+
+
+      try {
+
+        /* -------------------------
+           zipcloud API
+        -------------------------- */
+
+        const response =
+          await fetch(
+            `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalValue}`
           );
 
 
-        value =
-          value.substring(
-            0,
-            7
+        if (!response.ok) {
+
+          throw new Error(
+            `HTTP Error: ${response.status}`
           );
-
-
-        if (
-          value.length > 3
-        ) {
-
-          value =
-            value.substring(
-              0,
-              3
-            )
-            +
-            "-"
-            +
-            value.substring(
-              3
-            );
 
         }
 
 
-        postal.value =
-          value;
-
-      }
-    );
+        const data =
+          await response.json();
 
 
-    /* =========================
-       POSTAL SEARCH
-       デモ用
-    ========================== */
-
-    postalButton?.addEventListener(
-      "click",
-      () => {
-
-        const postalValue =
-          postal.value.replace(
-            /\D/g,
-            ""
-          );
-
+        /* -------------------------
+           該当住所なし
+        -------------------------- */
 
         if (
-          postalValue.length !== 7
+          data.status !== 200 ||
+          !data.results ||
+          data.results.length === 0
         ) {
 
           alert(
-            "郵便番号を7桁で入力してください。"
+            "該当する住所が見つかりませんでした。"
           );
-
-          postal.focus();
 
           return;
 
         }
 
 
-        const prefecture =
-          document.querySelector(
-            "#prefecture"
-          );
+        /* -------------------------
+           住所取得
+        -------------------------- */
 
-        const address =
-          document.querySelector(
-            "#address"
-          );
+        const result =
+          data.results[0];
 
+
+        /*
+         * address1
+         * → 都道府県
+         *
+         * address2
+         * → 市区町村
+         *
+         * address3
+         * → 町域
+         */
 
         if (prefecture) {
 
           prefecture.value =
-            "東京都";
+            result.address1;
 
         }
 
@@ -223,24 +240,96 @@ document.addEventListener(
         if (address) {
 
           address.value =
-            "杉並区x-x-x";
+            result.address2 +
+            result.address3;
+
+
+          /*
+           * 自動入力後、
+           * 番地を入力しやすいように
+           * addressへフォーカス
+           */
+
+          address.focus();
 
         }
 
+      } catch (error) {
 
-        alert(
-          "住所を入力しました。"
+        console.error(
+          "住所検索エラー:",
+          error
         );
 
+
+        alert(
+          "住所検索に失敗しました。時間をおいてもう一度お試しください。"
+        );
+
+      } finally {
+
+        /* -------------------------
+           ボタンを元に戻す
+        -------------------------- */
+
+        postalButton.disabled = false;
+
+        postalButton.textContent =
+          originalText;
+
       }
-    );
+
+    }
+  );
 
 
-    /* =========================
-       INITIAL
-    ========================== */
+  /* =========================
+     CARD NUMBER
+     デモ用
+  ========================== */
 
-    updatePaymentForm();
+  cardNumber?.addEventListener(
+    "input",
+    () => {
 
-  }
-);
+      const digits =
+        cardNumber.value
+          .replace(/\D/g, "")
+          .slice(0, 16);
+
+
+      cardNumber.value =
+        digits.replace(
+          /(\d{4})(?=\d)/g,
+          "$1 "
+        );
+
+    }
+  );
+
+
+  /* =========================
+     SECURITY CODE
+     デモ用
+  ========================== */
+
+  securityCode?.addEventListener(
+    "input",
+    () => {
+
+      securityCode.value =
+        securityCode.value
+          .replace(/\D/g, "")
+          .slice(0, 4);
+
+    }
+  );
+
+
+  /* =========================
+     INITIAL
+  ========================== */
+
+  updatePaymentForm();
+
+});
