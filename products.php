@@ -1,0 +1,283 @@
+<?php
+
+require_once __DIR__ . '/includes/db.php';
+
+/*
+ * 商品一覧を取得
+ * product_images の sort_order = 1 を代表画像として使用
+ */
+$sql = "
+  SELECT
+    p.id,
+    p.name,
+    p.price,
+    p.description,
+    c.name AS category_name,
+    pi.image_path
+  FROM products AS p
+  INNER JOIN categories AS c
+    ON p.category_id = c.id
+  LEFT JOIN product_images AS pi
+    ON p.id = pi.product_id
+    AND pi.sort_order = 1
+  ORDER BY p.id ASC
+";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$products = $stmt->fetchAll();
+
+/*
+ * カテゴリ名を data-category 用に変換
+ */
+$categoryMap = [
+  'キッチン' => 'kitchen',
+  'インテリア' => 'interior',
+  'ファブリック' => 'fabric',
+  'アロマ' => 'aroma',
+];
+
+?>
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>商品一覧 | 灯々</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Noto+Serif+JP:wght@400;500&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/products.css">
+</head>
+
+<body>
+
+  <?php include __DIR__ . '/includes/header.php'; ?>
+
+  <main>
+
+    <div class="breadcrumb">
+      <a href="index.php">TOP</a>
+      <span>&gt;</span>
+      <span>商品一覧</span>
+    </div>
+
+    <section class="products-heading">
+
+      <p class="section-label">SHOP</p>
+
+      <h1>商品一覧</h1>
+
+    </section>
+
+    <section class="products-intro">
+
+      <p>
+        暮らしに小さな灯りをともす、<br>
+        日々の道具を集めました。
+      </p>
+
+    </section>
+
+    <nav class="category-nav" aria-label="商品カテゴリー">
+
+      <button
+        class="category-tab is-active"
+        type="button"
+        data-category="all"
+      >
+        すべて
+      </button>
+
+      <?php foreach ($categoryMap as $categoryKey => $categoryValue): ?>
+
+        <button
+          class="category-tab"
+          type="button"
+          data-category="<?= htmlspecialchars($categoryValue, ENT_QUOTES, 'UTF-8') ?>"
+        >
+          <?= htmlspecialchars($categoryKey, ENT_QUOTES, 'UTF-8') ?>
+        </button>
+
+      <?php endforeach; ?>
+
+    </nav>
+
+    <section class="products">
+
+      <div class="products-toolbar">
+
+        <p class="item-count">
+          <span id="itemCount"><?= count($products) ?></span> ITEMS
+        </p>
+
+        <label class="sort-label">
+
+          <span class="sort-text">
+            並び替え
+          </span>
+
+          <select id="sortSelect" class="sort-select">
+
+            <option value="recommended">
+              おすすめ順
+            </option>
+
+            <option value="price-low">
+              価格の安い順
+            </option>
+
+            <option value="price-high">
+              価格の高い順
+            </option>
+
+          </select>
+
+        </label>
+
+      </div>
+
+      <div class="product-grid" id="productGrid">
+
+        <?php foreach ($products as $index => $product): ?>
+
+          <?php
+            $category = $categoryMap[$product['category_name']] ?? '';
+            $image = $product['image_path'] ?? '';
+            $productId = (int) $product['id'];
+            $price = (int) $product['price'];
+          ?>
+
+          <article
+            class="product-card"
+            data-category="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>"
+            data-price="<?= $price ?>"
+            data-order="<?= $index + 1 ?>"
+          >
+
+            <a
+              href="product-detail.php?id=<?= $productId ?>"
+              class="product-card__image"
+            >
+
+              <?php if ($image): ?>
+
+                <img
+                  src="<?= htmlspecialchars($image, ENT_QUOTES, 'UTF-8') ?>"
+                  alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
+                >
+
+              <?php endif; ?>
+
+            </a>
+
+            <div class="product-card__info">
+
+              <h2>
+
+                <a href="product-detail.php?id=<?= $productId ?>">
+                  <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
+                </a>
+
+              </h2>
+
+              <p class="product-card__price">
+
+                ￥ <?= number_format($price) ?>
+
+                <span>（税込）</span>
+
+              </p>
+
+            </div>
+
+            <button
+              class="favorite-button"
+              type="button"
+              aria-label="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>をお気に入りに追加"
+            >
+
+              <img
+                class="favorite-button__icon favorite-button__icon--outline"
+                src="images/icons/heart-outline.svg"
+                alt=""
+              >
+
+              <img
+                class="favorite-button__icon favorite-button__icon--solid"
+                src="images/icons/heart-solid.svg"
+                alt=""
+              >
+
+            </button>
+
+          </article>
+
+        <?php endforeach; ?>
+
+      </div>
+
+      <p
+        class="no-result"
+        id="noResult"
+      >
+        該当する商品がありません。
+      </p>
+
+      <button
+        class="more-button"
+        type="button"
+      >
+        もっと見る
+      </button>
+
+    </section>
+
+    <section class="products-about">
+
+      <div class="products-about__image">
+
+        <img
+          src="images/products/products-about.jpg"
+          alt="灯々の暮らしの道具"
+        >
+
+      </div>
+
+      <div class="products-about__content">
+
+        <h2>
+          暮らしになじむものを、<br>
+          ひとつずつ丁寧に
+        </h2>
+
+        <a href="about.php">
+          ABOUT US 灯々
+          <span>→</span>
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <?php include __DIR__ . '/includes/footer.php'; ?>
+
+  <script src="js/products.js"></script>
+  <script src="js/common.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,455 @@
+@charset "UTF-8";
+
+/* =========================
+   Base
+========================= */
+:root {
+  --bg: #f8f6f2;
+  --text: #443a34;
+  --brown: #7c4f32;
+  --accent: #a86b43;
+  --price: #b86a56;
+  --line: #bdb5af;
+  --footer: #443a36;
+  --white: #fff;
+  --placeholder: #d6d6d6;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================
+   Hero
+========================= */
+.hero {
+  position: relative;
+}
+
+.hero__image {
+  aspect-ratio: 375 / 495;
+  object-fit: cover;
+  object-position: center;
+  background: var(--placeholder);
+}
+
+.hero__content {
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+  color: var(--text);
+}
+
+.hero__title {
+  margin: 0 0 10px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  width: max-content;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: .02em;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+.hero__text {
+  margin: 0 0 18px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 11px;
+  line-height: 1.8;
+  letter-spacing: .08em;
+}
+
+/* =========================
+   Common
+========================= */
+.section {
+  border-bottom: 1px solid var(--line);
+}
+
+.section__inner {
+  padding: 44px 20px;
+}
+
+.section__inner--wide {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.section__inner--flush-right {
+  padding-right: 0;
+}
+
+.section-title {
+  margin: 0 0 28px;
+  color: var(--brown);
+  font-family: "Times New Roman", serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  letter-spacing: .06em;
+}
+
+.section-lead {
+  margin: -13px 0 24px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 12px;
+  text-align: center;
+}
+
+.button {
+  display: flex;
+  width: fit-content;
+  min-height: 31px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 18px;
+  font-size: 10px;
+  letter-spacing: .06em;
+}
+
+.button--hero {
+  min-width: 132px;
+  border: 1px solid var(--text);
+  background: rgba(255, 255, 255, .12);
+}
+
+.button--outline {
+  margin: 26px auto 0;
+  border: 1px solid var(--text);
+  background: transparent;
+}
+
+.button--text {
+  position: relative;
+  margin: 28px auto 0;
+  padding: 4px 14px;
+}
+
+.button--text::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  left: 0;
+  height: 1px;
+  background: var(--text);
+}
+
+/* =========================
+   Product
+========================= */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 18px;
+}
+
+.product-card {
+  min-width: 0;
+}
+
+.product-card__image {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--placeholder);
+}
+
+.product-card__name {
+  margin: 9px 0 2px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-card__price {
+  margin: 0;
+  color: var(--price);
+  font-family: "Times New Roman", serif;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.product-card__price span {
+  font-family: inherit;
+  font-size: 8px;
+}
+
+/* =========================
+   Category
+========================= */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 38px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.category-card__image {
+  aspect-ratio: 1.9 / 1;
+  object-fit: contain;
+  background: var(--placeholder);
+}
+
+.category-card__title {
+  margin: 7px 0 1px;
+  color: var(--brown);
+  font-family: "Times New Roman", serif;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.category-card__list {
+  font-size: 8px;
+  line-height: 1.55;
+}
+
+.category-card__list li::before {
+  content: "-";
+  margin-right: 2px;
+}
+
+/* =========================
+   PICK UP
+========================= */
+
+.pickup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.pickup-card__link {
+  display: block;
+}
+
+.pickup-card__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+/* =========================
+   Best Seller
+========================= */
+.ranking-filter {
+  margin-bottom: 12px;
+}
+
+.ranking-filter__button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.product-scroll {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-right: 20px;
+  scrollbar-width: none;
+}
+
+.product-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.product-card--ranking {
+  position: relative;
+  flex: 0 0 43%;
+}
+
+.product-card__rank {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  background: rgba(255, 255, 255, .9);
+  font-family: "Times New Roman", serif;
+  font-size: 9px;
+}
+
+/* =========================
+   Brand Story
+========================= */
+.brand-story .section-title {
+  margin-bottom: 30px;
+}
+
+.brand-story__image {
+  aspect-ratio: 375 / 225;
+  object-fit: cover;
+  background: var(--placeholder);
+}
+
+.brand-story__body {
+  padding: 24px 20px 0;
+  text-align: center;
+}
+
+.brand-story__title {
+  margin: 0 0 17px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .05em;
+}
+
+.brand-story__body p {
+  margin: 0 0 14px;
+  font-size: 9px;
+  line-height: 1.9;
+}
+
+/* =========================
+   Instagram
+========================= */
+.instagram {
+  text-align: center;
+}
+
+.instagram__title {
+  margin: -5px 0 16px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.instagram__text {
+  margin: 0 0 8px;
+  font-size: 9px;
+  line-height: 1.8;
+}
+
+.instagram__account {
+  display: inline-block;
+  margin-bottom: 23px;
+  font-size: 9px;
+}
+
+.instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.instagram-grid img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--placeholder);
+}
+
+/* =========================
+   Newsletter
+========================= */
+.newsletter {
+  text-align: center;
+}
+
+.newsletter__title {
+  margin: -5px 0 20px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.8;
+}
+
+.newsletter__text {
+  margin: 0 0 24px;
+  font-size: 9px;
+  line-height: 1.9;
+}
+
+.newsletter-form input {
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding: 4px 8px;
+  border: 1px solid #9e9792;
+  border-radius: 0;
+  background: var(--white);
+}
+
+.button--submit {
+  min-width: 126px;
+  margin: 24px auto 0;
+  border: 0;
+  background: var(--accent);
+  color: var(--white);
+  cursor: pointer;
+}
+
+.newsletter__note {
+  margin: 12px 0 0;
+  font-size: 8px;
+}
+
+/* =========================
+   Footer
+========================= */

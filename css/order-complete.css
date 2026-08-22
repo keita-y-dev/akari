@@ -1,0 +1,357 @@
+/* =========================
+   ORDER COMPLETE
+========================= */
+
+:root {
+  --bg-color: #f8f7f3;
+  --text-color: #514844;
+  --sub-text-color: #756d68;
+  --brown-color: #514640;
+  --line-color: #cfcac5;
+}
+
+
+/* =========================
+   BASE
+========================= */
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Noto Sans JP", sans-serif;
+  line-height: 1.8;
+}
+
+button {
+  font-family: inherit;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 25px 43px 0;
+  color: #333;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.breadcrumb a {
+  color: #333;
+  text-decoration: none;
+}
+
+
+/* =========================
+   PAGE HEADING
+========================= */
+
+.page-heading {
+  padding: 50px 20px 0;
+  text-align: center;
+}
+
+.page-heading__en {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  font-size: 29px;
+  line-height: 1.3;
+}
+
+.page-heading h1 {
+  margin: 8px 0 0;
+  font-family: "Noto Serif JP", serif;
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: .08em;
+}
+
+
+/* =========================
+   CHECKOUT STEP
+========================= */
+
+.checkout-step {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: calc(100% - 94px);
+  margin: 47px auto 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 48px;
+  color: #aaa39d;
+}
+
+.step span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #aaa39d;
+  border-radius: 50%;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.step p {
+  margin: 5px 0 0;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.step.is-current {
+  color: var(--brown-color);
+}
+
+.step.is-current span {
+  border-color: var(--brown-color);
+  background-color: var(--brown-color);
+  color: #fff;
+}
+
+.step-line {
+  width: 45px;
+  height: 1px;
+  margin: 15px 3px 0;
+  background-color: var(--line-color);
+}
+
+
+/* =========================
+   COMPLETE MESSAGE
+========================= */
+
+.complete-message {
+  padding: 55px 47px 50px;
+  text-align: center;
+}
+
+.complete-message h2 {
+  margin: 0;
+  font-family: "Noto Serif JP", serif;
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: .08em;
+}
+
+.complete-message > p {
+  margin: 15px 0 0;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.complete-message > p + p {
+  margin-top: 22px;
+}
+
+.complete-message .demo-note {
+  margin-top: 28px;
+  color: var(--sub-text-color);
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+
+/* =========================
+   ORDER SECTION
+========================= */
+
+.order-section {
+  margin: 0 47px;
+  padding: 35px 0;
+  border-top: 1px solid var(--line-color);
+}
+
+.section-title {
+  margin: 0 0 27px;
+  font-family: "Noto Serif JP", serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: .08em;
+}
+
+
+/* =========================
+   ORDER INFORMATION
+========================= */
+
+.order-info {
+  margin: 0;
+}
+
+.order-info__row {
+  display: grid;
+  grid-template-columns: 105px minmax(0, 1fr);
+  gap: 15px;
+  padding: 10px 0;
+  border-bottom: 1px dotted var(--line-color);
+}
+
+.order-info__row:first-child {
+  padding-top: 0;
+}
+
+.order-info__row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.order-info dt,
+.order-info dd {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.order-info dt {
+  color: var(--sub-text-color);
+}
+
+.order-info dd {
+  word-break: break-word;
+}
+
+
+/* =========================
+   DELIVERY
+========================= */
+
+.delivery-info {
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.delivery-info p {
+  margin: 0;
+}
+
+.delivery-info p + p {
+  margin-top: 2px;
+}
+
+
+/* =========================
+   DELIVERY DATE
+========================= */
+
+.delivery-date {
+  margin: 23px 0 0;
+  padding-top: 20px;
+  border-top: 1px dotted var(--line-color);
+}
+
+.delivery-date__row {
+  display: grid;
+  grid-template-columns: 105px minmax(0, 1fr);
+  gap: 15px;
+}
+
+.delivery-date__row + .delivery-date__row {
+  margin-top: 8px;
+}
+
+.delivery-date dt,
+.delivery-date dd {
+  margin: 0;
+  font-size: 12px;
+}
+
+.delivery-date dt {
+  color: var(--sub-text-color);
+}
+
+
+/* =========================
+   SHIPPING
+========================= */
+
+.shipping-section {
+  margin: 0 47px;
+  padding: 35px 0;
+  border-top: 1px solid var(--line-color);
+}
+
+.shipping-section p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.shipping-section p + p {
+  margin-top: 5px;
+}
+
+
+/* =========================
+   ACTION
+========================= */
+
+.complete-action {
+  margin: 0 47px;
+  padding: 15px 0 50px;
+  text-align: center;
+}
+
+.top-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 55px;
+  border-radius: 10px;
+  background-color: var(--brown-color);
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: .1em;
+  text-decoration: none;
+}
+
+.continue-link {
+  display: inline-block;
+  margin-top: 22px;
+  color: var(--text-color);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact-section {
+  margin: 0 47px;
+  padding: 35px 0 60px;
+  border-top: 1px solid var(--line-color);
+  text-align: center;
+}
+
+.contact-section p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.9;
+}
+
+.contact-link {
+  display: inline-block;
+  margin-top: 15px;
+  color: var(--text-color);
+  font-size: 11px;
+  text-decoration: underline;
+}
+
+
+/* =========================
+   FOOTER
+========================= */

@@ -1,0 +1,309 @@
+/* ==============================
+   ABOUT
+============================== */
+
+:root {
+  --bg-color: #f8f7f3;
+  --text-color: #4c4643;
+  --sub-text-color: #77716e;
+  --accent-color: #ad8050;
+  --line-color: #c9c7c4;
+  --brown-color: #4c403b;
+}
+
+
+/* ==============================
+   common
+============================== */
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Noto Sans JP", sans-serif;
+  line-height: 1.8;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.section-heading {
+  text-align: center;
+}
+
+.section-label {
+  margin: 0;
+  color: var(--accent-color);
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+.section-heading h2,
+.about-heading h1 {
+  margin: 4px 0 0;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+}
+
+
+/* ==============================
+   header
+============================== */
+
+.breadcrumb {
+  display: flex;
+  gap: 6px;
+  padding: 21px 36px 0;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.breadcrumb a {
+  color: #222;
+  text-decoration: none;
+}
+
+.breadcrumb span {
+  color: #222;
+}
+
+
+/* ==============================
+   page heading
+============================== */
+
+.about-heading {
+  padding: 41px 20px 0;
+  text-align: center;
+}
+
+.about-heading .section-label {
+  font-size: 24px;
+}
+
+.about-heading h1 {
+  font-size: 19px;
+}
+
+
+/* ==============================
+   intro
+============================== */
+
+.about-intro {
+  padding: 28px 0 50px;
+}
+
+.about-image {
+  width: calc(100% - 104px);
+  margin: 0 auto;
+}
+
+.about-intro__text {
+  padding: 56px 56px 0;
+}
+
+.about-intro__text h2 {
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto 23px;
+  font-family: "Noto Serif JP", serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  text-align: center;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+.about-intro__text p {
+  margin: 0;
+  color: var(--sub-text-color);
+  font-family: "Noto Serif JP", serif;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  line-height: 2.1;
+}
+
+
+/* ==============================
+   story
+============================== */
+
+.about-story {
+  padding: 34px 0 55px;
+  border-top: 1px solid var(--line-color);
+}
+
+.story-image {
+  width: calc(100% - 104px);
+  margin: 28px auto 0;
+}
+
+.story-text {
+  padding: 34px 56px 0;
+}
+
+.story-text p {
+  margin: 0;
+  color: var(--sub-text-color);
+  font-family: "Noto Serif JP", serif;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  line-height: 2.1;
+}
+
+.story-text p + p {
+  margin-top: 27px;
+}
+
+
+/* ==============================
+   values
+============================== */
+
+.about-values {
+  padding: 34px 40px 46px;
+  border-top: 1px solid var(--line-color);
+}
+
+.values-list {
+  margin-top: 34px;
+}
+
+.value-item {
+  padding: 37px 0 42px;
+  border-top: 1px solid var(--line-color);
+  text-align: center;
+}
+
+.value-item:last-child {
+  border-bottom: 1px solid var(--line-color);
+}
+
+.value-number {
+  margin: 0 0 25px;
+  color: #999;
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.15em;
+  line-height: 1;
+}
+
+.value-item h3 {
+  margin: 0;
+  font-family: "Noto Serif JP", serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.13em;
+  line-height: 1.6;
+}
+
+.value-text {
+  margin: 24px 30px 0;
+  color: #686462;
+  font-family: "Noto Serif JP", serif;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  line-height: 2;
+  text-align: left;
+}
+
+
+/* ==============================
+   selection
+============================== */
+
+.about-selection {
+  padding: 34px 0 54px;
+  border-top: 1px solid var(--line-color);
+}
+
+.selection-image {
+  width: calc(100% - 104px);
+  margin: 28px auto 0;
+}
+
+.selection-text {
+  padding: 36px 56px 0;
+}
+
+.selection-text p {
+  margin: 0;
+  color: var(--sub-text-color);
+  font-family: "Noto Serif JP", serif;
+  font-size: 15px;
+  letter-spacing: 0.05em;
+  line-height: 2.1;
+}
+
+.selection-text p + p {
+  margin-top: 27px;
+}
+
+
+/* ==============================
+   CTA
+============================== */
+
+.about-cta {
+  padding: 61px 32px 67px;
+  border-top: 1px solid var(--line-color);
+  text-align: center;
+}
+
+.about-cta h2 {
+  margin: 0 0 49px;
+  font-family: "Noto Serif JP", serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  line-height: 2;
+}
+
+.cta-button {
+  display: block;
+  width: 100%;
+  padding: 9px 20px;
+  border-radius: 9px;
+  background-color: var(--brown-color);
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  line-height: 1.8;
+  text-decoration: none;
+}
+
+.feature-link {
+  display: inline-block;
+  margin-top: 23px;
+  color: var(--text-color);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.feature-link span {
+  margin-left: 3px;
+}
+
+
+/* ==============================
+   footer
+============================== */
+
+
+/* ABOUT本文の横幅を調整 */
+.about-heading {
+  width: calc(100% - 40px);
+  margin-left: auto;
+  margin-right: auto;
+}

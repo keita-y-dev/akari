@@ -1,0 +1,369 @@
+/* ==============================
+   FEATURE / JOURNAL
+============================== */
+
+:root {
+  --bg-color: #f8f7f3;
+  --text-color: #4c4643;
+  --sub-text-color: #77716e;
+  --accent-color: #ad8050;
+  --line-color: #d1ceca;
+  --brown-color: #4c403b;
+}
+
+
+/* ==============================
+   common
+============================== */
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Noto Sans JP", sans-serif;
+  line-height: 1.8;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.section-label {
+  margin: 0;
+  color: var(--accent-color);
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+
+/* ==============================
+   header
+============================== */
+
+.breadcrumb {
+  display: flex;
+  gap: 5px;
+  padding: 3px 20px 0;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.breadcrumb a {
+  color: #333;
+  text-decoration: none;
+}
+
+.breadcrumb span {
+  color: #333;
+}
+
+
+/* ==============================
+   heading
+============================== */
+
+.feature-heading {
+  padding: 31px 20px 0;
+  text-align: center;
+}
+
+.feature-heading .section-label {
+  font-size: 24px;
+}
+
+.feature-heading h1 {
+  margin: 3px 0 0;
+  font-family: "Noto Serif JP", serif;
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+
+
+/* ==============================
+   journal hero
+============================== */
+
+.journal-hero {
+  padding: 31px 42px 42px;
+}
+
+.journal-hero__image {
+  width: 100%;
+  height: 144px;
+}
+
+.journal-hero__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.journal-hero__content {
+  padding-top: 16px;
+  text-align: center;
+}
+
+.journal-title {
+  margin: 0;
+  color: #8c8179;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
+}
+
+.journal-hero__content h2 {
+  margin: 3px 0 0;
+  font-family: "Noto Serif JP", serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  line-height: 1.6;
+}
+
+.journal-lead {
+  margin: 9px 0 0;
+  color: #77716e;
+  font-family: "Noto Serif JP", serif;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  line-height: 2.1;
+}
+
+.journal-hero__content time {
+  display: block;
+  margin-top: 16px;
+  color: #888;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+
+/* ==============================
+   scene
+============================== */
+
+.scene {
+  padding: 38px 42px 50px;
+  border-top: 1px solid var(--line-color);
+}
+
+.scene__heading {
+  text-align: center;
+}
+
+.scene-number {
+  margin: 0;
+  color: #8c8179;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+}
+
+.scene__heading h2 {
+  margin: 5px 0 24px;
+  font-family: "Noto Serif JP", serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+}
+
+.scene__image {
+  width: 100%;
+  height: 144px;
+}
+
+.scene__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scene__text {
+  margin: 18px 0 0;
+  color: #686462;
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  line-height: 2.1;
+}
+
+
+/* ==============================
+   product list
+============================== */
+
+.product-list {
+  display: grid;
+  width: 310px;
+  max-width: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin: 28px auto 0;
+}
+
+.product-card {
+  min-width: 0;
+}
+
+.product-card__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.1 / 1;
+  overflow: hidden;
+}
+
+.product-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card__info {
+  padding-top: 9px;
+}
+
+.product-card h3 {
+  overflow: hidden;
+  margin: 0;
+  color: #403b38;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-card__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.product-card__price {
+  margin: 0;
+  color: #b45f4b;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.product-card__price span {
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 10px;
+}
+
+.favorite-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #777;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.scene__link {
+  display: block;
+  width: fit-content;
+  margin: 32px auto 0;
+  color: #403b38;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.scene__link span {
+  margin-left: 3px;
+}
+
+
+/* ==============================
+   closing
+============================== */
+
+.feature-closing {
+  position: relative;
+  height: 260px;
+}
+
+.feature-closing__image {
+  position: absolute;
+  inset: 0;
+}
+
+.feature-closing__image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+}
+
+.feature-closing__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feature-closing__content {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  padding: 0 30px;
+  color: #fff;
+  text-align: center;
+  transform: translateY(-50%);
+}
+
+.feature-closing__content h2 {
+  margin: 0 0 28px;
+  font-family: "Noto Serif JP", serif;
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  line-height: 2;
+}
+
+.closing-button {
+  display: block;
+  width: 153px;
+  margin: 0 auto;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.closing-about {
+  display: inline-block;
+  margin-top: 16px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+}
+
+.closing-about span {
+  margin-left: 3px;
+}
+
+
+/* ==============================
+   footer
+============================== */
