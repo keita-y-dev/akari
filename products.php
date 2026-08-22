@@ -154,75 +154,17 @@ $categoryMap = [
 
           <?php
             $category = $categoryMap[$product['category_name']] ?? '';
-            $image = $product['image_path'] ?? '';
-            $productId = (int) $product['id'];
-            $price = (int) $product['price'];
+
+            $productCardOptions = [
+              'showFavorite' => true,
+              'headingTag' => 'h2',
+              'category' => $category,
+              'price' => (int)$product['price'],
+              'order' => $index + 1,
+            ];
+
+            include __DIR__ . '/includes/product-card.php';
           ?>
-
-          <article
-            class="product-card"
-            data-category="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>"
-            data-price="<?= $price ?>"
-            data-order="<?= $index + 1 ?>"
-          >
-
-            <a
-              href="product-detail.php?id=<?= $productId ?>"
-              class="product-card__image"
-            >
-
-              <?php if ($image): ?>
-
-                <img
-                  src="<?= htmlspecialchars($image, ENT_QUOTES, 'UTF-8') ?>"
-                  alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
-                >
-
-              <?php endif; ?>
-
-            </a>
-
-            <div class="product-card__info">
-
-              <h2>
-
-                <a href="product-detail.php?id=<?= $productId ?>">
-                  <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
-                </a>
-
-              </h2>
-
-              <p class="product-card__price">
-
-                ￥ <?= number_format($price) ?>
-
-                <span>（税込）</span>
-
-              </p>
-
-            </div>
-
-            <button
-              class="favorite-button"
-              type="button"
-              aria-label="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>をお気に入りに追加"
-            >
-
-              <img
-                class="favorite-button__icon favorite-button__icon--outline"
-                src="images/icons/heart-outline.svg"
-                alt=""
-              >
-
-              <img
-                class="favorite-button__icon favorite-button__icon--solid"
-                src="images/icons/heart-solid.svg"
-                alt=""
-              >
-
-            </button>
-
-          </article>
 
         <?php endforeach; ?>
 

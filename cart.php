@@ -338,93 +338,7 @@ $recommendProducts = $stmt->fetchAll();
       <div id="cartItems">
 
         <?php foreach ($cartItems as $item): ?>
-
-          <div
-            class="cart-item"
-            data-cart-item
-            data-product-id="<?= (int)$item['id'] ?>"
-            data-price="<?= (int)$item['price'] ?>"
-          >
-
-            <div class="cart-item__top">
-
-              <a
-                href="product-detail.php?id=<?= (int)$item['id'] ?>"
-                class="cart-item__image"
-              >
-                <?php if (!empty($item['image_path'])): ?>
-                  <img
-                    src="<?= htmlspecialchars($item['image_path'], ENT_QUOTES, 'UTF-8') ?>"
-                    alt="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>"
-                  >
-                <?php endif; ?>
-              </a>
-
-              <div class="cart-item__info">
-
-                <p class="cart-item__category">
-                  <?= htmlspecialchars(categoryLabel($item['category_name']), ENT_QUOTES, 'UTF-8') ?>
-                </p>
-
-                <h2>
-                  <a href="product-detail.php?id=<?= (int)$item['id'] ?>">
-                    <?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>
-                  </a>
-                </h2>
-
-                <p class="cart-item__price">
-                  ￥ <?= number_format((int)$item['price']) ?>
-                  <span>（税込）</span>
-                </p>
-
-              </div>
-
-            </div>
-
-            <div class="cart-item__bottom">
-
-              <p class="quantity__label">数量</p>
-
-              <div class="quantity">
-
-                <button
-                  class="quantity__button quantity__minus"
-                  type="button"
-                  aria-label="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>の数量を1減らす"
-                >
-                  −
-                </button>
-
-                <input
-                  class="quantity__input"
-                  type="number"
-                  value="<?= (int)$item['quantity'] ?>"
-                  min="1"
-                  max="<?= (int)$item['stock'] ?>"
-                  aria-label="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>の数量"
-                >
-
-                <button
-                  class="quantity__button quantity__plus"
-                  type="button"
-                  aria-label="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>の数量を1増やす"
-                >
-                  ＋
-                </button>
-
-              </div>
-
-              <button
-                class="delete-button"
-                type="button"
-              >
-                削除
-              </button>
-
-            </div>
-
-          </div>
-
+          <?php include __DIR__ . '/includes/cart-item.php'; ?>
         <?php endforeach; ?>
 
       </div>
@@ -572,47 +486,12 @@ $recommendProducts = $stmt->fetchAll();
         <div class="recommend__slider">
 
           <?php foreach ($recommendProducts as $recommend): ?>
-
-            <a
-              href="product-detail.php?id=<?= (int)$recommend['id'] ?>"
-              class="recommend-card"
-            >
-
-              <div class="recommend-card__image">
-
-                <?php if (!empty($recommend['image_path'])): ?>
-
-                  <img
-                    src="<?= htmlspecialchars($recommend['image_path'], ENT_QUOTES, 'UTF-8') ?>"
-                    alt="<?= htmlspecialchars($recommend['name'], ENT_QUOTES, 'UTF-8') ?>"
-                  >
-
-                <?php endif; ?>
-
-              </div>
-
-              <h3>
-                <?= htmlspecialchars($recommend['name'], ENT_QUOTES, 'UTF-8') ?>
-              </h3>
-
-              <div class="recommend-card__bottom">
-
-                <p>
-                  ￥ <?= number_format((int)$recommend['price']) ?>
-                  <span>（税込）</span>
-                </p>
-
-                <span
-                  class="heart"
-                  aria-hidden="true"
-                >
-                  ♡
-                </span>
-
-              </div>
-
-            </a>
-
+            <?php
+              $recommendCardOptions = [
+                'showFavorite' => true,
+              ];
+              include __DIR__ . '/includes/recomend-card.php';
+            ?>
           <?php endforeach; ?>
 
         </div>

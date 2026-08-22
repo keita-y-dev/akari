@@ -150,60 +150,16 @@ $sceneProducts = [
 
       <div class="product-list">
 
-        <?php foreach ($sceneProducts[3] as $productId): ?>
-
+        <?php foreach ($sceneProducts[1] as $productId): ?>
           <?php if (!isset($productMap[$productId])) continue; ?>
-
-          <?php $product = $productMap[$productId]; ?>
-
-          <article class="product-card">
-
-            <a
-              href="product-detail.php?id=<?= (int)$product['id'] ?>"
-              class="product-card__image"
-            >
-
-              <?php if (!empty($product['image_path'])): ?>
-
-                <img
-                  src="<?= htmlspecialchars($product['image_path'], ENT_QUOTES, 'UTF-8') ?>"
-                  alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
-                >
-
-              <?php endif; ?>
-
-            </a>
-
-            <div class="product-card__info">
-
-              <h3>
-                <a href="product-detail.php?id=<?= (int)$product['id'] ?>">
-                  <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
-                </a>
-              </h3>
-
-              <div class="product-card__bottom">
-
-                <p class="product-card__price">
-                  ￥ <?= number_format((int)$product['price']) ?>
-                  <span>（税込）</span>
-                </p>
-
-                <button
-                  class="favorite-button"
-                  type="button"
-                  data-product-id="<?= (int)$product['id'] ?>"
-                  aria-label="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>をお気に入りに追加"
-                >
-                  ♡
-                </button>
-
-              </div>
-
-            </div>
-
-          </article>
-
+          <?php
+            $product = $productMap[$productId];
+            $productCardOptions = [
+              'showFavorite' => true,
+              'headingTag' => 'h3',
+            ];
+            include __DIR__ . '/includes/product-card.php';
+          ?>
         <?php endforeach; ?>
 
       </div>
@@ -240,72 +196,17 @@ $sceneProducts = [
 
       <div class="product-list">
 
-        <article class="product-card">
-
-          <a href="product-detail.php" class="product-card__image">
-            <img
-              src="images/products/candle-holder.png"
-              alt="真鍮のキャンドルホルダー"
-            >
-          </a>
-
-          <div class="product-card__info">
-
-            <h3>
-              真鍮のキャンドルホルダー
-            </h3>
-
-            <div class="product-card__bottom">
-              <p class="product-card__price">
-                ￥ 3,850 <span>（税込）</span>
-              </p>
-
-              <button
-                class="favorite-button"
-                type="button"
-                aria-label="お気に入りに追加"
-              >
-                ♡
-              </button>
-            </div>
-
-          </div>
-
-        </article>
-
-
-        <article class="product-card">
-
-          <a href="product-detail.php" class="product-card__image">
-            <img
-              src="images/products/flower-vase.png"
-              alt="ガラスの一輪挿し"
-            >
-          </a>
-
-          <div class="product-card__info">
-
-            <h3>
-              ガラスの一輪挿し
-            </h3>
-
-            <div class="product-card__bottom">
-              <p class="product-card__price">
-                ￥ 3,350 <span>（税込）</span>
-              </p>
-
-              <button
-                class="favorite-button"
-                type="button"
-                aria-label="お気に入りに追加"
-              >
-                ♡
-              </button>
-            </div>
-
-          </div>
-
-        </article>
+        <?php foreach ($sceneProducts[2] as $productId): ?>
+          <?php if (!isset($productMap[$productId])) continue; ?>
+          <?php
+            $product = $productMap[$productId];
+            $productCardOptions = [
+              'showFavorite' => true,
+              'headingTag' => 'h3',
+            ];
+            include __DIR__ . '/includes/product-card.php';
+          ?>
+        <?php endforeach; ?>
 
       </div>
 
@@ -341,72 +242,17 @@ $sceneProducts = [
 
       <div class="product-list">
 
-        <article class="product-card">
-
-          <a href="product-detail.php" class="product-card__image">
-            <img
-              src="images/products/wood-tray.png"
-              alt="木製トレー"
-            >
-          </a>
-
-          <div class="product-card__info">
-
-            <h3>
-              木製トレー
-            </h3>
-
-            <div class="product-card__bottom">
-              <p class="product-card__price">
-                ￥ 4,400 <span>（税込）</span>
-              </p>
-
-              <button
-                class="favorite-button"
-                type="button"
-                aria-label="お気に入りに追加"
-              >
-                ♡
-              </button>
-            </div>
-
-          </div>
-
-        </article>
-
-
-        <article class="product-card">
-
-          <a href="product-detail.php" class="product-card__image">
-            <img
-              src="images/products/ceramic-plate.png"
-              alt="陶器の小皿"
-            >
-          </a>
-
-          <div class="product-card__info">
-
-            <h3>
-              陶器の小皿
-            </h3>
-
-            <div class="product-card__bottom">
-              <p class="product-card__price">
-                ￥ 1,320 <span>（税込）</span>
-              </p>
-
-              <button
-                class="favorite-button"
-                type="button"
-                aria-label="お気に入りに追加"
-              >
-                ♡
-              </button>
-            </div>
-
-          </div>
-
-        </article>
+        <?php foreach ($sceneProducts[3] as $productId): ?>
+          <?php if (!isset($productMap[$productId])) continue; ?>
+          <?php
+            $product = $productMap[$productId];
+            $productCardOptions = [
+              'showFavorite' => true,
+              'headingTag' => 'h3',
+            ];
+            include __DIR__ . '/includes/product-card.php';
+          ?>
+        <?php endforeach; ?>
 
       </div>
 
@@ -451,6 +297,8 @@ $sceneProducts = [
 
   <!-- footer -->
   <?php include __DIR__ . '/includes/footer.php'; ?>
+
+  <script src="js/common.js"></script>
 </body>
 
 </html>

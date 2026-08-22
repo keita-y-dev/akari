@@ -99,28 +99,13 @@ foreach ($bestSellerIds as $id) {
 
         <div class="product-grid">
           <?php foreach ($newArrivals as $product): ?>
-            <article class="product-card">
-              <a href="product-detail.php?id=<?= (int)$product['id'] ?>">
-
-                <?php if (!empty($product['image_path'])): ?>
-                  <img
-                    class="product-card__image"
-                    src="<?= htmlspecialchars($product['image_path'], ENT_QUOTES, 'UTF-8') ?>"
-                    alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
-                  >
-                <?php endif; ?>
-
-                <h3 class="product-card__name">
-                  <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
-                </h3>
-
-                <p class="product-card__price">
-                  ￥<?= number_format((int)$product['price']) ?>
-                  <span>（税込）</span>
-                </p>
-
-              </a>
-            </article>
+            <?php
+              $productCardOptions = [
+                'showFavorite' => true,
+                'rank' => null,
+              ];
+              include __DIR__ . '/includes/product-card.php';
+            ?>
           <?php endforeach; ?>
         </div>
       </div>
@@ -206,34 +191,15 @@ foreach ($bestSellerIds as $id) {
 
         <div class="product-scroll">
           <?php foreach ($bestSellers as $index => $product): ?>
-            <article class="product-card product-card--ranking">
-
-              <span class="product-card__rank">
-                <?= $index + 1 ?>
-              </span>
-
-              <a href="product-detail.php?id=<?= (int)$product['id'] ?>">
-
-                <?php if (!empty($product['image_path'])): ?>
-                  <img
-                    class="product-card__image"
-                    src="<?= htmlspecialchars($product['image_path'], ENT_QUOTES, 'UTF-8') ?>"
-                    alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
-                  >
-                <?php endif; ?>
-
-                <h3 class="product-card__name">
-                  <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
-                </h3>
-
-                <p class="product-card__price">
-                  ￥<?= number_format((int)$product['price']) ?>
-                  <span>（税込）</span>
-                </p>
-
-              </a>
-
-            </article>
+            <?php
+              $productCardOptions = [
+                'showFavorite' => false,
+                'headingTag' => 'h3',
+                'rank' => $index + 1,
+                'extraClass' => 'product-card--ranking',
+              ];
+              include __DIR__ . '/includes/product-card.php';
+            ?>
           <?php endforeach; ?>
         </div>
 
@@ -293,5 +259,7 @@ foreach ($bestSellerIds as $id) {
   </main>
 
   <?php include __DIR__ . '/includes/footer.php'; ?>
+
+  <script src="js/common.js"></script>
 </body>
 </html>

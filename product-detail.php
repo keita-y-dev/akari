@@ -652,55 +652,12 @@ $categoryLabel =
         <div class="recommend__grid">
 
           <?php foreach ($recommendProducts as $recommend): ?>
-
-            <a
-              href="product-detail.php?id=<?= (int) $recommend['id'] ?>"
-              class="recommend-card"
-            >
-
-              <div class="recommend-card__image">
-
-                <?php if (!empty($recommend['image_path'])): ?>
-
-                  <img
-                    src="<?= htmlspecialchars(
-                        $recommend['image_path'],
-                        ENT_QUOTES,
-                        'UTF-8'
-                    ) ?>"
-                    alt="<?= htmlspecialchars(
-                        $recommend['name'],
-                        ENT_QUOTES,
-                        'UTF-8'
-                    ) ?>"
-                  >
-
-                <?php endif; ?>
-
-              </div>
-
-
-              <h3>
-
-                <?= htmlspecialchars(
-                    $recommend['name'],
-                    ENT_QUOTES,
-                    'UTF-8'
-                ) ?>
-
-              </h3>
-
-
-              <p>
-
-                ￥<?= number_format(
-                    (int) $recommend['price']
-                ) ?>（税込）
-
-              </p>
-
-            </a>
-
+            <?php
+              $recommendCardOptions = [
+                'showFavorite' => false,
+              ];
+              include __DIR__ . '/includes/recomend-card.php';
+            ?>
           <?php endforeach; ?>
 
         </div>

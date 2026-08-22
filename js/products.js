@@ -5,92 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const productGrid = document.querySelector("#productGrid");
   const itemCount = document.querySelector("#itemCount");
   const noResult = document.querySelector("#noResult");
-  const favoriteButtons = document.querySelectorAll(".favorite-button");
   const colorButtons = document.querySelectorAll(".color-button");
-
-  const FAVORITES_KEY = "akariFavorites";
 
   let currentCategory = "all";
 
-
-  /* ==============================
-     favorites
-  ============================== */
-
-  function getFavorites() {
-    try {
-      return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
-    } catch (error) {
-      return [];
-    }
-  }
-
-
-  function saveFavorites(favorites) {
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
-  }
-
-
-  function getProductId(button) {
-    return button.closest(".product-card")?.dataset.order;
-  }
-
-
-  function updateFavoriteButton(button, isFavorite) {
-    const product = button.closest(".product-card");
-    const name =
-      product?.querySelector("h2")?.textContent.trim() || "商品";
-
-    button.classList.toggle("is-active", isFavorite);
-
-    button.setAttribute(
-      "aria-pressed",
-      String(isFavorite)
-    );
-
-    button.setAttribute(
-      "aria-label",
-      isFavorite
-        ? `${name}をお気に入りから削除`
-        : `${name}をお気に入りに追加`
-    );
-  }
-
-
-  function initializeFavorites() {
-    const favorites = getFavorites();
-
-    favoriteButtons.forEach((button) => {
-      const productId = getProductId(button);
-
-      updateFavoriteButton(
-        button,
-        favorites.includes(productId)
-      );
-    });
-  }
-
-
-  favoriteButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const productId = getProductId(button);
-
-      if (!productId) return;
-
-      const favorites = getFavorites();
-      const index = favorites.indexOf(productId);
-
-      if (index === -1) {
-        favorites.push(productId);
-        updateFavoriteButton(button, true);
-      } else {
-        favorites.splice(index, 1);
-        updateFavoriteButton(button, false);
-      }
-
-      saveFavorites(favorites);
-    });
-  });
 
 
   /* ==============================
@@ -214,6 +132,5 @@ document.addEventListener("DOMContentLoaded", () => {
      initial
   ============================== */
 
-  initializeFavorites();
   filterProducts();
 });

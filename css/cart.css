@@ -474,44 +474,6 @@ input {
   text-decoration: none;
 }
 
-.recommend-card__image {
-  width: 246px;
-  height: 246px;
-  overflow: hidden;
-  background-color: #eeeae4;
-}
-
-.recommend-card__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.recommend-card h3 {
-  margin: 8px 0 0;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
-}
-
-.recommend-card__bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.recommend-card__bottom p {
-  margin: 2px 0 0;
-  color: var(--accent-color);
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-}
-
-.recommend-card__bottom p span {
-  font-family: "Noto Sans JP", sans-serif;
-  font-size: 12px;
-}
-
 .heart {
   color: #817b77;
   font-family: Arial, sans-serif;
