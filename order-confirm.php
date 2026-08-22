@@ -1,3 +1,135 @@
+<?php
+
+session_start();
+
+require_once __DIR__ . '/includes/db.php';
+
+const FREE_SHIPPING_THRESHOLD = 5500;
+const SHIPPING_FEE = 550;
+
+if (empty($_SESSION['order_csrf_token'])) {
+    $_SESSION['order_csrf_token'] = bin2hex(random_bytes(32));
+}
+
+if (
+    empty($_SESSION['cart']) ||
+    !is_array($_SESSION['cart']) ||
+    empty($_SESSION['checkout']) ||
+    !is_array($_SESSION['checkout'])
+) {
+    header('Location: checkout.php');
+    exit;
+}
+
+$checkout = $_SESSION['checkout'];
+
+$productIds = array_values(
+    array_filter(
+        array_map('intval', array_keys($_SESSION['cart'])),
+        static fn (int $id): bool => $id > 0
+    )
+);
+
+if (empty($productIds)) {
+    header('Location: cart.php');
+    exit;
+}
+
+$placeholders = implode(',', array_fill(0, count($productIds), '?'));
+
+$sql = "
+    SELECT
+        p.id,
+        p.name,
+        p.price,
+        p.stock,
+        (
+            SELECT pi.image_path
+            FROM product_images AS pi
+            WHERE pi.product_id = p.id
+            ORDER BY pi.sort_order ASC, pi.id ASC
+            LIMIT 1
+        ) AS image_path
+    FROM products AS p
+    WHERE p.id IN ($placeholders)
+";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($productIds);
+
+$productMap = [];
+
+foreach ($stmt->fetchAll() as $product) {
+    $productMap[(int)$product['id']] = $product;
+}
+
+$cartItems = [];
+$subtotal = 0;
+
+foreach ($_SESSION['cart'] as $productId => $quantity) {
+    $productId = (int)$productId;
+
+    if (!isset($productMap[$productId])) {
+        continue;
+    }
+
+    $product = $productMap[$productId];
+    $stock = max(0, (int)$product['stock']);
+
+    if ($stock < 1) {
+        continue;
+    }
+
+    $quantity = max(1, min((int)$quantity, $stock));
+
+    $product['price'] = (int)$product['price'];
+    $product['quantity'] = $quantity;
+
+    $subtotal += $product['price'] * $quantity;
+    $cartItems[] = $product;
+}
+
+if (empty($cartItems)) {
+    header('Location: cart.php');
+    exit;
+}
+
+$shipping = $subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+$total = $subtotal + $shipping;
+
+function h(mixed $value): string
+{
+    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+}
+
+$deliveryLabels = [
+    'normal' => '通常配送',
+];
+
+$paymentLabels = [
+    'card' => 'クレジットカード',
+    'cod'  => '代金引換',
+];
+
+$timeLabels = [
+    ''       => '指定なし',
+    '午前中' => '午前中',
+    '14-16'  => '14:00〜16:00',
+    '16-18'  => '16:00〜18:00',
+    '18-20'  => '18:00〜20:00',
+];
+
+$deliveryDate = $checkout['deliveryDate'] ?? '';
+$deliveryDateLabel = '指定なし';
+
+if ($deliveryDate !== '') {
+    $timestamp = strtotime($deliveryDate);
+    $deliveryDateLabel = $timestamp !== false
+        ? date('Y年n月j日', $timestamp)
+        : $deliveryDate;
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -20,66 +152,26 @@
   <link rel="stylesheet" href="css/order-confirm.css">
 </head>
 
-
 <body>
-
-  <!-- =========================
-       HEADER
-  ========================== -->
 
   <?php include __DIR__ . '/includes/header.php'; ?>
 
-
   <main>
 
-    <!-- =========================
-         BREADCRUMB
-    ========================== -->
-
     <div class="breadcrumb">
-
-      <a href="index.php">
-        TOP
-      </a>
-
+      <a href="index.php">TOP</a>
       <span>&gt;</span>
-
-      <a href="cart.php">
-        カート
-      </a>
-
+      <a href="cart.php">カート</a>
       <span>&gt;</span>
-
-      <span>
-        ご注文内容確認
-      </span>
-
+      <span>ご注文内容確認</span>
     </div>
 
-
-    <!-- =========================
-         HEADING
-    ========================== -->
-
     <section class="page-heading">
-
-      <p class="page-heading__en">
-        ORDER CONFIRMATION
-      </p>
-
-      <h1>
-        ご注文内容の確認
-      </h1>
-
+      <p class="page-heading__en">ORDER CONFIRMATION</p>
+      <h1>ご注文内容の確認</h1>
     </section>
 
-
-    <!-- =========================
-         STEP
-    ========================== -->
-
     <div class="checkout-step">
-
       <div class="step">
         <span>1</span>
         <p>情報入力</p>
@@ -98,535 +190,305 @@
         <span>3</span>
         <p>完了</p>
       </div>
-
     </div>
-
-
-    <!-- =========================
-         DESCRIPTION
-    ========================== -->
 
     <div class="confirmation-description">
-
-      <p>
-        入力内容をご確認ください。
-      </p>
-
-      <p>
-        修正する場合は、各項目の「変更する」を押してください。
-      </p>
-
+      <p>入力内容をご確認ください。</p>
+      <p>修正する場合は、各項目の「変更する」を押してください。</p>
     </div>
-
-
-    <!-- =========================
-         CONFIRMATION
-    ========================== -->
 
     <div class="confirmation">
 
-
-      <!-- =========================
-           ORDER ITEM
-      ========================== -->
+      <?php if (!empty($_SESSION['order_error'])): ?>
+        <div class="form-error-summary" role="alert">
+          <?= h($_SESSION['order_error']) ?>
+        </div>
+        <?php unset($_SESSION['order_error']); ?>
+      <?php endif; ?>
 
       <section class="confirm-section">
 
         <div class="section-heading">
+          <h2>ご注文商品</h2>
 
-          <h2>
-            ご注文商品
-          </h2>
-
-          <button
-            class="change-button"
-            type="button"
-            data-change="input"
-          >
+          <a class="change-button" href="cart.php">
             変更する
             <span>&gt;</span>
-          </button>
-
+          </a>
         </div>
 
+        <?php foreach ($cartItems as $item): ?>
+          <div class="order-item">
 
-        <div class="order-item">
+            <div class="order-item__image">
+              <?php if (!empty($item['image_path'])): ?>
+                <img
+                  src="<?= h($item['image_path']) ?>"
+                  alt="<?= h($item['name']) ?>"
+                >
+              <?php endif; ?>
+            </div>
 
-          <div class="order-item__image">
+            <div class="order-item__info">
+              <h3><?= h($item['name']) ?></h3>
 
-            <img
-              src="images/products/mug.png"
-              alt="木の持ち手のマグカップ"
-            >
+              <p>
+                ￥<?= number_format($item['price']) ?>（税込）
+              </p>
 
-          </div>
-
-
-          <div class="order-item__info">
-
-            <h3>
-              木の持ち手のマグカップ
-            </h3>
-
-            <p>
-              ￥ 2,750（税込）
-            </p>
-
-            <p>
-              アイボリー × 1
-            </p>
+              <p>
+                数量：<?= (int)$item['quantity'] ?>
+              </p>
+            </div>
 
           </div>
-
-        </div>
-
+        <?php endforeach; ?>
 
         <div class="price-list">
 
           <div class="price-row">
-
-            <p>
-              小計
-            </p>
-
-            <p>
-              ￥2,750
-            </p>
-
+            <p>小計</p>
+            <p>￥<?= number_format($subtotal) ?></p>
           </div>
-
 
           <div class="price-row">
-
-            <p>
-              送料
-            </p>
-
-            <p>
-              ￥550
-            </p>
-
+            <p>送料</p>
+            <p>￥<?= number_format($shipping) ?></p>
           </div>
-
 
           <div class="price-total">
-
-            <p>
-              合計（税込）
-            </p>
-
-            <p>
-              ￥3,300
-            </p>
-
+            <p>合計（税込）</p>
+            <p>￥<?= number_format($total) ?></p>
           </div>
 
         </div>
 
       </section>
 
-
-      <!-- =========================
-           CUSTOMER
-      ========================== -->
-
       <section class="confirm-section">
 
         <div class="section-heading">
+          <h2>お客様情報</h2>
 
-          <h2>
-            お客様情報
-          </h2>
-
-          <button
-            class="change-button"
-            type="button"
-            data-change="input"
-          >
+          <a class="change-button" href="checkout.php">
             変更する
             <span>&gt;</span>
-          </button>
-
+          </a>
         </div>
-
 
         <dl class="confirm-list">
 
           <div class="confirm-row">
-
-            <dt>
-              お名前
-            </dt>
-
+            <dt>お名前</dt>
             <dd>
-              山田 太郎
+              <?= h($checkout['lastName'] ?? '') ?>
+              <?= h($checkout['firstName'] ?? '') ?>
             </dd>
-
           </div>
 
-
           <div class="confirm-row">
-
-            <dt>
-              フリガナ
-            </dt>
-
+            <dt>フリガナ</dt>
             <dd>
-              ヤマダ タロウ
+              <?= h($checkout['lastNameKana'] ?? '') ?>
+              <?= h($checkout['firstNameKana'] ?? '') ?>
             </dd>
-
           </div>
 
-
           <div class="confirm-row">
-
-            <dt>
-              メールアドレス
-            </dt>
-
-            <dd>
-              example@email.com
-            </dd>
-
+            <dt>メールアドレス</dt>
+            <dd><?= h($checkout['email'] ?? '') ?></dd>
           </div>
 
-
           <div class="confirm-row">
-
-            <dt>
-              電話番号
-            </dt>
-
-            <dd>
-              090-1234-5678
-            </dd>
-
+            <dt>電話番号</dt>
+            <dd><?= h($checkout['phone'] ?? '') ?></dd>
           </div>
 
         </dl>
 
       </section>
 
-
-      <!-- =========================
-           DELIVERY ADDRESS
-      ========================== -->
-
       <section class="confirm-section">
 
         <div class="section-heading">
+          <h2>配送先</h2>
 
-          <h2>
-            配送先
-          </h2>
-
-          <button
-            class="change-button"
-            type="button"
-            data-change="input"
-          >
+          <a class="change-button" href="checkout.php">
             変更する
             <span>&gt;</span>
-          </button>
-
+          </a>
         </div>
-
 
         <div class="address">
+          <p>〒 <?= h($checkout['postal'] ?? '') ?></p>
 
           <p>
-            〒 123-4567
+            <?= h($checkout['prefecture'] ?? '') ?>
+            <?= h($checkout['address'] ?? '') ?>
           </p>
 
-          <p>
-            東京都〇〇区〇〇1-2-3
-          </p>
-
-          <p>
-            〇〇マンション102号室
-          </p>
-
+          <?php if (!empty($checkout['building'])): ?>
+            <p><?= h($checkout['building']) ?></p>
+          <?php endif; ?>
         </div>
 
       </section>
 
-
-      <!-- =========================
-           DELIVERY
-      ========================== -->
-
       <section class="confirm-section">
 
         <div class="section-heading">
+          <h2>配送方法・希望日時</h2>
 
-          <h2>
-            配送方法・希望日時
-          </h2>
-
-          <button
-            class="change-button"
-            type="button"
-            data-change="input"
-          >
+          <a class="change-button" href="checkout.php">
             変更する
             <span>&gt;</span>
-          </button>
-
+          </a>
         </div>
-
 
         <dl class="confirm-list">
 
           <div class="confirm-row">
-
-            <dt>
-              配送方法
-            </dt>
-
+            <dt>配送方法</dt>
             <dd>
-              通常配達
+              <?= h($deliveryLabels[$checkout['delivery'] ?? 'normal'] ?? '通常配送') ?>
             </dd>
-
           </div>
 
-
           <div class="confirm-row">
-
-            <dt>
-              お届け希望日
-            </dt>
-
-            <dd>
-              指定なし
-            </dd>
-
+            <dt>お届け希望日</dt>
+            <dd><?= h($deliveryDateLabel) ?></dd>
           </div>
 
-
           <div class="confirm-row">
-
-            <dt>
-              お届け希望時間
-            </dt>
-
+            <dt>お届け希望時間</dt>
             <dd>
-              18:00 ~ 20:00
+              <?= h($timeLabels[$checkout['deliveryTime'] ?? ''] ?? '指定なし') ?>
             </dd>
-
           </div>
 
         </dl>
 
       </section>
 
-
-      <!-- =========================
-           PAYMENT
-      ========================== -->
-
       <section class="confirm-section">
 
         <div class="section-heading">
+          <h2>お支払い方法</h2>
 
-          <h2>
-            お支払い方法
-          </h2>
-
-          <button
-            class="change-button"
-            type="button"
-            data-change="input"
-          >
+          <a class="change-button" href="checkout.php">
             変更する
             <span>&gt;</span>
-          </button>
-
+          </a>
         </div>
-
 
         <dl class="confirm-list">
 
           <div class="confirm-row">
-
-            <dt>
-              お支払い方法
-            </dt>
-
+            <dt>お支払い方法</dt>
             <dd>
-              クレジットカード
+              <?= h($paymentLabels[$checkout['payment'] ?? 'card'] ?? '') ?>
             </dd>
-
           </div>
 
-
-          <div class="confirm-row">
-
-            <dt>
-              カード番号
-            </dt>
-
-            <dd>
-              **** **** **** 1234
-              <small>
-                ※カード情報は一部のみ表示します
-              </small>
-            </dd>
-
-          </div>
+          <?php if (($checkout['payment'] ?? 'card') === 'card'): ?>
+            <div class="confirm-row">
+              <dt>カード情報</dt>
+              <dd>
+                デモ画面のため保存しません
+                <small>※実際のカード情報は入力しないでください</small>
+              </dd>
+            </div>
+          <?php endif; ?>
 
         </dl>
 
       </section>
 
-
-      <!-- =========================
-           GIFT
-      ========================== -->
-
       <section class="confirm-section">
 
         <div class="section-heading">
+          <h2>ギフト・備考</h2>
 
-          <h2>
-            ギフト・備考
-          </h2>
-
-          <button
-            class="change-button"
-            type="button"
-            data-change="input"
-          >
+          <a class="change-button" href="checkout.php">
             変更する
             <span>&gt;</span>
-          </button>
-
+          </a>
         </div>
-
 
         <dl class="confirm-list">
 
           <div class="confirm-row">
-
-            <dt>
-              ギフトラッピング
-            </dt>
-
+            <dt>ギフトラッピング</dt>
             <dd>
-              希望しない
+              <?= !empty($checkout['gift']) ? '希望する' : '希望しない' ?>
             </dd>
-
           </div>
 
-
           <div class="confirm-row">
-
-            <dt>
-              備考
-            </dt>
-
+            <dt>備考</dt>
             <dd>
-              なし
+              <?= ($checkout['note'] ?? '') !== ''
+                  ? nl2br(h($checkout['note']))
+                  : 'なし' ?>
             </dd>
-
           </div>
 
         </dl>
 
       </section>
-
-
-      <!-- =========================
-           BILLING
-      ========================== -->
 
       <section class="confirm-section billing-section">
 
         <div class="section-heading">
-
-          <h2>
-            ご請求金額
-          </h2>
-
-          <button
-            class="change-button"
-            type="button"
-            data-change="input"
-          >
-            変更する
-            <span>&gt;</span>
-          </button>
-
+          <h2>ご請求金額</h2>
         </div>
-
 
         <div class="billing">
 
           <div class="billing-row">
-
-            <p>
-              小計
-            </p>
-
-            <p>
-              ￥2,750
-            </p>
-
+            <p>小計</p>
+            <p>￥<?= number_format($subtotal) ?></p>
           </div>
-
 
           <div class="billing-row">
-
-            <p>
-              送料
-            </p>
-
-            <p>
-              ￥550
-            </p>
-
+            <p>送料</p>
+            <p>￥<?= number_format($shipping) ?></p>
           </div>
 
-
           <div class="billing-total">
-
-            <p>
-              合計（税込）
-            </p>
-
-            <p>
-              ￥3,300
-            </p>
-
+            <p>合計（税込）</p>
+            <p>￥<?= number_format($total) ?></p>
           </div>
 
         </div>
 
       </section>
 
-
-      <!-- =========================
-           ORDER BUTTON
-      ========================== -->
-
       <section class="order-action">
 
-        <button
-          class="order-button"
-          id="orderButton"
-          type="button"
-        >
-          注 文 を 確 定 す る
-        </button>
+        <form action="order-process.php" method="post">
+          <input
+            type="hidden"
+            name="csrf_token"
+            value="<?= h($_SESSION['order_csrf_token']) ?>"
+          >
 
+          <button
+            class="order-button"
+            id="orderButton"
+            type="submit"
+          >
+            注 文 を 確 定 す る
+          </button>
+        </form>
 
-        <button
+        <a
           class="back-button"
           id="backButton"
-          type="button"
+          href="checkout.php"
         >
           ←入力内容の修正に戻る
-        </button>
-
+        </a>
 
         <p class="order-note">
           ※ボタンを押すと注文が確定します。
@@ -636,79 +498,9 @@
 
     </div>
 
-
-    <!-- =========================
-         COMPLETE
-    ========================== -->
-
-    <section
-      class="complete"
-      id="complete"
-      aria-hidden="true"
-    >
-
-      <p class="complete__en">
-        ORDER COMPLETE
-      </p>
-
-      <h2>
-        ご注文ありがとうございます
-      </h2>
-
-      <p class="complete__text">
-        ご注文を受け付けました。
-        <br>
-        ご登録いただいたメールアドレスへ
-        <br>
-        確認メールをお送りします。
-      </p>
-
-      <a
-        class="complete-button"
-        href="index.php"
-      >
-        TOPへ戻る
-      </a>
-
-    </section>
-
   </main>
 
-
-  <!-- =========================
-       FOOTER
-  ========================== -->
-
-  <footer class="footer">
-    <div class="footer__inner">
-      <div class="footer__brand">
-        <p class="footer__logo">灯々</p>
-        <p>東京都杉並区x xx xx</p>
-        <a href="mailto:info@akari.example">info@akari.example</a>
-      </div>
-
-      <div class="footer__accordion">
-        <button class="footer__accordion-button" type="button" aria-expanded="false" aria-controls="footer-links">
-          <span>サイトメニュー</span>
-          <span class="footer__accordion-icon" aria-hidden="true">＋</span>
-        </button>
-
-        <nav class="footer__nav" id="footer-links" aria-label="フッターナビゲーション">
-          <ul>
-            <li><a href="#">ご利用ガイド</a></li>
-            <li><a href="#">サポート</a></li>
-            <li><a href="about.php">灯々について</a></li>
-            <li><a href="#">規約・ポリシー</a></li>
-          </ul>
-        </nav>
-      </div>
-
-      <p class="footer__copy">© 2026 AKARI.inc</p>
-    </div>
-  </footer>
-
-
-  <script src="js/order-confirm.js"></script>
+  <?php include __DIR__ . '/includes/footer.php'; ?>
 
   <script src="js/common.js"></script>
 </body>

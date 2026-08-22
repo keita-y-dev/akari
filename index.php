@@ -1,3 +1,74 @@
+<?php
+
+require_once __DIR__ . '/includes/db.php';
+
+/*
+ * NEW ARRIVAL
+ * 登録日時の新しい商品から4件取得
+ */
+$newArrivalSql = "
+    SELECT
+        p.id,
+        p.name,
+        p.price,
+        (
+            SELECT pi.image_path
+            FROM product_images AS pi
+            WHERE pi.product_id = p.id
+            ORDER BY pi.sort_order ASC, pi.id ASC
+            LIMIT 1
+        ) AS image_path
+    FROM products AS p
+    ORDER BY p.created_at DESC, p.id DESC
+    LIMIT 4
+";
+
+$newArrivalStmt = $pdo->query($newArrivalSql);
+$newArrivals = $newArrivalStmt->fetchAll();
+
+
+/*
+ * BEST SELLER
+ * 売上データはまだないため、現デザインのランキング
+ * 1: マグカップ / 2: リネンクロス / 3: 木製トレー
+ * をDBから取得
+ */
+$bestSellerIds = [1, 3, 6];
+
+$bestSellerSql = "
+    SELECT
+        p.id,
+        p.name,
+        p.price,
+        (
+            SELECT pi.image_path
+            FROM product_images AS pi
+            WHERE pi.product_id = p.id
+            ORDER BY pi.sort_order ASC, pi.id ASC
+            LIMIT 1
+        ) AS image_path
+    FROM products AS p
+    WHERE p.id IN (1, 3, 6)
+";
+
+$bestSellerStmt = $pdo->query($bestSellerSql);
+$bestSellerRows = $bestSellerStmt->fetchAll();
+
+$bestSellerMap = [];
+
+foreach ($bestSellerRows as $row) {
+    $bestSellerMap[(int)$row['id']] = $row;
+}
+
+$bestSellers = [];
+
+foreach ($bestSellerIds as $id) {
+    if (isset($bestSellerMap[$id])) {
+        $bestSellers[] = $bestSellerMap[$id];
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -27,37 +98,30 @@
         <h2 class="section-title">NEW ARRIVAL</h2>
 
         <div class="product-grid">
-          <article class="product-card">
-            <a href="product-detail.php">
-              <img class="product-card__image" src="images/products/mug.png" alt="木の持ち手のマグカップ">
-              <h3 class="product-card__name">木の持ち手のマグカップ</h3>
-              <p class="product-card__price">￥2,750 <span>（税込）</span></p>
-            </a>
-          </article>
+          <?php foreach ($newArrivals as $product): ?>
+            <article class="product-card">
+              <a href="product-detail.php?id=<?= (int)$product['id'] ?>">
 
-          <article class="product-card">
-            <a href="product-detail.php">
-              <img class="product-card__image" src="images/products/flower-vase.png" alt="ガラスの一輪挿し">
-              <h3 class="product-card__name">ガラスの一輪挿し</h3>
-              <p class="product-card__price">￥3,850 <span>（税込）</span></p>
-            </a>
-          </article>
+                <?php if (!empty($product['image_path'])): ?>
+                  <img
+                    class="product-card__image"
+                    src="<?= htmlspecialchars($product['image_path'], ENT_QUOTES, 'UTF-8') ?>"
+                    alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
+                  >
+                <?php endif; ?>
 
-          <article class="product-card">
-            <a href="product-detail.php">
-              <img class="product-card__image" src="images/products/candle-holder.png" alt="真鍮のキャンドルホルダー">
-              <h3 class="product-card__name">真鍮のキャンドルホルダー</h3>
-              <p class="product-card__price">￥3,850 <span>（税込）</span></p>
-            </a>
-          </article>
+                <h3 class="product-card__name">
+                  <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
+                </h3>
 
-          <article class="product-card">
-            <a href="product-detail.php">
-              <img class="product-card__image" src="images/products/wood-tray.png" alt="木製トレー">
-              <h3 class="product-card__name">木製トレー</h3>
-              <p class="product-card__price">￥4,400 <span>（税込）</span></p>
-            </a>
-          </article>
+                <p class="product-card__price">
+                  ￥<?= number_format((int)$product['price']) ?>
+                  <span>（税込）</span>
+                </p>
+
+              </a>
+            </article>
+          <?php endforeach; ?>
         </div>
       </div>
     </section>
@@ -141,32 +205,36 @@
         </div>
 
         <div class="product-scroll">
-          <article class="product-card product-card--ranking">
-            <span class="product-card__rank">1</span>
-            <a href="product-detail.php">
-              <img class="product-card__image" src="images/products/mug.png" alt="木の持ち手のマグカップ">
-              <h3 class="product-card__name">木の持ち手のマグカップ</h3>
-              <p class="product-card__price">￥2,750 <span>（税込）</span></p>
-            </a>
-          </article>
+          <?php foreach ($bestSellers as $index => $product): ?>
+            <article class="product-card product-card--ranking">
 
-          <article class="product-card product-card--ranking">
-            <span class="product-card__rank">2</span>
-            <a href="product-detail.php">
-              <img class="product-card__image" src="images/products/linen-cloth.png" alt="リネンクロス">
-              <h3 class="product-card__name">リネンクロス</h3>
-              <p class="product-card__price">￥1,650 <span>（税込）</span></p>
-            </a>
-          </article>
+              <span class="product-card__rank">
+                <?= $index + 1 ?>
+              </span>
 
-          <article class="product-card product-card--ranking">
-            <span class="product-card__rank">3</span>
-            <a href="product-detail.php">
-              <img class="product-card__image" src="images/products/wood-tray.png" alt="木製トレー">
-              <h3 class="product-card__name">木製トレー</h3>
-              <p class="product-card__price">￥4,400 <span>（税込）</span></p>
-            </a>
-          </article>
+              <a href="product-detail.php?id=<?= (int)$product['id'] ?>">
+
+                <?php if (!empty($product['image_path'])): ?>
+                  <img
+                    class="product-card__image"
+                    src="<?= htmlspecialchars($product['image_path'], ENT_QUOTES, 'UTF-8') ?>"
+                    alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
+                  >
+                <?php endif; ?>
+
+                <h3 class="product-card__name">
+                  <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
+                </h3>
+
+                <p class="product-card__price">
+                  ￥<?= number_format((int)$product['price']) ?>
+                  <span>（税込）</span>
+                </p>
+
+              </a>
+
+            </article>
+          <?php endforeach; ?>
         </div>
 
         <a class="button button--text" href="products.php">ランキングをすべて見る</a>

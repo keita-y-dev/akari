@@ -1,3 +1,49 @@
+<?php
+
+require_once __DIR__ . '/includes/db.php';
+
+/*
+ * 特集ページで使用する商品
+ * SCENE 01: 1, 3
+ * SCENE 02: 4, 2
+ * SCENE 03: 6, 5
+ */
+$productIds = [1, 3, 4, 2, 6, 5];
+
+$placeholders = implode(',', array_fill(0, count($productIds), '?'));
+
+$sql = "
+    SELECT
+        p.id,
+        p.name,
+        p.price,
+        (
+            SELECT pi.image_path
+            FROM product_images AS pi
+            WHERE pi.product_id = p.id
+            ORDER BY pi.sort_order ASC, pi.id ASC
+            LIMIT 1
+        ) AS image_path
+    FROM products AS p
+    WHERE p.id IN ($placeholders)
+";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($productIds);
+
+$productMap = [];
+
+foreach ($stmt->fetchAll() as $product) {
+    $productMap[(int)$product['id']] = $product;
+}
+
+$sceneProducts = [
+    1 => [1, 3],
+    2 => [4, 2],
+    3 => [6, 5],
+];
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -104,76 +150,65 @@
 
       <div class="product-list">
 
-        <article class="product-card">
+        <?php foreach ($sceneProducts[3] as $productId): ?>
 
-          <a href="product-detail.php" class="product-card__image">
-            <img
-              src="images/products/mug.png"
-              alt="木の持ち手のマグカップ"
+          <?php if (!isset($productMap[$productId])) continue; ?>
+
+          <?php $product = $productMap[$productId]; ?>
+
+          <article class="product-card">
+
+            <a
+              href="product-detail.php?id=<?= (int)$product['id'] ?>"
+              class="product-card__image"
             >
-          </a>
 
-          <div class="product-card__info">
+              <?php if (!empty($product['image_path'])): ?>
 
-            <h3>
-              木の持ち手のマグカップ
-            </h3>
+                <img
+                  src="<?= htmlspecialchars($product['image_path'], ENT_QUOTES, 'UTF-8') ?>"
+                  alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
+                >
 
-            <div class="product-card__bottom">
-              <p class="product-card__price">
-                ￥ 2,750 <span>（税込）</span>
-              </p>
+              <?php endif; ?>
 
-              <button
-                class="favorite-button"
-                type="button"
-                aria-label="お気に入りに追加"
-              >
-                ♡
-              </button>
+            </a>
+
+            <div class="product-card__info">
+
+              <h3>
+                <a href="product-detail.php?id=<?= (int)$product['id'] ?>">
+                  <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
+                </a>
+              </h3>
+
+              <div class="product-card__bottom">
+
+                <p class="product-card__price">
+                  ￥ <?= number_format((int)$product['price']) ?>
+                  <span>（税込）</span>
+                </p>
+
+                <button
+                  class="favorite-button"
+                  type="button"
+                  data-product-id="<?= (int)$product['id'] ?>"
+                  aria-label="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>をお気に入りに追加"
+                >
+                  ♡
+                </button>
+
+              </div>
+
             </div>
 
-          </div>
+          </article>
 
-        </article>
-
-
-        <article class="product-card">
-
-          <a href="product-detail.php" class="product-card__image">
-            <img
-              src="images/products/linen-cloth.png"
-              alt="リネンクロス"
-            >
-          </a>
-
-          <div class="product-card__info">
-
-            <h3>
-              リネンクロス
-            </h3>
-
-            <div class="product-card__bottom">
-              <p class="product-card__price">
-                ￥ 1,650 <span>（税込）</span>
-              </p>
-
-              <button
-                class="favorite-button"
-                type="button"
-                aria-label="お気に入りに追加"
-              >
-                ♡
-              </button>
-            </div>
-
-          </div>
-
-        </article>
+        <?php endforeach; ?>
 
       </div>
 
-      <a href="product-detail.php" class="scene__link">
+      <a href="products.php" class="scene__link">
         商品を見る<span>→</span>
       </a>
 

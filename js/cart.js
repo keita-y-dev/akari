@@ -1,98 +1,84 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const cart = document.querySelector("#cart");
-  const cartItem = document.querySelector("#cartItem");
+  const cartItems = document.querySelector("#cartItems");
   const emptyCart = document.querySelector("#emptyCart");
-
-  const quantityMinus = document.querySelector(".quantity__minus");
-  const quantityPlus = document.querySelector(".quantity__plus");
-  const quantityInput = document.querySelector(".quantity__input");
-
-  const deleteButton = document.querySelector(".delete-button");
 
   const subtotalElement = document.querySelector("#subtotal");
   const shippingElement = document.querySelector("#shipping");
   const totalElement = document.querySelector("#total");
 
-  const freeShippingMessage = document.querySelector("#freeShippingMessage");
-  const progressBar = document.querySelector("#progressBar");
+  const freeShippingMessage =
+    document.querySelector("#freeShippingMessage");
 
-  const checkoutButton = document.querySelector("#checkoutButton");
+  const progressBar =
+    document.querySelector("#progressBar");
 
-  const guideItems = document.querySelectorAll(".guide-item");
+  const guideItems =
+    document.querySelectorAll(".guide-item");
 
-  const FREE_SHIPPING_THRESHOLD = 5500;
-  const SHIPPING_FEE = 550;
+  const config =
+    window.AKARI_CART || {};
 
+  const csrfToken =
+    config.csrfToken || "";
 
-  /* ==============================
-     初期値
-  ============================== */
-
-  if (!cartItem || !quantityInput) {
-    return;
-  }
-
-  const unitPrice =
-    Number(cartItem.dataset.price) || 0;
+  const freeShippingThreshold =
+    Number(config.freeShippingThreshold) || 5500;
 
 
   /* ==============================
-     金額表示
+     金額フォーマット
   ============================== */
 
   function formatPrice(price) {
 
-    return price.toLocaleString("ja-JP");
+    return Number(price).toLocaleString("ja-JP");
 
   }
 
 
   /* ==============================
-     カート更新
+     カート商品取得
   ============================== */
 
-  function updateCart() {
+  function getCartItem(target) {
 
-    let quantity =
-      Number(quantityInput.value) || 1;
+    return target.closest("[data-cart-item]");
 
-    const maxQuantity =
-      Number(quantityInput.max) || 99;
+  }
 
 
-    if (quantity < 1) {
-      quantity = 1;
-    }
+  /* ==============================
+     操作中のボタン無効化
+  ============================== */
+
+  function setControlsDisabled(
+    cartItem,
+    disabled
+  ) {
+
+    cartItem
+      .querySelectorAll("button, input")
+      .forEach((control) => {
+
+        control.disabled = disabled;
+
+      });
+
+  }
 
 
-    if (quantity > maxQuantity) {
-      quantity = maxQuantity;
-    }
+  /* ==============================
+     金額表示更新
+  ============================== */
 
-
-    quantityInput.value =
-      quantity;
-
-
-    const subtotal =
-      unitPrice * quantity;
-
-
-    const shipping =
-      subtotal >= FREE_SHIPPING_THRESHOLD
-        ? 0
-        : SHIPPING_FEE;
-
-
-    const total =
-      subtotal + shipping;
-
+  function updateSummary(data) {
 
     if (subtotalElement) {
 
       subtotalElement.textContent =
-        formatPrice(subtotal);
+        formatPrice(data.subtotal);
 
     }
 
@@ -100,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (shippingElement) {
 
       shippingElement.textContent =
-        formatPrice(shipping);
+        formatPrice(data.shipping);
 
     }
 
@@ -108,42 +94,25 @@ document.addEventListener("DOMContentLoaded", () => {
     if (totalElement) {
 
       totalElement.textContent =
-        formatPrice(total);
+        formatPrice(data.total);
 
     }
 
 
-    updateFreeShipping(subtotal);
-
-  }
-
-
-  /* ==============================
-     送料無料表示
-  ============================== */
-
-  function updateFreeShipping(subtotal) {
-
-    const remaining =
-      Math.max(
-        FREE_SHIPPING_THRESHOLD - subtotal,
-        0
-      );
-
-
     if (freeShippingMessage) {
 
-      if (remaining === 0) {
+      const remaining =
+        Math.max(
+          freeShippingThreshold -
+          Number(data.subtotal),
+          0
+        );
 
-        freeShippingMessage.textContent =
-          "送料無料です";
 
-      } else {
-
-        freeShippingMessage.textContent =
-          `あと￥${formatPrice(remaining)}で送料無料`;
-
-      }
+      freeShippingMessage.textContent =
+        remaining === 0
+          ? "送料無料です"
+          : `あと￥${formatPrice(remaining)}で送料無料`;
 
     }
 
@@ -152,7 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const percentage =
         Math.min(
-          subtotal / FREE_SHIPPING_THRESHOLD * 100,
+          Number(data.subtotal) /
+          freeShippingThreshold *
+          100,
           100
         );
 
@@ -166,56 +137,305 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ==============================
-     数量を減らす
+     空カート表示
   ============================== */
 
-  quantityMinus?.addEventListener(
-    "click",
-    () => {
+  function showEmptyCart() {
 
-      let quantity =
-        Number(quantityInput.value) || 1;
+    if (cart) {
+      cart.hidden = true;
+    }
 
 
-      if (quantity > 1) {
+    if (emptyCart) {
+      emptyCart.hidden = false;
+    }
 
-        quantity--;
+  }
 
-        quantityInput.value =
-          quantity;
 
-        updateCart();
+  /* ==============================
+     PHPへカート更新リクエスト
+  ============================== */
+
+  async function sendCartRequest(
+    action,
+    productId,
+    quantity = null
+  ) {
+
+    const formData =
+      new FormData();
+
+
+    formData.append(
+      "action",
+      action
+    );
+
+
+    formData.append(
+      "product_id",
+      productId
+    );
+
+
+    formData.append(
+      "csrf_token",
+      csrfToken
+    );
+
+
+    if (quantity !== null) {
+
+      formData.append(
+        "quantity",
+        quantity
+      );
+
+    }
+
+
+    const response =
+      await fetch(
+        "cart.php",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            "X-Requested-With":
+              "XMLHttpRequest"
+          }
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !response.ok ||
+      !data.success
+    ) {
+
+      throw new Error(
+        data.message ||
+        "カートを更新できませんでした。"
+      );
+
+    }
+
+
+    return data;
+
+  }
+
+
+  /* ==============================
+     数量更新
+  ============================== */
+
+  async function updateQuantity(
+    cartItem,
+    newQuantity
+  ) {
+
+    const input =
+      cartItem.querySelector(
+        ".quantity__input"
+      );
+
+
+    if (!input) {
+      return;
+    }
+
+
+    const min =
+      Number(input.min) || 1;
+
+
+    const max =
+      Number(input.max) || 99;
+
+
+    const quantity =
+      Math.min(
+        max,
+        Math.max(
+          min,
+          Number(newQuantity) || min
+        )
+      );
+
+
+    const productId =
+      cartItem.dataset.productId;
+
+
+    input.value =
+      quantity;
+
+
+    setControlsDisabled(
+      cartItem,
+      true
+    );
+
+
+    try {
+
+      const data =
+        await sendCartRequest(
+          "update",
+          productId,
+          quantity
+        );
+
+
+      updateSummary(data);
+
+    } catch (error) {
+
+      alert(error.message);
+
+      window.location.reload();
+
+    } finally {
+
+      if (
+        document.body.contains(
+          cartItem
+        )
+      ) {
+
+        setControlsDisabled(
+          cartItem,
+          false
+        );
 
       }
 
     }
-  );
+
+  }
 
 
   /* ==============================
-     数量を増やす
+     ＋ − 削除ボタン
   ============================== */
 
-  quantityPlus?.addEventListener(
+  cartItems?.addEventListener(
     "click",
-    () => {
+    async (event) => {
 
-      let quantity =
-        Number(quantityInput.value) || 1;
-
-
-      const maxQuantity =
-        Number(quantityInput.max) || 99;
+      const cartItem =
+        getCartItem(event.target);
 
 
-      if (quantity < maxQuantity) {
+      if (!cartItem) {
+        return;
+      }
 
-        quantity++;
 
-        quantityInput.value =
-          quantity;
+      const input =
+        cartItem.querySelector(
+          ".quantity__input"
+        );
 
-        updateCart();
+
+      /*
+       * 数量を減らす
+       */
+      if (
+        event.target.closest(
+          ".quantity__minus"
+        )
+      ) {
+
+        await updateQuantity(
+          cartItem,
+          Number(input.value) - 1
+        );
+
+        return;
+
+      }
+
+
+      /*
+       * 数量を増やす
+       */
+      if (
+        event.target.closest(
+          ".quantity__plus"
+        )
+      ) {
+
+        await updateQuantity(
+          cartItem,
+          Number(input.value) + 1
+        );
+
+        return;
+
+      }
+
+
+      /*
+       * 商品削除
+       */
+      if (
+        event.target.closest(
+          ".delete-button"
+        )
+      ) {
+
+        const productId =
+          cartItem.dataset.productId;
+
+
+        setControlsDisabled(
+          cartItem,
+          true
+        );
+
+
+        try {
+
+          const data =
+            await sendCartRequest(
+              "remove",
+              productId
+            );
+
+
+          cartItem.remove();
+
+
+          updateSummary(data);
+
+
+          if (
+            Number(data.cartCount) === 0
+          ) {
+
+            showEmptyCart();
+
+          }
+
+        } catch (error) {
+
+          alert(error.message);
+
+
+          setControlsDisabled(
+            cartItem,
+            false
+          );
+
+        }
 
       }
 
@@ -227,73 +447,34 @@ document.addEventListener("DOMContentLoaded", () => {
      数量を直接入力
   ============================== */
 
-  quantityInput?.addEventListener(
+  cartItems?.addEventListener(
     "change",
-    () => {
+    async (event) => {
 
-      let quantity =
-        Number(quantityInput.value) || 1;
-
-
-      const maxQuantity =
-        Number(quantityInput.max) || 99;
-
-
-      if (quantity < 1) {
-        quantity = 1;
+      if (
+        !event.target.matches(
+          ".quantity__input"
+        )
+      ) {
+        return;
       }
 
 
-      if (quantity > maxQuantity) {
-        quantity = maxQuantity;
-      }
-
-
-      quantityInput.value =
-        quantity;
-
-
-      updateCart();
-
-    }
-  );
-
-
-  /* ==============================
-     商品削除
-  ============================== */
-
-  deleteButton?.addEventListener(
-    "click",
-    () => {
-
-      cartItem.remove();
-
-
-      if (cart) {
-
-        cart.style.display =
-          "none";
-
-      }
-
-
-      if (emptyCart) {
-
-        emptyCart.style.display =
-          "block";
-
-      }
-
-
-      if (checkoutButton) {
-
-        checkoutButton.setAttribute(
-          "aria-disabled",
-          "true"
+      const cartItem =
+        getCartItem(
+          event.target
         );
 
+
+      if (!cartItem) {
+        return;
       }
+
+
+      await updateQuantity(
+        cartItem,
+        event.target.value
+      );
 
     }
   );
@@ -311,10 +492,12 @@ document.addEventListener("DOMContentLoaded", () => {
           ".guide-button"
         );
 
+
       const content =
         guideItem.querySelector(
           ".guide-content"
         );
+
 
       const arrow =
         guideItem.querySelector(
@@ -362,20 +545,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
   );
-
-
-  /* ==============================
-     初期表示
-  ============================== */
-
-  if (emptyCart) {
-
-    emptyCart.style.display =
-      "none";
-
-  }
-
-
-  updateCart();
 
 });

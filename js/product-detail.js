@@ -1,171 +1,193 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
-  const mainImage =
-    document.querySelector("#mainImage");
+    const mainImage =
+      document.querySelector(
+        "#mainImage"
+      );
 
-  const mainImageButton =
-    document.querySelector(".product-gallery__main");
+    const mainImageButton =
+      document.querySelector(
+        ".product-gallery__main"
+      );
 
-  const thumbnails =
-    document.querySelectorAll(".gallery-thumb");
+    const thumbnails =
+      document.querySelectorAll(
+        ".gallery-thumb"
+      );
 
-  const favoriteButton =
-    document.querySelector(".favorite-button");
+    const favoriteButton =
+      document.querySelector(
+        ".favorite-button"
+      );
 
-  const quantityInput =
-    document.querySelector("#quantityInput");
+    const quantityInput =
+      document.querySelector(
+        "#quantityInput"
+      );
 
-  const quantityMinus =
-    document.querySelector("#quantityMinus");
+    const quantityMinus =
+      document.querySelector(
+        "#quantityMinus"
+      );
 
-  const quantityPlus =
-    document.querySelector("#quantityPlus");
+    const quantityPlus =
+      document.querySelector(
+        "#quantityPlus"
+      );
 
-  const accordions =
-    document.querySelectorAll(".accordion");
+    const cartButton =
+      document.querySelector(
+        ".cart-button"
+      );
 
-  const modal =
-    document.querySelector("#imageModal");
+    const accordions =
+      document.querySelectorAll(
+        ".accordion"
+      );
 
-  const modalImage =
-    document.querySelector("#modalImage");
+    const modal =
+      document.querySelector(
+        "#imageModal"
+      );
 
-  const modalClose =
-    document.querySelector("#modalClose");
+    const modalImage =
+      document.querySelector(
+        "#modalImage"
+      );
 
-  const modalOverlay =
-    document.querySelector(".image-modal__overlay");
+    const modalClose =
+      document.querySelector(
+        "#modalClose"
+      );
 
-
-  const FAVORITES_KEY =
-    "akariFavorites";
-
-
-  if (!mainImage) {
-    return;
-  }
-
-
-  /* ==============================
-     product id
-  ============================== */
-
-  const productId =
-    new URLSearchParams(window.location.search)
-      .get("id");
+    const modalOverlay =
+      document.querySelector(
+        ".image-modal__overlay"
+      );
 
 
-  /* ==============================
-     favorites
-  ============================== */
+    const config =
+      window.AKARI_PRODUCT || {};
 
-  function getFavorites() {
 
-    try {
+    const productId =
+      String(
+        config.productId || ""
+      );
 
-      const favorites =
-        JSON.parse(
-          localStorage.getItem(
-            FAVORITES_KEY
-          )
+
+    const csrfToken =
+      config.csrfToken || "";
+
+
+    const FAVORITES_KEY =
+      "akariFavorites";
+
+
+    /* ==============================
+       favorites
+    ============================== */
+
+    function getFavorites() {
+
+      try {
+
+        const favorites =
+          JSON.parse(
+            localStorage.getItem(
+              FAVORITES_KEY
+            )
+          );
+
+
+        return Array.isArray(
+          favorites
+        )
+          ? favorites
+          : [];
+
+      } catch (error) {
+
+        return [];
+
+      }
+
+    }
+
+
+    function saveFavorites(
+      favorites
+    ) {
+
+      localStorage.setItem(
+        FAVORITES_KEY,
+        JSON.stringify(
+          favorites
+        )
+      );
+
+    }
+
+
+    function updateFavoriteButton(
+      isFavorite
+    ) {
+
+      if (!favoriteButton) {
+        return;
+      }
+
+
+      const icon =
+        favoriteButton.querySelector(
+          "img"
         );
 
-      return Array.isArray(favorites)
-        ? favorites
-        : [];
 
-    } catch (error) {
+      if (icon) {
 
-      return [];
+        icon.src =
+          isFavorite
+            ? "images/icons/heart-solid.svg"
+            : "images/icons/heart-outline.svg";
 
-    }
-
-  }
+      }
 
 
-  function saveFavorites(favorites) {
-
-    localStorage.setItem(
-      FAVORITES_KEY,
-      JSON.stringify(favorites)
-    );
-
-  }
+      favoriteButton
+        .classList
+        .toggle(
+          "is-active",
+          isFavorite
+        );
 
 
-  function updateFavoriteButton(
-    isFavorite
-  ) {
-
-    if (!favoriteButton) {
-      return;
-    }
-
-    const icon =
-      favoriteButton.querySelector("img");
+      favoriteButton
+        .setAttribute(
+          "aria-pressed",
+          String(isFavorite)
+        );
 
 
-    if (icon) {
-
-      icon.src = isFavorite
-        ? "images/icons/heart-solid.svg"
-        : "images/icons/heart-outline.svg";
-
-      icon.alt = "";
+      favoriteButton
+        .setAttribute(
+          "aria-label",
+          isFavorite
+            ? "お気に入りから削除"
+            : "お気に入りに追加"
+        );
 
     }
 
 
-    favoriteButton.classList.toggle(
-      "is-active",
-      isFavorite
-    );
+    function initializeFavorite() {
 
-
-    favoriteButton.setAttribute(
-      "aria-pressed",
-      String(isFavorite)
-    );
-
-
-    favoriteButton.setAttribute(
-      "aria-label",
-      isFavorite
-        ? "お気に入りから削除"
-        : "お気に入りに追加"
-    );
-
-  }
-
-
-  function initializeFavorite() {
-
-    if (
-      !favoriteButton ||
-      !productId
-    ) {
-      return;
-    }
-
-
-    const favorites =
-      getFavorites();
-
-
-    updateFavoriteButton(
-      favorites.includes(
-        String(productId)
-      )
-    );
-
-  }
-
-
-  favoriteButton?.addEventListener(
-    "click",
-    () => {
-
-      if (!productId) {
+      if (
+        !favoriteButton ||
+        !productId
+      ) {
         return;
       }
 
@@ -173,347 +195,538 @@ document.addEventListener("DOMContentLoaded", () => {
       const favorites =
         getFavorites();
 
-      const id =
-        String(productId);
 
-      const index =
-        favorites.indexOf(id);
-
-
-      if (index === -1) {
-
-        favorites.push(id);
-
-        updateFavoriteButton(true);
-
-      } else {
-
-        favorites.splice(
-          index,
-          1
-        );
-
-        updateFavoriteButton(false);
-
-      }
-
-
-      saveFavorites(
-        favorites
+      updateFavoriteButton(
+        favorites.includes(
+          productId
+        )
       );
 
     }
-  );
 
 
-  /* ==============================
-     gallery
-  ============================== */
+    favoriteButton
+      ?.addEventListener(
+        "click",
+        () => {
 
-  function setActiveThumbnail(
-    target
-  ) {
+          if (!productId) {
+            return;
+          }
+
+
+          const favorites =
+            getFavorites();
+
+
+          const index =
+            favorites.indexOf(
+              productId
+            );
+
+
+          if (index === -1) {
+
+            favorites.push(
+              productId
+            );
+
+            updateFavoriteButton(
+              true
+            );
+
+          } else {
+
+            favorites.splice(
+              index,
+              1
+            );
+
+            updateFavoriteButton(
+              false
+            );
+
+          }
+
+
+          saveFavorites(
+            favorites
+          );
+
+        }
+      );
+
+
+    /* ==============================
+       gallery
+    ============================== */
+
+    function setActiveThumbnail(
+      target
+    ) {
+
+      thumbnails.forEach(
+        (thumbnail) => {
+
+          thumbnail.classList.toggle(
+            "is-active",
+            thumbnail === target
+          );
+
+        }
+      );
+
+    }
+
+
+    function showGalleryImage(
+      thumbnail
+    ) {
+
+      const image =
+        thumbnail.querySelector(
+          "img"
+        );
+
+
+      if (!image) {
+        return;
+      }
+
+
+      mainImage.src =
+        image.src;
+
+
+      mainImage.alt =
+        thumbnail.dataset.alt ||
+        image.alt ||
+        "商品画像";
+
+
+      setActiveThumbnail(
+        thumbnail
+      );
+
+    }
+
 
     thumbnails.forEach(
       (thumbnail) => {
 
-        thumbnail.classList.toggle(
-          "is-active",
-          thumbnail === target
-        );
+        thumbnail.addEventListener(
+          "click",
+          () => {
 
-      }
-    );
-
-  }
-
-
-  function showGalleryImage(
-    thumbnail
-  ) {
-
-    const image =
-      thumbnail.querySelector("img");
-
-
-    if (!image) {
-      return;
-    }
-
-
-    mainImage.src =
-      image.src;
-
-
-    mainImage.alt =
-      thumbnail.dataset.alt ||
-      image.alt ||
-      "商品画像";
-
-
-    setActiveThumbnail(
-      thumbnail
-    );
-
-  }
-
-
-  thumbnails.forEach(
-    (thumbnail) => {
-
-      thumbnail.addEventListener(
-        "click",
-        () => {
-
-          showGalleryImage(
-            thumbnail
-          );
-
-        }
-      );
-
-    }
-  );
-
-
-  /* ==============================
-     quantity
-  ============================== */
-
-  function updateQuantity(value) {
-
-    if (!quantityInput) {
-      return;
-    }
-
-
-    const max =
-      Number(
-        quantityInput.max
-      ) || 99;
-
-
-    const quantity =
-      Math.min(
-        max,
-        Math.max(
-          1,
-          Number(value) || 1
-        )
-      );
-
-
-    quantityInput.value =
-      quantity;
-
-  }
-
-
-  quantityMinus?.addEventListener(
-    "click",
-    () => {
-
-      updateQuantity(
-        Number(
-          quantityInput.value
-        ) - 1
-      );
-
-    }
-  );
-
-
-  quantityPlus?.addEventListener(
-    "click",
-    () => {
-
-      updateQuantity(
-        Number(
-          quantityInput.value
-        ) + 1
-      );
-
-    }
-  );
-
-
-  quantityInput?.addEventListener(
-    "change",
-    () => {
-
-      updateQuantity(
-        quantityInput.value
-      );
-
-    }
-  );
-
-
-  /* ==============================
-     accordion
-  ============================== */
-
-  accordions.forEach(
-    (accordion) => {
-
-      const button =
-        accordion.querySelector(
-          ".accordion__button"
-        );
-
-
-      button?.addEventListener(
-        "click",
-        () => {
-
-          const isOpen =
-            accordion.classList.toggle(
-              "is-open"
+            showGalleryImage(
+              thumbnail
             );
-
-
-          button.setAttribute(
-            "aria-expanded",
-            String(isOpen)
-          );
-
-
-          const icon =
-            accordion.querySelector(
-              ".accordion__icon"
-            );
-
-
-          if (icon) {
-
-            icon.textContent =
-              isOpen
-                ? "−"
-                : "＋";
 
           }
+        );
+
+      }
+    );
+
+
+    /* ==============================
+       quantity
+    ============================== */
+
+    function updateQuantity(
+      value
+    ) {
+
+      if (!quantityInput) {
+        return;
+      }
+
+
+      const max =
+        Number(
+          quantityInput.max
+        ) || 99;
+
+
+      const quantity =
+        Math.min(
+          max,
+          Math.max(
+            1,
+            Number(value) || 1
+          )
+        );
+
+
+      quantityInput.value =
+        quantity;
+
+    }
+
+
+    quantityMinus
+      ?.addEventListener(
+        "click",
+        () => {
+
+          updateQuantity(
+            Number(
+              quantityInput.value
+            ) - 1
+          );
 
         }
       );
 
-    }
-  );
+
+    quantityPlus
+      ?.addEventListener(
+        "click",
+        () => {
+
+          updateQuantity(
+            Number(
+              quantityInput.value
+            ) + 1
+          );
+
+        }
+      );
 
 
-  /* ==============================
-     image modal
-  ============================== */
+    quantityInput
+      ?.addEventListener(
+        "change",
+        () => {
 
-  function openModal() {
+          updateQuantity(
+            quantityInput.value
+          );
 
-    if (
-      !modal ||
-      !modalImage
-    ) {
-      return;
-    }
-
-
-    modalImage.src =
-      mainImage.src;
-
-    modalImage.alt =
-      mainImage.alt;
+        }
+      );
 
 
-    modal.classList.add(
-      "is-open"
-    );
+    /* ==============================
+       add to cart
+    ============================== */
 
-
-    modal.setAttribute(
-      "aria-hidden",
-      "false"
-    );
-
-
-    document.body.classList.add(
-      "is-modal-open"
-    );
-
-  }
-
-
-  function closeModal() {
-
-    if (!modal) {
-      return;
-    }
-
-
-    modal.classList.remove(
-      "is-open"
-    );
-
-
-    modal.setAttribute(
-      "aria-hidden",
-      "true"
-    );
-
-
-    document.body.classList.remove(
-      "is-modal-open"
-    );
-
-  }
-
-
-  mainImageButton?.addEventListener(
-    "click",
-    openModal
-  );
-
-
-  modalClose?.addEventListener(
-    "click",
-    closeModal
-  );
-
-
-  modalOverlay?.addEventListener(
-    "click",
-    closeModal
-  );
-
-
-  document.addEventListener(
-    "keydown",
-    (event) => {
+    async function addToCart() {
 
       if (
-        event.key === "Escape" &&
-        modal?.classList.contains(
-          "is-open"
-        )
+        !cartButton ||
+        !quantityInput ||
+        !productId
       ) {
+        return;
+      }
 
-        closeModal();
+
+      const quantity =
+        Number(
+          quantityInput.value
+        ) || 1;
+
+
+      const originalText =
+        cartButton.textContent;
+
+
+      cartButton.disabled =
+        true;
+
+
+      cartButton.textContent =
+        "追加しています…";
+
+
+      const formData =
+        new FormData();
+
+
+      formData.append(
+        "action",
+        "add"
+      );
+
+
+      formData.append(
+        "product_id",
+        productId
+      );
+
+
+      formData.append(
+        "quantity",
+        quantity
+      );
+
+
+      formData.append(
+        "csrf_token",
+        csrfToken
+      );
+
+
+      try {
+
+        const response =
+          await fetch(
+            "cart.php",
+            {
+              method: "POST",
+              body: formData,
+              headers: {
+                "X-Requested-With":
+                  "XMLHttpRequest"
+              }
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          !response.ok ||
+          !data.success
+        ) {
+
+          throw new Error(
+            data.message ||
+            "カートに追加できませんでした。"
+          );
+
+        }
+
+
+        cartButton.textContent =
+          "カートに追加しました";
+
+
+        /*
+         * 少し待ってから
+         * カートページへ移動
+         */
+        window.setTimeout(
+          () => {
+
+            window.location.href =
+              "cart.php";
+
+          },
+          500
+        );
+
+      } catch (error) {
+
+        alert(
+          error.message
+        );
+
+
+        cartButton.disabled =
+          false;
+
+
+        cartButton.textContent =
+          originalText;
 
       }
 
     }
-  );
 
 
-  /* ==============================
-     initial
-  ============================== */
+    cartButton
+      ?.addEventListener(
+        "click",
+        addToCart
+      );
 
-  initializeFavorite();
+
+    /* ==============================
+       accordion
+    ============================== */
+
+    accordions.forEach(
+      (accordion) => {
+
+        const button =
+          accordion.querySelector(
+            ".accordion__button"
+          );
 
 
-  if (thumbnails.length > 0) {
+        button
+          ?.addEventListener(
+            "click",
+            () => {
 
-    setActiveThumbnail(
-      thumbnails[0]
+              const isOpen =
+                accordion
+                  .classList
+                  .toggle(
+                    "is-open"
+                  );
+
+
+              button.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+              );
+
+
+              const icon =
+                accordion.querySelector(
+                  ".accordion__icon"
+                );
+
+
+              if (icon) {
+
+                icon.textContent =
+                  isOpen
+                    ? "−"
+                    : "＋";
+
+              }
+
+            }
+          );
+
+      }
     );
 
-  }
 
-});
+    /* ==============================
+       image modal
+    ============================== */
+
+    function openModal() {
+
+      if (
+        !modal ||
+        !modalImage
+      ) {
+        return;
+      }
+
+
+      modalImage.src =
+        mainImage.src;
+
+
+      modalImage.alt =
+        mainImage.alt;
+
+
+      modal.classList.add(
+        "is-open"
+      );
+
+
+      modal.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      document.body
+        .classList
+        .add(
+          "is-modal-open"
+        );
+
+    }
+
+
+    function closeModal() {
+
+      if (!modal) {
+        return;
+      }
+
+
+      modal.classList.remove(
+        "is-open"
+      );
+
+
+      modal.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      document.body
+        .classList
+        .remove(
+          "is-modal-open"
+        );
+
+    }
+
+
+    mainImageButton
+      ?.addEventListener(
+        "click",
+        openModal
+      );
+
+
+    modalClose
+      ?.addEventListener(
+        "click",
+        closeModal
+      );
+
+
+    modalOverlay
+      ?.addEventListener(
+        "click",
+        closeModal
+      );
+
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.key ===
+            "Escape" &&
+          modal
+            ?.classList
+            .contains(
+              "is-open"
+            )
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+
+    /* ==============================
+       initial
+    ============================== */
+
+    initializeFavorite();
+
+
+    if (
+      thumbnails.length > 0
+    ) {
+
+      setActiveThumbnail(
+        thumbnails[0]
+      );
+
+    }
+
+  }
+);

@@ -1,6 +1,15 @@
 <?php
 
+session_start();
+
 require_once __DIR__ . '/includes/db.php';
+
+/*
+ * CSRFトークン
+ */
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
 /*
  * 商品ID
@@ -736,6 +745,16 @@ $categoryLabel =
 
 
   <?php include __DIR__ . '/includes/footer.php'; ?>
+
+  <script>
+    window.AKARI_PRODUCT = {
+      productId: <?= (int)$product['id'] ?>,
+      csrfToken: <?= json_encode(
+          $_SESSION['csrf_token'],
+          JSON_UNESCAPED_UNICODE
+      ) ?>
+    };
+  </script>
 
   <script src="js/product-detail.js"></script>
   <script src="js/common.js"></script>
