@@ -198,7 +198,7 @@ $categoryLabel =
   <?php include __DIR__ . '/includes/header.php'; ?>
 
 
-  <main>
+  <main class="<?= (!$story && !$recommendProducts) ? 'is-short-content' : '' ?>">
 
     <?php
       $breadcrumbs = [
@@ -383,7 +383,10 @@ $categoryLabel =
               type="button"
               aria-label="数量を1減らす"
             >
-              −
+              <img
+                src="images/icons/remove.svg"
+                alt=""
+              >
             </button>
 
             <input
@@ -404,7 +407,10 @@ $categoryLabel =
               aria-label="数量を1増やす"
               <?= (int) $product['stock'] <= 0 ? 'disabled' : '' ?>
             >
-              ＋
+              <img
+                src="images/icons/add.svg"
+                alt=""
+              >
             </button>
 
           </div>
