@@ -29,43 +29,103 @@ $newArrivals = $newArrivalStmt->fetchAll();
 
 /*
  * BEST SELLER
- * 売上データはまだないため、現デザインのランキング
- * 1: マグカップ / 2: リネンクロス / 3: 木製トレー
- * をDBから取得
+ *
+ * 総合: 現在のランキング
+ * 新着: created_at の新しい順
+ * ギフト: ギフト向けとして選んだ商品
  */
-$bestSellerIds = [1, 3, 6];
+$rankingType = (string)($_GET['ranking'] ?? 'overall');
 
-$bestSellerSql = "
-    SELECT
-        p.id,
-        p.name,
-        p.price,
-        (
-            SELECT pi.image_path
-            FROM product_images AS pi
-            WHERE pi.product_id = p.id
-            ORDER BY pi.sort_order ASC, pi.id ASC
-            LIMIT 1
-        ) AS image_path
-    FROM products AS p
-    WHERE p.id IN (1, 3, 6)
-";
+$rankingOptions = [
+    'overall' => '総合',
+    'new'     => '新着',
+    'gift'    => 'ギフト',
+];
 
-$bestSellerStmt = $pdo->query($bestSellerSql);
-$bestSellerRows = $bestSellerStmt->fetchAll();
-
-$bestSellerMap = [];
-
-foreach ($bestSellerRows as $row) {
-    $bestSellerMap[(int)$row['id']] = $row;
+if (!array_key_exists($rankingType, $rankingOptions)) {
+    $rankingType = 'overall';
 }
 
-$bestSellers = [];
-
-foreach ($bestSellerIds as $id) {
-    if (isset($bestSellerMap[$id])) {
-        $bestSellers[] = $bestSellerMap[$id];
+function fetchProductsByIds(PDO $pdo, array $ids): array
+{
+    if (empty($ids)) {
+        return [];
     }
+
+    $placeholders = implode(',', array_fill(0, count($ids), '?'));
+
+    $sql = "
+        SELECT
+            p.id,
+            p.name,
+            p.price,
+            (
+                SELECT pi.image_path
+                FROM product_images AS pi
+                WHERE pi.product_id = p.id
+                ORDER BY pi.sort_order ASC, pi.id ASC
+                LIMIT 1
+            ) AS image_path
+        FROM products AS p
+        WHERE p.id IN ($placeholders)
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($ids);
+
+    $map = [];
+
+    foreach ($stmt->fetchAll() as $row) {
+        $map[(int)$row['id']] = $row;
+    }
+
+    $products = [];
+
+    foreach ($ids as $id) {
+        if (isset($map[$id])) {
+            $products[] = $map[$id];
+        }
+    }
+
+    return $products;
+}
+
+switch ($rankingType) {
+    case 'new':
+        $rankingSql = "
+            SELECT
+                p.id,
+                p.name,
+                p.price,
+                (
+                    SELECT pi.image_path
+                    FROM product_images AS pi
+                    WHERE pi.product_id = p.id
+                    ORDER BY pi.sort_order ASC, pi.id ASC
+                    LIMIT 1
+                ) AS image_path
+            FROM products AS p
+            ORDER BY p.created_at DESC, p.id DESC
+            LIMIT 3
+        ";
+
+        $bestSellers = $pdo->query($rankingSql)->fetchAll();
+        break;
+
+    case 'gift':
+        /*
+         * ギフト向け商品は現時点では手動セレクト。
+         * 商品属性をDB化したくなった場合は後から置き換え可能。
+         */
+        $giftProductIds = [1, 5, 6];
+        $bestSellers = fetchProductsByIds($pdo, $giftProductIds);
+        break;
+
+    case 'overall':
+    default:
+        $bestSellerIds = [1, 3, 6];
+        $bestSellers = fetchProductsByIds($pdo, $bestSellerIds);
+        break;
 }
 
 ?>
@@ -185,9 +245,37 @@ foreach ($bestSellerIds as $id) {
       <div class="section__inner section__inner--flush-right">
         <h2 class="section-title">BEST SELLER</h2>
 
-        <div class="ranking-filter">
-          <button class="ranking-filter__button" type="button">総合⌄</button>
-        </div>
+        <form
+          class="ranking-filter"
+          action="index.php"
+          method="get"
+          id="rankingFilterForm"
+        >
+          <label class="visually-hidden" for="rankingType">
+            ランキングの表示切替
+          </label>
+
+          <select
+            class="ranking-filter__select"
+            id="rankingType"
+            name="ranking"
+          >
+            <?php foreach ($rankingOptions as $value => $label): ?>
+              <option
+                value="<?= htmlspecialchars($value, ENT_QUOTES, 'UTF-8') ?>"
+                <?= $rankingType === $value ? 'selected' : '' ?>
+              >
+                <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+
+          <noscript>
+            <button class="ranking-filter__submit" type="submit">
+              表示
+            </button>
+          </noscript>
+        </form>
 
         <div class="product-scroll">
           <?php foreach ($bestSellers as $index => $product): ?>
@@ -260,6 +348,7 @@ foreach ($bestSellerIds as $id) {
 
   <?php include __DIR__ . '/includes/footer.php'; ?>
 
+  <script src="js/top.js"></script>
   <script src="js/common.js"></script>
 </body>
 </html>
