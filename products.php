@@ -179,39 +179,32 @@ $categoryMap = [
         該当する商品がありません。
       </p>
 
-      <button
-        class="more-button"
-        type="button"
-      >
-        もっと見る
-      </button>
+      <?php if (count($products) > 6): ?>
+
+        <button
+          class="more-button"
+          type="button"
+        >
+          もっと見る
+        </button>
+
+      <?php endif; ?>
 
     </section>
 
     <section class="products-about">
 
-      <div class="products-about__image">
-
+      <a
+        class="products-about__link"
+        href="about.php"
+        aria-label="灯々について"
+      >
         <img
+          class="products-about__image"
           src="images/products/products-about.jpg"
-          alt="灯々の暮らしの道具"
+          alt="暮らしになじむものをひとつずつ丁寧に。ABOUT 灯々"
         >
-
-      </div>
-
-      <div class="products-about__content">
-
-        <h2>
-          暮らしになじむものを、<br>
-          ひとつずつ丁寧に
-        </h2>
-
-        <a href="about.php">
-          ABOUT US 灯々
-          <span>→</span>
-        </a>
-
-      </div>
+      </a>
 
     </section>
 
