@@ -484,66 +484,31 @@ document.addEventListener("DOMContentLoaded", () => {
      ガイドアコーディオン
   ============================== */
 
-  guideItems.forEach(
-    (guideItem) => {
+  guideItems.forEach((guideItem) => {
 
-      const button =
-        guideItem.querySelector(
-          ".guide-button"
-        );
+    const button =
+      guideItem.querySelector(".guide-button");
 
+    const arrow =
+      guideItem.querySelector(".guide-button__arrow");
 
-      const content =
-        guideItem.querySelector(
-          ".guide-content"
-        );
+    button?.addEventListener("click", () => {
 
+      const isOpen =
+        guideItem.classList.toggle("is-open");
 
-      const arrow =
-        guideItem.querySelector(
-          ".guide-button__arrow"
-        );
-
-
-      button?.addEventListener(
-        "click",
-        () => {
-
-          const isOpen =
-            guideItem.classList.toggle(
-              "is-open"
-            );
-
-
-          button.setAttribute(
-            "aria-expanded",
-            String(isOpen)
-          );
-
-
-          if (content) {
-
-            content.style.maxHeight =
-              isOpen
-                ? `${content.scrollHeight}px`
-                : "0px";
-
-          }
-
-
-          if (arrow) {
-
-            arrow.textContent =
-              isOpen
-                ? "▼"
-                : "▶";
-
-          }
-
-        }
+      button.setAttribute(
+        "aria-expanded",
+        String(isOpen)
       );
 
-    }
-  );
+      if (arrow) {
+        arrow.textContent =
+          isOpen ? "▼" : "▶";
+      }
+
+    });
+
+  });
 
 });

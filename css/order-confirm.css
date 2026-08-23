@@ -393,7 +393,7 @@ button {
   min-height: 55px;
   border: 0;
   border-radius: 10px;
-  background-color: var(--brown-color);
+  background-color: #1D82E0;
   color: #fff;
   font-size: 14px;
   letter-spacing: .15em;
@@ -412,7 +412,7 @@ button {
 }
 
 .back-button {
-  margin-top: 22px;
+  margin-top: 40px;
   padding: 0;
   border: 0;
   background: transparent;
