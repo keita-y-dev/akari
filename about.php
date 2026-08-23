@@ -194,6 +194,9 @@
 
   <!-- footer -->
   <?php include __DIR__ . '/includes/footer.php'; ?>
+
+  <script src="js/common.js"></script>
+  
 </body>
 
 </html>
