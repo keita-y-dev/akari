@@ -3,8 +3,21 @@
 require_once __DIR__ . '/includes/db.php';
 
 /*
+ * 検索キーワード
+ *
+ * header.php の検索フォームから
+ * products.php?q=キーワード
+ * の形で受け取る
+ */
+$keyword = trim((string)($_GET['q'] ?? ''));
+
+
+/*
  * 商品一覧を取得
  * product_images の sort_order = 1 を代表画像として使用
+ *
+ * 検索キーワードがある場合は、
+ * 商品名・商品説明・カテゴリー名を対象に検索する
  */
 $sql = "
   SELECT
@@ -20,11 +33,27 @@ $sql = "
   LEFT JOIN product_images AS pi
     ON p.id = pi.product_id
     AND pi.sort_order = 1
+";
+
+$params = [];
+
+if ($keyword !== '') {
+  $sql .= "
+    WHERE
+      p.name LIKE :keyword
+      OR p.description LIKE :keyword
+      OR c.name LIKE :keyword
+  ";
+
+  $params[':keyword'] = '%' . $keyword . '%';
+}
+
+$sql .= "
   ORDER BY p.id ASC
 ";
 
 $stmt = $pdo->prepare($sql);
-$stmt->execute();
+$stmt->execute($params);
 $products = $stmt->fetchAll();
 
 /*
@@ -82,13 +111,24 @@ $categoryMap = [
       <h1>商品一覧</h1>
 
     </section>
-
+    
     <section class="products-intro">
 
-      <p>
-        暮らしに小さな灯りをともす、<br>
-        日々の道具を集めました。
-      </p>
+      <?php if ($keyword !== ''): ?>
+
+        <p>
+          「<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>」の検索結果<br>
+          <?= count($products) ?>件の商品が見つかりました。
+        </p>
+
+      <?php else: ?>
+
+        <p>
+          暮らしに小さな灯りをともす、<br>
+          日々の道具を集めました。
+        </p>
+
+      <?php endif; ?>
 
     </section>
 
