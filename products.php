@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/helpers.php';
 
 /*
  * 検索キーワード
@@ -117,7 +118,7 @@ $categoryMap = [
       <?php if ($keyword !== ''): ?>
 
         <p>
-          「<?= htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') ?>」の検索結果<br>
+          「<?= h($keyword) ?>」の検索結果<br>
           <?= count($products) ?>件の商品が見つかりました。
         </p>
 
@@ -147,9 +148,9 @@ $categoryMap = [
         <button
           class="category-tab"
           type="button"
-          data-category="<?= htmlspecialchars($categoryValue, ENT_QUOTES, 'UTF-8') ?>"
+          data-category="<?= h($categoryValue) ?>"
         >
-          <?= htmlspecialchars($categoryKey, ENT_QUOTES, 'UTF-8') ?>
+          <?= h($categoryKey) ?>
         </button>
 
       <?php endforeach; ?>

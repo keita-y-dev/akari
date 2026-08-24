@@ -53,18 +53,6 @@ if (!$order) {
 }
 
 
-$paymentLabels = [
-    'card' => 'クレジットカード',
-    'cod' => '代金引換',
-];
-
-$timeLabels = [
-    '' => '指定なし',
-    '午前中' => '午前中',
-    '14-16' => '14:00〜16:00',
-    '16-18' => '16:00〜18:00',
-    '18-20' => '18:00〜20:00',
-];
 
 $createdAt = strtotime((string)$order['created_at']);
 $createdAtLabel = $createdAt !== false
@@ -81,13 +69,9 @@ if (!empty($order['delivery_date'])) {
         : (string)$order['delivery_date'];
 }
 
-$deliveryTimeLabel =
-    $timeLabels[$order['delivery_time'] ?? '']
-    ?? '指定なし';
+$deliveryTimeLabel = deliveryTimeLabel((string)($order['delivery_time'] ?? ''));
 
-$paymentLabel =
-    $paymentLabels[$order['payment_method'] ?? '']
-    ?? (string)$order['payment_method'];
+$paymentLabel = paymentLabel((string)($order['payment_method'] ?? ''));
 
 ?>
 <!DOCTYPE html>

@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/helpers.php';
 /*
  * cart-item.php
  *
@@ -45,8 +46,8 @@ $_ciCategoryDisplay =
     >
       <?php if ($_ciProductImage !== ''): ?>
         <img
-          src="<?= htmlspecialchars($_ciProductImage, ENT_QUOTES, 'UTF-8') ?>"
-          alt="<?= htmlspecialchars($_ciProductName, ENT_QUOTES, 'UTF-8') ?>"
+          src="<?= h($_ciProductImage) ?>"
+          alt="<?= h($_ciProductName) ?>"
         >
       <?php else: ?>
         <div
@@ -62,13 +63,13 @@ $_ciCategoryDisplay =
 
       <?php if ($_ciCategoryDisplay !== ''): ?>
         <p class="cart-item__category">
-          <?= htmlspecialchars($_ciCategoryDisplay, ENT_QUOTES, 'UTF-8') ?>
+          <?= h($_ciCategoryDisplay) ?>
         </p>
       <?php endif; ?>
 
       <h2 class="cart-item__name">
         <a href="product-detail?id=<?= $_ciProductId ?>">
-          <?= htmlspecialchars($_ciProductName, ENT_QUOTES, 'UTF-8') ?>
+          <?= h($_ciProductName) ?>
         </a>
       </h2>
 
@@ -92,7 +93,7 @@ $_ciCategoryDisplay =
       <button
         class="quantity__button quantity__minus"
         type="button"
-        aria-label="<?= htmlspecialchars($_ciProductName, ENT_QUOTES, 'UTF-8') ?>の数量を1減らす"
+        aria-label="<?= h($_ciProductName) ?>の数量を1減らす"
       >
         −
       </button>
@@ -103,13 +104,13 @@ $_ciCategoryDisplay =
         value="<?= $_ciProductQuantity ?>"
         min="1"
         max="<?= $_ciProductStock ?>"
-        aria-label="<?= htmlspecialchars($_ciProductName, ENT_QUOTES, 'UTF-8') ?>の数量"
+        aria-label="<?= h($_ciProductName) ?>の数量"
       >
 
       <button
         class="quantity__button quantity__plus"
         type="button"
-        aria-label="<?= htmlspecialchars($_ciProductName, ENT_QUOTES, 'UTF-8') ?>の数量を1増やす"
+        aria-label="<?= h($_ciProductName) ?>の数量を1増やす"
       >
         ＋
       </button>
@@ -119,7 +120,7 @@ $_ciCategoryDisplay =
     <button
       class="delete-button"
       type="button"
-      aria-label="<?= htmlspecialchars($_ciProductName, ENT_QUOTES, 'UTF-8') ?>をカートから削除"
+      aria-label="<?= h($_ciProductName) ?>をカートから削除"
     >
       削除
     </button>

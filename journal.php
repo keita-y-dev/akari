@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/product-functions.php';
 
 /*
  * 特集ページで使用する商品
@@ -9,31 +11,9 @@ require_once __DIR__ . '/includes/db.php';
  * SCENE 03: 6, 5
  */
 $productIds = [1, 3, 4, 2, 6, 5];
-
-$placeholders = implode(',', array_fill(0, count($productIds), '?'));
-
-$sql = "
-    SELECT
-        p.id,
-        p.name,
-        p.price,
-        (
-            SELECT pi.image_path
-            FROM product_images AS pi
-            WHERE pi.product_id = p.id
-            ORDER BY pi.sort_order ASC, pi.id ASC
-            LIMIT 1
-        ) AS image_path
-    FROM products AS p
-    WHERE p.id IN ($placeholders)
-";
-
-$stmt = $pdo->prepare($sql);
-$stmt->execute($productIds);
-
 $productMap = [];
 
-foreach ($stmt->fetchAll() as $product) {
+foreach (fetchProductsByIds($pdo, $productIds) as $product) {
     $productMap[(int)$product['id']] = $product;
 }
 

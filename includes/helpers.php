@@ -16,3 +16,26 @@ function categoryLabel(string $categoryName): string
 
     return $map[$categoryName] ?? $categoryName;
 }
+
+function paymentLabel(string $value): string
+{
+    $labels = [
+        'card' => 'クレジットカード',
+        'cod' => '代金引換',
+    ];
+
+    return $labels[$value] ?? $value;
+}
+
+function deliveryTimeLabel(string $value): string
+{
+    $labels = [
+        '' => '指定なし',
+        '午前中' => '午前中',
+        '14-16' => '14:00〜16:00',
+        '16-18' => '16:00〜18:00',
+        '18-20' => '18:00〜20:00',
+    ];
+
+    return $labels[$value] ?? '指定なし';
+}

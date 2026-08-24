@@ -149,7 +149,7 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
   >
 
   <title>
-    <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?> | 灯々
+    <?= h($product['name']) ?> | 灯々
   </title>
 
   <link
@@ -216,16 +216,8 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
 
           <img
             id="mainImage"
-            src="<?= htmlspecialchars(
-                $mainImage,
-                ENT_QUOTES,
-                'UTF-8'
-            ) ?>"
-            alt="<?= htmlspecialchars(
-                $product['name'],
-                ENT_QUOTES,
-                'UTF-8'
-            ) ?>"
+            src="<?= h($mainImage) ?>"
+            alt="<?= h($product['name']) ?>"
           >
 
           <span class="zoom-icon">
@@ -244,19 +236,11 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
               <button
                 class="gallery-thumb<?= $i === 0 ? ' is-active' : '' ?>"
                 type="button"
-                data-alt="<?= htmlspecialchars(
-                    $product['name'],
-                    ENT_QUOTES,
-                    'UTF-8'
-                ) ?>"
+                data-alt="<?= h($product['name']) ?>"
               >
 
                 <img
-                  src="<?= htmlspecialchars(
-                      $image['image_path'],
-                      ENT_QUOTES,
-                      'UTF-8'
-                  ) ?>"
+                  src="<?= h($image['image_path']) ?>"
                   alt=""
                 >
 
@@ -277,11 +261,7 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
 
         <p class="product-info__category">
 
-          <?= htmlspecialchars(
-              $categoryLabel,
-              ENT_QUOTES,
-              'UTF-8'
-          ) ?>
+          <?= h($categoryLabel) ?>
 
         </p>
 
@@ -290,11 +270,7 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
 
           <h1 class="product-info__title">
 
-            <?= htmlspecialchars(
-                $product['name'],
-                ENT_QUOTES,
-                'UTF-8'
-            ) ?>
+            <?= h($product['name']) ?>
 
           </h1>
 
@@ -336,11 +312,7 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
 
           <p class="product-info__description">
 
-            <?= htmlspecialchars(
-                $product['description'],
-                ENT_QUOTES,
-                'UTF-8'
-            ) ?>
+            <?= h($product['description']) ?>
 
           </p>
 
@@ -487,11 +459,7 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
             >
 
               <span>
-                <?= htmlspecialchars(
-                    $detail['title'],
-                    ENT_QUOTES,
-                    'UTF-8'
-                ) ?>
+                <?= h($detail['title']) ?>
               </span>
 
               <span class="accordion__icon">
@@ -516,11 +484,7 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
                   <?php if (trim($line) !== ''): ?>
 
                     <p>
-                      <?= htmlspecialchars(
-                          $line,
-                          ENT_QUOTES,
-                          'UTF-8'
-                      ) ?>
+                      <?= h($line) ?>
                     </p>
 
                   <?php endif; ?>
@@ -556,16 +520,8 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
           <div class="story__image">
 
             <img
-              src="<?= htmlspecialchars(
-                  $story['image_path'],
-                  ENT_QUOTES,
-                  'UTF-8'
-              ) ?>"
-              alt="<?= htmlspecialchars(
-                  $product['name'],
-                  ENT_QUOTES,
-                  'UTF-8'
-              ) ?>のストーリー"
+              src="<?= h($story['image_path']) ?>"
+              alt="<?= h($product['name']) ?>のストーリー"
             >
 
           </div>
@@ -576,11 +532,7 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
         <div class="story__content">
 
           <h2>
-            <?= htmlspecialchars(
-                $story['title'],
-                ENT_QUOTES,
-                'UTF-8'
-            ) ?>
+            <?= h($story['title']) ?>
           </h2>
 
 
@@ -597,11 +549,7 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
 
               <p>
                 <?= nl2br(
-                    htmlspecialchars(
-                        trim($paragraph),
-                        ENT_QUOTES,
-                        'UTF-8'
-                    )
+                    h(trim($paragraph))
                 ) ?>
               </p>
 

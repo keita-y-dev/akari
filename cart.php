@@ -56,14 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ], 400);
         }
 
-        $stmt = $pdo->prepare("
-            SELECT stock
-            FROM products
-            WHERE id = ?
-        ");
-        $stmt->execute([$productId]);
-
-        $stock = $stmt->fetchColumn();
+        $stock = getProductStock($pdo, $productId);
 
         if ($stock === false || (int)$stock < 1) {
             jsonResponse([
@@ -91,14 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ], 400);
         }
 
-        $stmt = $pdo->prepare("
-            SELECT stock
-            FROM products
-            WHERE id = ?
-        ");
-        $stmt->execute([$productId]);
-
-        $stock = $stmt->fetchColumn();
+        $stock = getProductStock($pdo, $productId);
 
         if ($stock === false || (int)$stock < 1) {
             unset($_SESSION['cart'][$productId]);
@@ -146,34 +132,11 @@ $excludeIds = array_map(
     $cartItems
 );
 
-$recommendSql = "
-    SELECT
-        p.id,
-        p.name,
-        p.price,
-        (
-            SELECT pi.image_path
-            FROM product_images AS pi
-            WHERE pi.product_id = p.id
-            ORDER BY pi.sort_order ASC, pi.id ASC
-            LIMIT 1
-        ) AS image_path
-    FROM products AS p
-";
-
-$recommendParams = [];
-
-if (!empty($excludeIds)) {
-    $placeholders = implode(',', array_fill(0, count($excludeIds), '?'));
-    $recommendSql .= " WHERE p.id NOT IN ($placeholders)";
-    $recommendParams = $excludeIds;
-}
-
-$recommendSql .= " ORDER BY p.id ASC LIMIT 3";
-
-$stmt = $pdo->prepare($recommendSql);
-$stmt->execute($recommendParams);
-$recommendProducts = $stmt->fetchAll();
+$recommendProducts = fetchRecommendedProducts(
+    $pdo,
+    $excludeIds,
+    3
+);
 
 ?>
 <!DOCTYPE html>

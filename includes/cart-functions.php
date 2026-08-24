@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/product-functions.php';
 
 function fetchCartItems(
     PDO $pdo,
@@ -33,6 +34,8 @@ function fetchCartItems(
         ? 'INNER JOIN categories AS c ON c.id = p.category_id'
         : '';
 
+    $imageSql = primaryProductImageSql();
+
     $sql = "
         SELECT
             p.id,
@@ -40,13 +43,7 @@ function fetchCartItems(
             p.price,
             p.stock
             $categorySelect,
-            (
-                SELECT pi.image_path
-                FROM product_images AS pi
-                WHERE pi.product_id = p.id
-                ORDER BY pi.sort_order ASC, pi.id ASC
-                LIMIT 1
-            ) AS image_path
+            $imageSql AS image_path
         FROM products AS p
         $categoryJoin
         WHERE p.id IN ($placeholders)
@@ -121,4 +118,19 @@ function calculateCartSummary(array $cartItems): array
         'shipping' => $shipping,
         'total' => $subtotal + $shipping,
     ];
+}
+
+
+function getProductStock(PDO $pdo, int $productId): int|false
+{
+    $stmt = $pdo->prepare("
+        SELECT stock
+        FROM products
+        WHERE id = ?
+    ");
+    $stmt->execute([$productId]);
+
+    $stock = $stmt->fetchColumn();
+
+    return $stock === false ? false : (int)$stock;
 }

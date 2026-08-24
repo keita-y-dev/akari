@@ -1,32 +1,14 @@
 <?php
 
 require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/product-functions.php';
 
 /*
- * お気に入りページ
- *
- * お気に入りID自体はブラウザの localStorage に保存しているため、
- * PHPでは表示候補となる商品を取得し、
- * js/favorites.js 側でお気に入り商品のみ表示します。
+ * お気に入りID自体はブラウザの localStorage に保存。
+ * PHPでは表示候補となる全商品を取得し、JS側で絞り込みます。
  */
-$sql = "
-  SELECT
-    p.id,
-    p.name,
-    p.price,
-    (
-      SELECT pi.image_path
-      FROM product_images AS pi
-      WHERE pi.product_id = p.id
-      ORDER BY pi.sort_order ASC, pi.id ASC
-      LIMIT 1
-    ) AS image_path
-  FROM products AS p
-  ORDER BY p.id ASC
-";
-
-$stmt = $pdo->query($sql);
-$products = $stmt->fetchAll();
+$products = fetchAllProductsWithImage($pdo);
 
 ?>
 <!DOCTYPE html>

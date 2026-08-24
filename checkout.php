@@ -5,6 +5,7 @@ session_start();
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/cart-functions.php';
+require_once __DIR__ . '/includes/helpers.php';
 
 if (empty($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
     header('Location: cart');
@@ -191,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 function old(array $form, string $key): string
 {
-    return htmlspecialchars((string)($form[$key] ?? ''), ENT_QUOTES, 'UTF-8');
+    return h($form[$key] ?? '');
 }
 
 function hasError(array $errors, string $key): bool
@@ -201,7 +202,7 @@ function hasError(array $errors, string $key): bool
 
 function errorMessage(array $errors, string $key): string
 {
-    return htmlspecialchars((string)($errors[$key] ?? ''), ENT_QUOTES, 'UTF-8');
+    return h($errors[$key] ?? '');
 }
 
 ?>
@@ -305,7 +306,7 @@ function errorMessage(array $errors, string $key): string
       method="post"
     >
       <input type="hidden" name="csrf_token"
-        value="<?= htmlspecialchars($_SESSION['checkout_csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+        value="<?= h($_SESSION['checkout_csrf_token']) ?>">
 
 
       <!-- =========================
@@ -327,8 +328,8 @@ function errorMessage(array $errors, string $key): string
 
               <?php if (!empty($item['image_path'])): ?>
                 <img
-                  src="<?= htmlspecialchars($item['image_path'], ENT_QUOTES, 'UTF-8') ?>"
-                  alt="<?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>"
+                  src="<?= h($item['image_path']) ?>"
+                  alt="<?= h($item['name']) ?>"
                 >
               <?php endif; ?>
 
@@ -337,7 +338,7 @@ function errorMessage(array $errors, string $key): string
             <div class="order-item__info">
 
               <h3>
-                <?= htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8') ?>
+                <?= h($item['name']) ?>
               </h3>
 
               <p>
@@ -622,10 +623,10 @@ function errorMessage(array $errors, string $key): string
 
             <?php foreach ($prefectures as $prefecture): ?>
               <option
-                value="<?= htmlspecialchars($prefecture, ENT_QUOTES, 'UTF-8') ?>"
+                value="<?= h($prefecture) ?>"
                 <?= (($form['prefecture'] ?? '') === $prefecture) ? 'selected' : '' ?>
               >
-                <?= htmlspecialchars($prefecture, ENT_QUOTES, 'UTF-8') ?>
+                <?= h($prefecture) ?>
               </option>
             <?php endforeach; ?>
 
@@ -750,10 +751,10 @@ function errorMessage(array $errors, string $key): string
 
             <?php foreach ($deliveryDateOptions as $value => $label): ?>
               <option
-                value="<?= htmlspecialchars($value, ENT_QUOTES, 'UTF-8') ?>"
+                value="<?= h($value) ?>"
                 <?= (($form['deliveryDate'] ?? '') === $value) ? 'selected' : '' ?>
               >
-                <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
+                <?= h($label) ?>
               </option>
             <?php endforeach; ?>
 
@@ -785,10 +786,10 @@ function errorMessage(array $errors, string $key): string
 
             <?php foreach ($deliveryTimeOptions as $value => $label): ?>
               <option
-                value="<?= htmlspecialchars($value, ENT_QUOTES, 'UTF-8') ?>"
+                value="<?= h($value) ?>"
                 <?= (($form['deliveryTime'] ?? '') === $value) ? 'selected' : '' ?>
               >
-                <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
+                <?= h($label) ?>
               </option>
             <?php endforeach; ?>
 
@@ -1091,7 +1092,7 @@ function errorMessage(array $errors, string $key): string
           <p>入力内容をご確認ください。</p>
           <ul>
             <?php foreach ($errors as $message): ?>
-              <li><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></li>
+              <li><?= h($message) ?></li>
             <?php endforeach; ?>
           </ul>
         </div>

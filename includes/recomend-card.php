@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/helpers.php';
 /* recomend-card.php */
 $recommendCardOptions = $recommendCardOptions ?? [];
 $_rcShowFavorite = $recommendCardOptions['showFavorite'] ?? false;
@@ -13,8 +14,8 @@ $_rcProductImage = (string)($recommend['image_path'] ?? '');
     <div class="recommend-card__image">
       <?php if ($_rcProductImage !== ''): ?>
         <img
-          src="<?= htmlspecialchars($_rcProductImage, ENT_QUOTES, 'UTF-8') ?>"
-          alt="<?= htmlspecialchars($_rcProductName, ENT_QUOTES, 'UTF-8') ?>"
+          src="<?= h($_rcProductImage) ?>"
+          alt="<?= h($_rcProductName) ?>"
           loading="lazy"
         >
       <?php else: ?>
@@ -22,7 +23,7 @@ $_rcProductImage = (string)($recommend['image_path'] ?? '');
       <?php endif; ?>
     </div>
 
-    <h3 class="recommend-card__name"><?= htmlspecialchars($_rcProductName, ENT_QUOTES, 'UTF-8') ?></h3>
+    <h3 class="recommend-card__name"><?= h($_rcProductName) ?></h3>
 
     <div class="recommend-card__bottom">
       <p class="recommend-card__price">
@@ -37,7 +38,7 @@ $_rcProductImage = (string)($recommend['image_path'] ?? '');
       class="favorite-button recommend-card__favorite"
       type="button"
       data-favorite-product-id="<?= $_rcProductId ?>"
-      aria-label="<?= htmlspecialchars($_rcProductName, ENT_QUOTES, 'UTF-8') ?>をお気に入りに追加"
+      aria-label="<?= h($_rcProductName) ?>をお気に入りに追加"
       aria-pressed="false"
     >
       <img class="favorite-button__icon favorite-button__icon--outline" src="images/icons/heart-outline.svg" alt="">

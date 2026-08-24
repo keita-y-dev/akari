@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/helpers.php';
 /*
  * product-card.php
  *
@@ -39,9 +40,9 @@ $_pcDataOrder = $productCardOptions['order'] ?? null;
 ?>
 
 <article
-  class="product-card<?= $_pcExtraClass !== '' ? ' ' . htmlspecialchars($_pcExtraClass, ENT_QUOTES, 'UTF-8') : '' ?>"
+  class="product-card<?= $_pcExtraClass !== '' ? ' ' . h($_pcExtraClass) : '' ?>"
   data-product-id="<?= $_pcProductId ?>"
-  <?= $_pcDataCategory !== null ? 'data-category="' . htmlspecialchars((string)$_pcDataCategory, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
+  <?= $_pcDataCategory !== null ? 'data-category="' . h((string)$_pcDataCategory) . '"' : '' ?>
   <?= $_pcDataPrice !== null ? 'data-price="' . (int)$_pcDataPrice . '"' : '' ?>
   <?= $_pcDataOrder !== null ? 'data-order="' . (int)$_pcDataOrder . '"' : '' ?>
 >
@@ -57,8 +58,8 @@ $_pcDataOrder = $productCardOptions['order'] ?? null;
     <div class="product-card__image">
       <?php if ($_pcProductImage !== ''): ?>
         <img
-          src="<?= htmlspecialchars($_pcProductImage, ENT_QUOTES, 'UTF-8') ?>"
-          alt="<?= htmlspecialchars($_pcProductName, ENT_QUOTES, 'UTF-8') ?>"
+          src="<?= h($_pcProductImage) ?>"
+          alt="<?= h($_pcProductName) ?>"
           loading="lazy"
         >
       <?php else: ?>
@@ -70,7 +71,7 @@ $_pcDataOrder = $productCardOptions['order'] ?? null;
   <div class="product-card__info">
     <?= '<' . $_pcHeadingTag . ' class="product-card__name">' ?>
       <a href="product-detail?id=<?= $_pcProductId ?>">
-        <?= htmlspecialchars($_pcProductName, ENT_QUOTES, 'UTF-8') ?>
+        <?= h($_pcProductName) ?>
       </a>
     <?= '</' . $_pcHeadingTag . '>' ?>
 
@@ -85,7 +86,7 @@ $_pcDataOrder = $productCardOptions['order'] ?? null;
       class="favorite-button"
       type="button"
       data-favorite-product-id="<?= $_pcProductId ?>"
-      aria-label="<?= htmlspecialchars($_pcProductName, ENT_QUOTES, 'UTF-8') ?>をお気に入りに追加"
+      aria-label="<?= h($_pcProductName) ?>をお気に入りに追加"
       aria-pressed="false"
     >
       <img class="favorite-button__icon favorite-button__icon--outline" src="images/icons/heart-outline.svg" alt="">

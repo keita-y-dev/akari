@@ -39,18 +39,6 @@ $deliveryLabels = [
     'normal' => '通常配送',
 ];
 
-$paymentLabels = [
-    'card' => 'クレジットカード',
-    'cod'  => '代金引換',
-];
-
-$timeLabels = [
-    ''       => '指定なし',
-    '午前中' => '午前中',
-    '14-16'  => '14:00〜16:00',
-    '16-18'  => '16:00〜18:00',
-    '18-20'  => '18:00〜20:00',
-];
 
 $deliveryDate = $checkout['deliveryDate'] ?? '';
 $deliveryDateLabel = '指定なし';
@@ -296,7 +284,7 @@ if ($deliveryDate !== '') {
           <div class="confirm-row">
             <dt>お届け希望時間</dt>
             <dd>
-              <?= h($timeLabels[$checkout['deliveryTime'] ?? ''] ?? '指定なし') ?>
+              <?= h(deliveryTimeLabel((string)($checkout['deliveryTime'] ?? ''))) ?>
             </dd>
           </div>
 
@@ -320,7 +308,7 @@ if ($deliveryDate !== '') {
           <div class="confirm-row">
             <dt>お支払い方法</dt>
             <dd>
-              <?= h($paymentLabels[$checkout['payment'] ?? 'card'] ?? '') ?>
+              <?= h(paymentLabel((string)($checkout['payment'] ?? 'card'))) ?>
             </dd>
           </div>
 
