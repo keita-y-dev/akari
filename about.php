@@ -28,7 +28,7 @@
 
     <?php
       $breadcrumbs = [
-        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'TOP', 'url' => 'index'],
         ['label' => 'ABOUT', 'url' => null],
       ];
       include __DIR__ . '/includes/breadcrumb.php';
@@ -180,11 +180,11 @@
         あなたのもとへ。
       </h2>
 
-      <a href="products.php" class="cta-button">
+      <a href="products" class="cta-button">
         商品を見る
       </a>
 
-      <a href="journal.php" class="feature-link">
+      <a href="journal" class="feature-link">
         特集を読む<span>→</span>
       </a>
 

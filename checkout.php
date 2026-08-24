@@ -8,7 +8,7 @@ const FREE_SHIPPING_THRESHOLD = 5500;
 const SHIPPING_FEE = 550;
 
 if (empty($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
-    header('Location: cart.php');
+    header('Location: cart');
     exit;
 }
 
@@ -20,7 +20,7 @@ $productIds = array_values(
 );
 
 if (empty($productIds)) {
-    header('Location: cart.php');
+    header('Location: cart');
     exit;
 }
 
@@ -84,7 +84,7 @@ foreach ($_SESSION['cart'] as $productId => $quantity) {
 }
 
 if (empty($cartItems)) {
-    header('Location: cart.php');
+    header('Location: cart');
     exit;
 }
 
@@ -255,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $_SESSION['checkout'] = $form;
-        header('Location: order-confirm.php');
+        header('Location: order-confirm');
         exit;
     }
 }
@@ -312,8 +312,8 @@ function errorMessage(array $errors, string $key): string
 
     <?php
       $breadcrumbs = [
-        ['label' => 'TOP', 'url' => 'index.php'],
-        ['label' => 'カート', 'url' => 'cart.php'],
+        ['label' => 'TOP', 'url' => 'index'],
+        ['label' => 'カート', 'url' => 'cart'],
         ['label' => 'ご購入手続き', 'url' => null],
       ];
       include __DIR__ . '/includes/breadcrumb.php';
@@ -372,7 +372,7 @@ function errorMessage(array $errors, string $key): string
     <form
       class="checkout"
       id="checkoutForm"
-      action="checkout.php"
+      action="checkout"
       method="post"
     >
       <input type="hidden" name="csrf_token"
@@ -1179,7 +1179,7 @@ function errorMessage(array $errors, string $key): string
 
       <a
         class="back-cart"
-        href="cart.php"
+        href="cart"
       >
         ← カートへ戻る
       </a>

@@ -51,7 +51,7 @@ $_pcDataOrder = $productCardOptions['order'] ?? null;
   <?php endif; ?>
 
   <a
-    href="product-detail.php?id=<?= $_pcProductId ?>"
+    href="product-detail?id=<?= $_pcProductId ?>"
     class="product-card__image-link"
   >
     <div class="product-card__image">
@@ -69,7 +69,7 @@ $_pcDataOrder = $productCardOptions['order'] ?? null;
 
   <div class="product-card__info">
     <?= '<' . $_pcHeadingTag . ' class="product-card__name">' ?>
-      <a href="product-detail.php?id=<?= $_pcProductId ?>">
+      <a href="product-detail?id=<?= $_pcProductId ?>">
         <?= htmlspecialchars($_pcProductName, ENT_QUOTES, 'UTF-8') ?>
       </a>
     <?= '</' . $_pcHeadingTag . '>' ?>

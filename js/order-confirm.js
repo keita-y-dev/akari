@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
        */
 
       window.location.href =
-        "checkout.php";
+        "checkout";
 
     });
 
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   backButton.addEventListener("click", () => {
 
     window.location.href =
-      "checkout.php";
+      "checkout";
 
   });
 

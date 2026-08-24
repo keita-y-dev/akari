@@ -17,7 +17,7 @@ if (empty($_SESSION['csrf_token'])) {
 $productId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 if (!$productId) {
-    header('Location: products.php');
+    header('Location: products');
     exit;
 }
 
@@ -39,7 +39,7 @@ $stmt->execute([$productId]);
 $product = $stmt->fetch();
 
 if (!$product) {
-    header('Location: products.php');
+    header('Location: products');
     exit;
 }
 
@@ -202,8 +202,8 @@ $categoryLabel =
 
     <?php
       $breadcrumbs = [
-        ['label' => 'TOP', 'url' => 'index.php'],
-        ['label' => $categoryLabel, 'url' => 'products.php'],
+        ['label' => 'TOP', 'url' => 'index'],
+        ['label' => $categoryLabel, 'url' => 'products'],
         ['label' => $product['name'], 'url' => null],
       ];
       include __DIR__ . '/includes/breadcrumb.php';

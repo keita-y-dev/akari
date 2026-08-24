@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const response =
       await fetch(
-        "cart.php",
+        "cart",
         {
           method: "POST",
           body: formData,

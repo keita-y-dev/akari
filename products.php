@@ -6,7 +6,7 @@ require_once __DIR__ . '/includes/db.php';
  * 検索キーワード
  *
  * header.php の検索フォームから
- * products.php?q=キーワード
+ * products?q=キーワード
  * の形で受け取る
  */
 $keyword = trim((string)($_GET['q'] ?? ''));
@@ -98,7 +98,7 @@ $categoryMap = [
 
     <?php
       $breadcrumbs = [
-        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'TOP', 'url' => 'index'],
         ['label' => '商品一覧', 'url' => null],
       ];
       include __DIR__ . '/includes/breadcrumb.php';
@@ -236,7 +236,7 @@ $categoryMap = [
 
       <a
         class="products-about__link"
-        href="about.php"
+        href="about"
         aria-label="灯々について"
       >
         <img

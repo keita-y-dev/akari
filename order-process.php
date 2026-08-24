@@ -8,7 +8,7 @@ const FREE_SHIPPING_THRESHOLD = 5500;
 const SHIPPING_FEE = 550;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: order-confirm.php');
+    header('Location: order-confirm');
     exit;
 }
 
@@ -18,7 +18,7 @@ if (
     empty($_SESSION['checkout']) ||
     !is_array($_SESSION['checkout'])
 ) {
-    header('Location: checkout.php');
+    header('Location: checkout');
     exit;
 }
 
@@ -31,7 +31,7 @@ if (
     $_SESSION['order_error'] =
         '送信内容を確認できませんでした。もう一度お試しください。';
 
-    header('Location: order-confirm.php');
+    header('Location: order-confirm');
     exit;
 }
 
@@ -298,7 +298,7 @@ try {
         $_SESSION['order_csrf_token']
     );
 
-    header('Location: order-complete.php');
+    header('Location: order-complete');
     exit;
 
 } catch (Throwable $e) {
@@ -318,6 +318,6 @@ try {
             '注文処理中にエラーが発生しました。もう一度お試しください。';
     }
 
-    header('Location: order-confirm.php');
+    header('Location: order-confirm');
     exit;
 }

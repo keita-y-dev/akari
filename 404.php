@@ -42,11 +42,11 @@ http_response_code(404);
         URLをご確認いただくか、トップページからお探しください。
       </p>
 
-      <a class="not-found__button" href="index.php">
+      <a class="not-found__button" href="index">
         TOPへ戻る
       </a>
 
-      <a class="not-found__shop-link" href="products.php">
+      <a class="not-found__shop-link" href="products">
         商品を見る →
       </a>
 

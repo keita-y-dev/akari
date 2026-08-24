@@ -59,7 +59,7 @@ $products = $stmt->fetchAll();
 
     <?php
       $breadcrumbs = [
-        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'TOP', 'url' => 'index'],
         ['label' => 'お気に入り', 'url' => null],
       ];
       include __DIR__ . '/includes/breadcrumb.php';
@@ -98,7 +98,7 @@ $products = $stmt->fetchAll();
 
         <a
           class="favorites-shop-link"
-          href="products.php"
+          href="products"
         >
           商品一覧を見る →
         </a>
@@ -147,7 +147,7 @@ $products = $stmt->fetchAll();
 
         <a
           class="favorites-empty__button"
-          href="products.php"
+          href="products"
         >
           商品を見つける
         </a>

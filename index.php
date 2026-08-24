@@ -149,7 +149,7 @@ switch ($rankingType) {
       <div class="hero__content">
         <h1 class="hero__title">暮らしに、<br>小さな灯りを。</h1>
         <p class="hero__text">毎日の風景になじむ、<br>長く愛せる暮らしの道具を集めました。</p>
-        <a class="button button--hero" href="products.php">商品を見る</a>
+        <a class="button button--hero" href="products">商品を見る</a>
       </div>
     </section>
 
@@ -216,7 +216,7 @@ switch ($rankingType) {
           </article>
         </div>
 
-        <a class="button button--outline" href="products.php">すべてのカテゴリーを見る</a>
+        <a class="button button--outline" href="products">すべてのカテゴリーを見る</a>
       </div>
     </section>
 
@@ -227,7 +227,7 @@ switch ($rankingType) {
 
         <div class="pickup-list">
           <article class="pickup-card">
-            <a class="pickup-card__link" href="journal.php">
+            <a class="pickup-card__link" href="journal">
                 <img class="pickup-card__image" src="images/top/autumn-night.png" alt="秋の夜を心地よく過ごす特集">
             </a>
           </article>
@@ -247,7 +247,7 @@ switch ($rankingType) {
 
         <form
           class="ranking-filter"
-          action="index.php"
+          action="index"
           method="get"
           id="rankingFilterForm"
         >
@@ -291,7 +291,7 @@ switch ($rankingType) {
           <?php endforeach; ?>
         </div>
 
-        <a class="button button--text" href="products.php">ランキングをすべて見る</a>
+        <a class="button button--text" href="products">ランキングをすべて見る</a>
       </div>
     </section>
 
@@ -304,7 +304,7 @@ switch ($rankingType) {
           <h3 class="brand-story__title">日々の暮らしに、小さな喜びを</h3>
           <p>何気なく使うものが少し変わるだけで、<br>いつもの時間はほんの少し心地よくなる。</p>
           <p>灯々は、暮らしに寄り添う生活雑貨を<br>ひとつひとつ丁寧に選んでいます。</p>
-          <a class="button button--text" href="about.php">灯々について</a>
+          <a class="button button--text" href="about">灯々について</a>
         </div>
       </div>
     </section>

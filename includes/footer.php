@@ -12,7 +12,7 @@
         <ul>
           <li><a href="#">ご利用ガイド</a></li>
           <li><a href="#">サポート</a></li>
-          <li><a href="about.php">灯々について</a></li>
+          <li><a href="about">灯々について</a></li>
           <li><a href="#">規約・ポリシー</a></li>
         </ul>
       </nav>

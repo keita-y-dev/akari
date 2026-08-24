@@ -17,7 +17,7 @@ if (
     empty($_SESSION['checkout']) ||
     !is_array($_SESSION['checkout'])
 ) {
-    header('Location: checkout.php');
+    header('Location: checkout');
     exit;
 }
 
@@ -31,7 +31,7 @@ $productIds = array_values(
 );
 
 if (empty($productIds)) {
-    header('Location: cart.php');
+    header('Location: cart');
     exit;
 }
 
@@ -90,7 +90,7 @@ foreach ($_SESSION['cart'] as $productId => $quantity) {
 }
 
 if (empty($cartItems)) {
-    header('Location: cart.php');
+    header('Location: cart');
     exit;
 }
 
@@ -160,8 +160,8 @@ if ($deliveryDate !== '') {
 
     <?php
       $breadcrumbs = [
-        ['label' => 'TOP', 'url' => 'index.php'],
-        ['label' => 'カート', 'url' => 'cart.php'],
+        ['label' => 'TOP', 'url' => 'index'],
+        ['label' => 'カート', 'url' => 'cart'],
         ['label' => 'ご注文内容確認', 'url' => null],
       ];
       include __DIR__ . '/includes/breadcrumb.php';
@@ -212,7 +212,7 @@ if ($deliveryDate !== '') {
         <div class="section-heading">
           <h2>ご注文商品</h2>
 
-          <a class="change-button" href="cart.php">
+          <a class="change-button" href="cart">
             変更する
             <span>&gt;</span>
           </a>
@@ -271,7 +271,7 @@ if ($deliveryDate !== '') {
         <div class="section-heading">
           <h2>お客様情報</h2>
 
-          <a class="change-button" href="checkout.php">
+          <a class="change-button" href="checkout">
             変更する
             <span>&gt;</span>
           </a>
@@ -314,7 +314,7 @@ if ($deliveryDate !== '') {
         <div class="section-heading">
           <h2>配送先</h2>
 
-          <a class="change-button" href="checkout.php">
+          <a class="change-button" href="checkout">
             変更する
             <span>&gt;</span>
           </a>
@@ -340,7 +340,7 @@ if ($deliveryDate !== '') {
         <div class="section-heading">
           <h2>配送方法・希望日時</h2>
 
-          <a class="change-button" href="checkout.php">
+          <a class="change-button" href="checkout">
             変更する
             <span>&gt;</span>
           </a>
@@ -376,7 +376,7 @@ if ($deliveryDate !== '') {
         <div class="section-heading">
           <h2>お支払い方法</h2>
 
-          <a class="change-button" href="checkout.php">
+          <a class="change-button" href="checkout">
             変更する
             <span>&gt;</span>
           </a>
@@ -410,7 +410,7 @@ if ($deliveryDate !== '') {
         <div class="section-heading">
           <h2>ギフト・備考</h2>
 
-          <a class="change-button" href="checkout.php">
+          <a class="change-button" href="checkout">
             変更する
             <span>&gt;</span>
           </a>
@@ -467,7 +467,7 @@ if ($deliveryDate !== '') {
 
       <section class="order-action">
 
-        <form action="order-process.php" method="post">
+        <form action="order-process" method="post">
           <input
             type="hidden"
             name="csrf_token"
@@ -486,7 +486,7 @@ if ($deliveryDate !== '') {
         <a
           class="back-button"
           id="backButton"
-          href="checkout.php"
+          href="checkout"
         >
           ←入力内容の修正に戻る
         </a>

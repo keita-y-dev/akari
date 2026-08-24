@@ -472,7 +472,7 @@ document.addEventListener(
 
         const response =
           await fetch(
-            "cart.php",
+            "cart",
             {
               method: "POST",
               body: formData,
@@ -513,7 +513,7 @@ document.addEventListener(
           () => {
 
             window.location.href =
-              "cart.php";
+              "cart";
 
           },
           500

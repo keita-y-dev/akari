@@ -13,7 +13,7 @@
  * 任意:
  * $item['category_name']
  *
- * cart.php 側に categoryLabel() がある場合はそれを利用します。
+ * cart 側に categoryLabel() がある場合はそれを利用します。
  */
 
 $_ciProductId = (int)($item['id'] ?? 0);
@@ -40,7 +40,7 @@ $_ciCategoryDisplay =
   <div class="cart-item__top">
 
     <a
-      href="product-detail.php?id=<?= $_ciProductId ?>"
+      href="product-detail?id=<?= $_ciProductId ?>"
       class="cart-item__image"
     >
       <?php if ($_ciProductImage !== ''): ?>
@@ -67,7 +67,7 @@ $_ciCategoryDisplay =
       <?php endif; ?>
 
       <h2 class="cart-item__name">
-        <a href="product-detail.php?id=<?= $_ciProductId ?>">
+        <a href="product-detail?id=<?= $_ciProductId ?>">
           <?= htmlspecialchars($_ciProductName, ENT_QUOTES, 'UTF-8') ?>
         </a>
       </h2>

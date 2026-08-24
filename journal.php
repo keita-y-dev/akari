@@ -75,7 +75,7 @@ $sceneProducts = [
 
     <?php
       $breadcrumbs = [
-        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'TOP', 'url' => 'index'],
         ['label' => '特集', 'url' => null],
       ];
       include __DIR__ . '/includes/breadcrumb.php';
@@ -165,7 +165,7 @@ $sceneProducts = [
 
       </div>
 
-      <a href="products.php" class="scene__link">
+      <a href="products" class="scene__link">
         商品を見る<span>→</span>
       </a>
 
@@ -211,7 +211,7 @@ $sceneProducts = [
 
       </div>
 
-      <a href="products.php" class="scene__link">
+      <a href="products" class="scene__link">
         商品を見る<span>→</span>
       </a>
 
@@ -257,7 +257,7 @@ $sceneProducts = [
 
       </div>
 
-      <a href="products.php" class="scene__link">
+      <a href="products" class="scene__link">
         商品を見る<span>→</span>
       </a>
 
@@ -281,11 +281,11 @@ $sceneProducts = [
           灯々の道具とともに。
         </h2>
 
-        <a href="products.php" class="closing-button">
+        <a href="products" class="closing-button">
           すべての商品を見る
         </a>
 
-        <a href="about.php" class="closing-about">
+        <a href="about" class="closing-about">
           ABOUT 灯々<span>→</span>
         </a>
 

@@ -6,7 +6,7 @@ if (
     empty($_SESSION['completed_order']) ||
     !is_array($_SESSION['completed_order'])
 ) {
-    header('Location: index.php');
+    header('Location: index');
     exit;
 }
 
@@ -47,7 +47,7 @@ $order = $stmt->fetch();
 
 if (!$order) {
     unset($_SESSION['completed_order']);
-    header('Location: index.php');
+    header('Location: index');
     exit;
 }
 
@@ -129,7 +129,7 @@ $paymentLabel =
 
     <?php
       $breadcrumbs = [
-        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'TOP', 'url' => 'index'],
         ['label' => 'ご注文完了', 'url' => null],
       ];
       include __DIR__ . '/includes/breadcrumb.php';
@@ -371,7 +371,7 @@ $paymentLabel =
     <section class="complete-action">
 
       <a
-        href="index.php"
+        href="index"
         class="top-button"
       >
         T O P ペ ー ジ へ 戻 る
@@ -379,7 +379,7 @@ $paymentLabel =
 
 
       <a
-        href="index.php"
+        href="index"
         class="continue-link"
       >
         買い物を続ける→

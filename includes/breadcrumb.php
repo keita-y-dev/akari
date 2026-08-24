@@ -4,7 +4,7 @@
  *
  * 使用例:
  * $breadcrumbs = [
- *     ['label' => 'TOP', 'url' => 'index.php'],
+ *     ['label' => 'TOP', 'url' => 'index'],
  *     ['label' => '商品一覧', 'url' => null],
  * ];
  * include __DIR__ . '/includes/breadcrumb.php';

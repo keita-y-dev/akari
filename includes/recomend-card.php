@@ -9,7 +9,7 @@ $_rcProductImage = (string)($recommend['image_path'] ?? '');
 ?>
 
 <article class="recommend-card">
-  <a href="product-detail.php?id=<?= $_rcProductId ?>" class="recommend-card__link">
+  <a href="product-detail?id=<?= $_rcProductId ?>" class="recommend-card__link">
     <div class="recommend-card__image">
       <?php if ($_rcProductImage !== ''): ?>
         <img

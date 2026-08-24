@@ -1,0 +1,23 @@
+# =========================
+# 404
+# =========================
+
+ErrorDocument 404 /works/akari/404.php
+
+
+# =========================
+# URLから.phpを省略
+# =========================
+
+RewriteEngine On
+
+# ブラウザから .php 付きで直接アクセスされた場合は
+# 拡張子なしURLへ301リダイレクト
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php(?:[?\s]) [NC]
+RewriteRule ^(.+?)\.php$ $1 [R=301,L,NE]
+
+# 拡張子なしURLを内部的に .php へ振り分け
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/?$ $1.php [L]

@@ -320,7 +320,7 @@ $recommendProducts = $stmt->fetchAll();
 
     <?php
       $breadcrumbs = [
-        ['label' => 'TOP', 'url' => 'index.php'],
+        ['label' => 'TOP', 'url' => 'index'],
         ['label' => 'カート', 'url' => null],
       ];
       include __DIR__ . '/includes/breadcrumb.php';
@@ -389,7 +389,7 @@ $recommendProducts = $stmt->fetchAll();
         </div>
 
         <a
-          href="checkout.php"
+          href="checkout"
           class="checkout-button"
           id="checkoutButton"
         >
@@ -397,7 +397,7 @@ $recommendProducts = $stmt->fetchAll();
         </a>
 
         <a
-          href="products.php"
+          href="products"
           class="continue-shopping"
         >
           お買い物を続ける →
@@ -480,7 +480,7 @@ $recommendProducts = $stmt->fetchAll();
     >
       <p>カートに商品がありません。</p>
 
-      <a href="products.php">
+      <a href="products">
         商品を見る
       </a>
     </section>
