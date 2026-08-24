@@ -3,9 +3,7 @@
 session_start();
 
 require_once __DIR__ . '/includes/db.php';
-
-const FREE_SHIPPING_THRESHOLD = 5500;
-const SHIPPING_FEE = 550;
+require_once __DIR__ . '/includes/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: order-confirm');

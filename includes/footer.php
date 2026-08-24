@@ -21,3 +21,5 @@
     <p class="footer__copy">© 2026 AKARI.inc</p>
   </div>
 </footer>
+
+<script src="js/favorites-store.js"></script>

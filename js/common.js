@@ -27,80 +27,47 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =====================================================
-   PRODUCT CARD FAVORITES
-   product-card.php / recomend-card.php 共通
+   FAVORITES
+   product-card.php / recomend-card.php / product-detail.php 共通
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  const FAVORITES_KEY = "akariFavorites";
+  const favoritesStore =
+    window.AKARI_FAVORITES;
 
-
-  function getFavorites() {
-
-    try {
-
-      const favorites =
-        JSON.parse(
-          localStorage.getItem(
-            FAVORITES_KEY
-          )
-        );
-
-      return Array.isArray(favorites)
-        ? favorites.map(String)
-        : [];
-
-    } catch (error) {
-
-      return [];
-
-    }
-
+  if (!favoritesStore) {
+    return;
   }
 
-
-  function saveFavorites(favorites) {
-
-    localStorage.setItem(
-      FAVORITES_KEY,
-      JSON.stringify(favorites)
-    );
-
-  }
-
-
-  function updateFavoriteButton(
-    button,
-    isFavorite
-  ) {
-
-    button.classList.toggle(
-      "is-active",
-      isFavorite
-    );
-
-    button.setAttribute(
-      "aria-pressed",
-      String(isFavorite)
-    );
-
-
-    const productCard =
-      button.closest(
-        ".product-card, .recommend-card"
-      );
-
-
-    const productName =
-      productCard
+  function getProductName(button) {
+    return (
+      button
+        .closest(".product-card, .recommend-card, .product-info")
         ?.querySelector(
-          ".product-card__name, .recommend-card__name"
+          ".product-card__name, .recommend-card__name, .product-info__title"
         )
         ?.textContent
         ?.trim()
-        || "商品";
+      || "商品"
+    );
+  }
 
+  function updateFavoriteButton(button, isFavorite) {
+    button.classList.toggle("is-active", isFavorite);
+    button.setAttribute("aria-pressed", String(isFavorite));
+
+    const singleIcon = button.querySelector(
+      "img:not(.favorite-button__icon)"
+    );
+
+    if (singleIcon) {
+      singleIcon.src = isFavorite
+        ? "images/icons/heart-solid.svg"
+        : "images/icons/heart-outline.svg";
+    }
+
+    const productName = getProductName(button);
 
     button.setAttribute(
       "aria-label",
@@ -108,120 +75,50 @@ document.addEventListener("DOMContentLoaded", () => {
         ? `${productName}をお気に入りから削除`
         : `${productName}をお気に入りに追加`
     );
-
   }
-
 
   function initializeFavoriteButtons() {
-
-    const favorites =
-      getFavorites();
-
+    const favorites = favoritesStore.get();
 
     document
-      .querySelectorAll(
-        "[data-favorite-product-id]"
-      )
+      .querySelectorAll("[data-favorite-product-id]")
       .forEach((button) => {
-
-        const productId =
-          String(
-            button.dataset
-              .favoriteProductId
-            || ""
-          );
-
+        const productId = String(
+          button.dataset.favoriteProductId || ""
+        );
 
         updateFavoriteButton(
           button,
-          favorites.includes(
-            productId
-          )
+          favorites.includes(productId)
         );
-
       });
-
   }
 
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest(
+      "[data-favorite-product-id]"
+    );
 
-  document.addEventListener(
-    "click",
-    (event) => {
-
-      const button =
-        event.target.closest(
-          "[data-favorite-product-id]"
-        );
-
-
-      if (!button) {
-        return;
-      }
-
-
-      event.preventDefault();
-      event.stopPropagation();
-
-
-      const productId =
-        String(
-          button.dataset
-            .favoriteProductId
-          || ""
-        );
-
-
-      if (!productId) {
-        return;
-      }
-
-
-      const favorites =
-        getFavorites();
-
-
-      const index =
-        favorites.indexOf(
-          productId
-        );
-
-
-      if (index === -1) {
-
-        favorites.push(
-          productId
-        );
-
-
-        updateFavoriteButton(
-          button,
-          true
-        );
-
-      } else {
-
-        favorites.splice(
-          index,
-          1
-        );
-
-
-        updateFavoriteButton(
-          button,
-          false
-        );
-
-      }
-
-
-      saveFavorites(
-        favorites
-      );
-
+    if (!button) {
+      return;
     }
-  );
 
+    event.preventDefault();
+    event.stopPropagation();
+
+    const productId = String(
+      button.dataset.favoriteProductId || ""
+    );
+
+    if (!productId) {
+      return;
+    }
+
+    const isFavorite =
+      favoritesStore.toggle(productId);
+
+    updateFavoriteButton(button, isFavorite);
+  });
 
   initializeFavoriteButtons();
-
 });

@@ -3,6 +3,7 @@
 session_start();
 
 require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/helpers.php';
 
 /*
  * CSRFトークン
@@ -131,16 +132,7 @@ $mainImage = $images[0]['image_path'] ?? 'images/products/no-image.png';
 /*
  * カテゴリ英語表記
  */
-$categoryMap = [
-    'キッチン' => 'KITCHEN',
-    'インテリア' => 'INTERIOR',
-    'ファブリック' => 'FABRIC',
-    'アロマ' => 'AROMA',
-];
-
-$categoryLabel =
-    $categoryMap[$product['category_name']]
-    ?? $product['category_name'];
+$categoryLabel = categoryLabel((string)$product['category_name']);
 
 ?>
 
@@ -310,6 +302,7 @@ $categoryLabel =
           <button
             class="favorite-button"
             type="button"
+            data-favorite-product-id="<?= (int)$product['id'] ?>"
             aria-label="お気に入りに追加"
             aria-pressed="false"
           >

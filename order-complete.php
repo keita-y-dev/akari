@@ -16,6 +16,7 @@ $orderNumber = (string)($completedOrder['order_number'] ?? '');
 $orderId = (int)($completedOrder['order_id'] ?? 0);
 
 require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/helpers.php';
 
 $stmt = $pdo->prepare("
     SELECT
@@ -51,10 +52,6 @@ if (!$order) {
     exit;
 }
 
-function h(mixed $value): string
-{
-    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
-}
 
 $paymentLabels = [
     'card' => 'クレジットカード',

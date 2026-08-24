@@ -17,10 +17,6 @@ document.addEventListener(
         ".gallery-thumb"
       );
 
-    const favoriteButton =
-      document.querySelector(
-        ".favorite-button"
-      );
 
     const quantityInput =
       document.querySelector(
@@ -80,181 +76,6 @@ document.addEventListener(
 
     const csrfToken =
       config.csrfToken || "";
-
-
-    const FAVORITES_KEY =
-      "akariFavorites";
-
-
-    /* ==============================
-       favorites
-    ============================== */
-
-    function getFavorites() {
-
-      try {
-
-        const favorites =
-          JSON.parse(
-            localStorage.getItem(
-              FAVORITES_KEY
-            )
-          );
-
-
-        return Array.isArray(
-          favorites
-        )
-          ? favorites
-          : [];
-
-      } catch (error) {
-
-        return [];
-
-      }
-
-    }
-
-
-    function saveFavorites(
-      favorites
-    ) {
-
-      localStorage.setItem(
-        FAVORITES_KEY,
-        JSON.stringify(
-          favorites
-        )
-      );
-
-    }
-
-
-    function updateFavoriteButton(
-      isFavorite
-    ) {
-
-      if (!favoriteButton) {
-        return;
-      }
-
-
-      const icon =
-        favoriteButton.querySelector(
-          "img"
-        );
-
-
-      if (icon) {
-
-        icon.src =
-          isFavorite
-            ? "images/icons/heart-solid.svg"
-            : "images/icons/heart-outline.svg";
-
-      }
-
-
-      favoriteButton
-        .classList
-        .toggle(
-          "is-active",
-          isFavorite
-        );
-
-
-      favoriteButton
-        .setAttribute(
-          "aria-pressed",
-          String(isFavorite)
-        );
-
-
-      favoriteButton
-        .setAttribute(
-          "aria-label",
-          isFavorite
-            ? "お気に入りから削除"
-            : "お気に入りに追加"
-        );
-
-    }
-
-
-    function initializeFavorite() {
-
-      if (
-        !favoriteButton ||
-        !productId
-      ) {
-        return;
-      }
-
-
-      const favorites =
-        getFavorites();
-
-
-      updateFavoriteButton(
-        favorites.includes(
-          productId
-        )
-      );
-
-    }
-
-
-    favoriteButton
-      ?.addEventListener(
-        "click",
-        () => {
-
-          if (!productId) {
-            return;
-          }
-
-
-          const favorites =
-            getFavorites();
-
-
-          const index =
-            favorites.indexOf(
-              productId
-            );
-
-
-          if (index === -1) {
-
-            favorites.push(
-              productId
-            );
-
-            updateFavoriteButton(
-              true
-            );
-
-          } else {
-
-            favorites.splice(
-              index,
-              1
-            );
-
-            updateFavoriteButton(
-              false
-            );
-
-          }
-
-
-          saveFavorites(
-            favorites
-          );
-
-        }
-      );
 
 
     /* ==============================
@@ -714,9 +535,6 @@ document.addEventListener(
     /* ==============================
        initial
     ============================== */
-
-    initializeFavorite();
-
 
     if (
       thumbnails.length > 0

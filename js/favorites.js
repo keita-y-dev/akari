@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const FAVORITES_KEY = "akariFavorites";
-
   const grid =
     document.querySelector("#favoritesGrid");
 
@@ -12,34 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#favoriteCount");
 
 
-  function getFavorites() {
-
-    try {
-
-      const favorites =
-        JSON.parse(
-          localStorage.getItem(
-            FAVORITES_KEY
-          )
-        );
-
-      return Array.isArray(favorites)
-        ? favorites.map(String)
-        : [];
-
-    } catch (error) {
-
-      return [];
-
-    }
-
-  }
-
-
   function refreshFavoritesPage() {
 
     const favorites =
-      getFavorites();
+      window.AKARI_FAVORITES?.get() || [];
 
     let visibleCount = 0;
 
@@ -126,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     (event) => {
 
       if (
-        event.key === FAVORITES_KEY
+        event.key === window.AKARI_FAVORITES?.storageKey
       ) {
         refreshFavoritesPage();
       }

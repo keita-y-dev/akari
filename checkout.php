@@ -3,96 +3,25 @@
 session_start();
 
 require_once __DIR__ . '/includes/db.php';
-
-const FREE_SHIPPING_THRESHOLD = 5500;
-const SHIPPING_FEE = 550;
+require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/cart-functions.php';
 
 if (empty($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
     header('Location: cart');
     exit;
 }
 
-$productIds = array_values(
-    array_filter(
-        array_map('intval', array_keys($_SESSION['cart'])),
-        static fn (int $id): bool => $id > 0
-    )
-);
-
-if (empty($productIds)) {
-    header('Location: cart');
-    exit;
-}
-
-$placeholders = implode(',', array_fill(0, count($productIds), '?'));
-
-$sql = "
-    SELECT
-        p.id,
-        p.name,
-        p.price,
-        p.stock,
-        (
-            SELECT pi.image_path
-            FROM product_images AS pi
-            WHERE pi.product_id = p.id
-            ORDER BY pi.sort_order ASC, pi.id ASC
-            LIMIT 1
-        ) AS image_path
-    FROM products AS p
-    WHERE p.id IN ($placeholders)
-";
-
-$stmt = $pdo->prepare($sql);
-$stmt->execute($productIds);
-
-$productMap = [];
-
-foreach ($stmt->fetchAll() as $product) {
-    $productMap[(int)$product['id']] = $product;
-}
-
-$cartItems = [];
-$subtotal = 0;
-
-foreach ($_SESSION['cart'] as $productId => $quantity) {
-    $productId = (int)$productId;
-
-    if (!isset($productMap[$productId])) {
-        unset($_SESSION['cart'][$productId]);
-        continue;
-    }
-
-    $product = $productMap[$productId];
-    $stock = max(0, (int)$product['stock']);
-
-    if ($stock < 1) {
-        unset($_SESSION['cart'][$productId]);
-        continue;
-    }
-
-    $quantity = max(1, (int)$quantity);
-    $quantity = min($quantity, $stock);
-
-    $_SESSION['cart'][$productId] = $quantity;
-
-    $product['price'] = (int)$product['price'];
-    $product['quantity'] = $quantity;
-
-    $subtotal += $product['price'] * $quantity;
-    $cartItems[] = $product;
-}
+$cartItems = fetchCartItems($pdo, $_SESSION['cart'], true);
 
 if (empty($cartItems)) {
     header('Location: cart');
     exit;
 }
 
-$shipping = $subtotal >= FREE_SHIPPING_THRESHOLD
-    ? 0
-    : SHIPPING_FEE;
-
-$total = $subtotal + $shipping;
+$summary = calculateCartSummary($cartItems);
+$subtotal = $summary['subtotal'];
+$shipping = $summary['shipping'];
+$total = $summary['total'];
 
 $prefectures = [
     '北海道',

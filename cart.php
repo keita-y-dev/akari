@@ -3,9 +3,9 @@
 session_start();
 
 require_once __DIR__ . '/includes/db.php';
-
-const FREE_SHIPPING_THRESHOLD = 5500;
-const SHIPPING_FEE = 550;
+require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/cart-functions.php';
 
 if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
@@ -21,120 +21,6 @@ function jsonResponse(array $data, int $status = 200): never
     header('Content-Type: application/json; charset=UTF-8');
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
-}
-
-function calculateCartSummary(array $cartItems): array
-{
-    $subtotal = 0;
-
-    foreach ($cartItems as $item) {
-        $subtotal += (int)$item['price'] * (int)$item['quantity'];
-    }
-
-    $shipping = $subtotal > 0 && $subtotal < FREE_SHIPPING_THRESHOLD
-        ? SHIPPING_FEE
-        : 0;
-
-    return [
-        'subtotal' => $subtotal,
-        'shipping' => $shipping,
-        'total' => $subtotal + $shipping,
-    ];
-}
-
-function fetchCartItems(PDO $pdo, array $cart): array
-{
-    if (empty($cart)) {
-        return [];
-    }
-
-    $productIds = array_values(
-        array_filter(
-            array_map('intval', array_keys($cart)),
-            static fn (int $id): bool => $id > 0
-        )
-    );
-
-    if (empty($productIds)) {
-        return [];
-    }
-
-    $placeholders = implode(',', array_fill(0, count($productIds), '?'));
-
-    $sql = "
-        SELECT
-            p.id,
-            p.name,
-            p.price,
-            p.stock,
-            c.name AS category_name,
-            (
-                SELECT pi.image_path
-                FROM product_images AS pi
-                WHERE pi.product_id = p.id
-                ORDER BY pi.sort_order ASC, pi.id ASC
-                LIMIT 1
-            ) AS image_path
-        FROM products AS p
-        INNER JOIN categories AS c
-            ON c.id = p.category_id
-        WHERE p.id IN ($placeholders)
-    ";
-
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($productIds);
-
-    $products = [];
-
-    foreach ($stmt->fetchAll() as $product) {
-        $productId = (int)$product['id'];
-        $stock = max(0, (int)$product['stock']);
-
-        if ($stock === 0) {
-            unset($_SESSION['cart'][$productId]);
-            continue;
-        }
-
-        $quantity = max(1, (int)($cart[$productId] ?? 1));
-        $quantity = min($quantity, $stock);
-
-        $_SESSION['cart'][$productId] = $quantity;
-
-        $product['id'] = $productId;
-        $product['price'] = (int)$product['price'];
-        $product['stock'] = $stock;
-        $product['quantity'] = $quantity;
-
-        $products[$productId] = $product;
-    }
-
-    foreach ($productIds as $productId) {
-        if (!isset($products[$productId])) {
-            unset($_SESSION['cart'][$productId]);
-        }
-    }
-
-    $items = [];
-
-    foreach (array_keys($_SESSION['cart']) as $productId) {
-        if (isset($products[$productId])) {
-            $items[] = $products[$productId];
-        }
-    }
-
-    return $items;
-}
-
-function categoryLabel(string $categoryName): string
-{
-    $map = [
-        'キッチン' => 'KITCHEN',
-        'インテリア' => 'INTERIOR',
-        'ファブリック' => 'FABRIC',
-        'アロマ' => 'AROMA',
-    ];
-
-    return $map[$categoryName] ?? $categoryName;
 }
 
 /*
@@ -236,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ], 400);
     }
 
-    $cartItems = fetchCartItems($pdo, $_SESSION['cart']);
+    $cartItems = fetchCartItems($pdo, $_SESSION['cart'], true, true);
     $summary = calculateCartSummary($cartItems);
 
     jsonResponse([
@@ -248,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ]);
 }
 
-$cartItems = fetchCartItems($pdo, $_SESSION['cart']);
+$cartItems = fetchCartItems($pdo, $_SESSION['cart'], true, true);
 $summary = calculateCartSummary($cartItems);
 
 /*
