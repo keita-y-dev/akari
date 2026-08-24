@@ -11,15 +11,32 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#rankingFilterForm");
 
 
-  if (!rankingSelect || !rankingForm) {
-    return;
+  if (rankingSelect && rankingForm) {
+
+    rankingSelect.addEventListener("change", () => {
+      rankingForm.submit();
+    });
+
   }
 
 
-  rankingSelect.addEventListener("change", () => {
+  /* =========================
+     NEWSLETTER
+  ========================= */
 
-    rankingForm.submit();
+  const newsletterButton =
+    document.querySelector(".newsletter .button--submit");
 
-  });
+  if (newsletterButton) {
+
+    newsletterButton.addEventListener("click", (event) => {
+
+      event.preventDefault();
+
+      alert("デモサイトのため、実際の登録は行われません。");
+
+    });
+
+  }
 
 });

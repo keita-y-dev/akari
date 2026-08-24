@@ -173,7 +173,7 @@ $sceneProducts = [
 
 
     <!-- scene 02 -->
-    <section class="scene">
+    <section class="scene scene--reverse">
 
       <div class="scene__heading">
         <p class="scene-number">SCENE 02</p>

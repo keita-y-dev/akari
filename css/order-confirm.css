@@ -123,7 +123,7 @@ button {
 
 .confirmation-description p {
   margin: 0;
-  font-size: 12px;
+  font-size: 18px;
   line-height: 1.9;
 }
 
@@ -194,6 +194,10 @@ button {
   display: grid;
   grid-template-columns: 110px minmax(0, 1fr);
   gap: 20px;
+}
+
+.order-item + .order-item {
+  margin-top: 36px;
 }
 
 .order-item__image {
@@ -390,7 +394,7 @@ button {
 
 .order-button {
   width: 100%;
-  min-height: 55px;
+  min-height: 60px;
   border: 0;
   border-radius: 10px;
   background-color: #1D82E0;
@@ -412,12 +416,17 @@ button {
 }
 
 .back-button {
-  margin-top: 40px;
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: 28px;
+  padding: 8px 12px;
   border: 0;
   background: transparent;
   color: var(--text-color);
   font-size: 12px;
+  line-height: 1.6;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -482,3 +491,71 @@ button {
 /* =========================
    FOOTER
 ========================= */
+
+/* =========================================================
+   RESPONSIVE 768 / 1024 / 1440
+========================================================= */
+@media (min-width: 768px) {
+  .page-heading { padding-top: 60px; }
+  .confirmation-description, .confirmation { width: min(760px, calc(100% - 80px)); margin: 0 auto; padding-left: 0; padding-right: 0; }
+  .confirmation-description { padding-top: 52px; }
+  .confirmation { padding-top: 48px; padding-bottom: 110px; }
+  .order-item { grid-template-columns: 140px minmax(0, 1fr); gap: 28px; }
+  .order-item__image { width: 140px; height: 140px; }
+  .confirm-row { grid-template-columns: 150px minmax(0, 1fr); gap: 28px; padding: 14px 0; }
+
+  .order-action {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "back order"
+      "note note";
+    align-items: center;
+    column-gap: 24px;
+    row-gap: 18px;
+    padding-top: 56px;
+  }
+
+  .order-action form {
+    grid-area: order;
+    width: 100%;
+  }
+
+  .order-button {
+    width: 280px;
+    max-width: 100%;
+    min-height: 56px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .back-button {
+    grid-area: back;
+    justify-self: center;
+    min-height: 52px;
+    margin-top: 0;
+    padding: 10px 16px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .order-note {
+    grid-area: note;
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .confirmation-description, .confirmation { width: min(900px, calc(100% - 96px)); }
+  .confirmation { padding-bottom: 120px; }
+  .confirm-section { padding-bottom: 52px; }
+  .confirm-section + .confirm-section { padding-top: 52px; }
+  .section-heading h2 { font-size: 21px; }
+  .confirm-row dt, .confirm-row dd, .address { font-size: 14px; }
+  .order-action { width: min(620px, 100%); margin-left: auto; margin-right: auto; }
+}
+
+@media (min-width: 1440px) {
+  .confirmation-description, .confirmation { max-width: 980px; }
+}
+

@@ -575,3 +575,331 @@ input {
 /* ==============================
    footer
 ============================== */
+
+/* =========================================================
+   RESPONSIVE 768 / 1024 / 1440
+========================================================= */
+@media (min-width: 768px) {
+  /* ==============================
+     heading
+  ============================== */
+
+  .cart-heading {
+    padding-top: 64px;
+  }
+
+  .cart-heading__en {
+    font-size: 32px;
+    line-height: 1.4;
+  }
+
+  .cart-heading h1 {
+    margin-top: 12px;
+    font-size: 23px;
+    line-height: 1.8;
+  }
+
+
+  /* ==============================
+     cart
+  ============================== */
+
+  .cart {
+    width: min(760px, calc(100% - 80px));
+    margin: 0 auto;
+    padding: 72px 0 0;
+  }
+
+
+  /* ==============================
+     cart item
+  ============================== */
+
+  .cart-item {
+    padding-bottom: 56px;
+  }
+
+  .cart-item + .cart-item {
+    padding-top: 56px;
+  }
+
+  .cart-item__top {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+
+  .cart-item__image {
+    width: 220px;
+  }
+
+  .cart-item__info {
+    min-width: 0;
+    padding-top: 4px;
+  }
+
+  .cart-item__category {
+    font-size: 14px;
+    line-height: 1.7;
+    letter-spacing: 0.1em;
+  }
+
+  .cart-item__info h2 {
+    margin-top: 12px;
+    font-size: 23px;
+    line-height: 1.8;
+    letter-spacing: 0.04em;
+  }
+
+  .cart-item__color {
+    margin-top: 14px;
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .cart-item__price {
+    margin-top: 18px;
+    font-size: 19px;
+    line-height: 1.8;
+  }
+
+  .cart-item__price span {
+    font-size: 14px;
+  }
+
+
+  /* ==============================
+     quantity
+  ============================== */
+
+  .cart-item__bottom {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "label label"
+      "control delete";
+
+    gap: 12px 22px;
+
+    width: fit-content;
+
+    /* 商品情報の左端に揃える */
+    margin-top: 36px;
+    margin-left: 260px;
+
+    align-items: center;
+  }
+
+  .quantity__label {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .quantity {
+    grid-template-columns: 52px 64px 52px;
+    height: 52px;
+  }
+
+  .quantity__button {
+    width: 52px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .quantity__input {
+    width: 64px;
+    height: 50px;
+    font-size: 18px;
+    line-height: 50px;
+  }
+
+  .delete-button {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+
+  /* ==============================
+     summary
+  ============================== */
+
+  .cart-summary {
+    padding-top: 72px;
+  }
+
+  .summary-row p {
+    font-size: 18px;
+  }
+
+  .summary-total {
+    margin-top: 48px;
+    padding-top: 40px;
+  }
+
+
+  /* ==============================
+     guide
+  ============================== */
+
+  .cart-guide {
+    margin-top: 76px;
+  }
+
+
+  /* ==============================
+     recommend
+  ============================== */
+
+  .recommend {
+    width: min(920px, calc(100% - 80px));
+    margin: 0 auto;
+    padding: 96px 0 108px;
+  }
+
+  .recommend h2 {
+    padding-left: 0;
+    font-size: 28px;
+    line-height: 1.5;
+  }
+
+  .recommend__slider {
+    gap: 28px;
+    padding-right: 0;
+    margin-top: 32px;
+  }
+
+  .recommend-card {
+    flex-basis: 230px;
+  }
+}
+
+@media (min-width: 1024px) {
+
+  .breadcrumb {
+    width: min(1180px, calc(100% - 96px));
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .breadcrumb__list {
+    justify-content: flex-start;
+  }
+
+
+  /* ==============================
+     cart layout
+  ============================== */
+
+  .cart {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 72px;
+    width: min(1180px, calc(100% - 96px));
+    margin: 0 auto;
+    padding-top: 72px;
+  }
+
+
+  /* ==============================
+     cart items
+  ============================== */
+
+  #cartItems {
+    min-width: 0;
+  }
+
+  .cart-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .cart-item__top {
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 34px;
+  }
+
+  .cart-item__image {
+    width: 180px;
+  }
+
+  .cart-item__bottom {
+    margin: 0;
+    align-self: center;
+  }
+
+
+  /* ==============================
+     summary
+  ============================== */
+
+  .cart-summary {
+    width: 100%;
+    padding-top: 0;
+  }
+
+
+  /* ==============================
+     guide
+  ============================== */
+
+  .cart-guide {
+    width: 100%;
+    margin-top: 48px;
+  }
+
+
+  /* ==============================
+    recommend
+  ============================== */
+
+  .recommend {
+    width: min(1080px, calc(100% - 96px));
+    margin: 0 auto;
+    padding: 96px 0 108px;
+  }
+
+  .recommend h2 {
+    padding-left: 0;
+    font-size: 28px;
+  }
+
+  .recommend__slider {
+    display: grid;
+    grid-template-columns: repeat(3, 240px);
+    justify-content: start;
+    gap: 32px;
+    overflow: visible;
+    margin-top: 32px;
+  }
+
+  .recommend-card {
+    width: 240px;
+    flex: none;
+  }
+
+  /* 商品名 */
+  .recommend-card h3 {
+    margin-top: 14px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* 価格 */
+  .recommend-card p {
+    margin-top: 7px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+@media (min-width: 1440px) {
+  .cart { max-width: 1080px; }
+  .cart-item { gap: 72px; }
+  .cart-item__top { grid-template-columns: 200px minmax(0, 1fr); }
+  .cart-item__image { width: 200px; }
+  .recommend { max-width: 1280px; }
+}
+

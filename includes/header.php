@@ -26,7 +26,7 @@
         <ul class="global-nav__list">
           <li><a href="index.php">HOME</a></li>
           <li><a href="products.php">商品一覧</a></li>
-          <li><a href="#">お気に入り</a></li>
+          <li><a href="favorites.php">お気に入り</a></li>
           <li><a href="journal.php">特集</a></li>
           <li><a href="about.php">灯々について</a></li>
         </ul>

@@ -338,3 +338,231 @@ button {
 /* =========================
    FOOTER
 ========================= */
+
+/* =========================================================
+   RESPONSIVE 768 / 1024 / 1440
+========================================================= */
+@media (min-width: 768px) {
+  .page-heading { padding-top: 60px; }
+  .complete-message, .order-section, .complete-action, .contact-section { width: min(720px, calc(100% - 80px)); margin-left: auto; margin-right: auto; }
+  .complete-message { padding-left: 0; padding-right: 0; }
+  .order-section { padding-left: 0; padding-right: 0; }
+  .order-info__row, .delivery-date__row { grid-template-columns: 180px minmax(0, 1fr); }
+  .complete-action { padding-left: 0; padding-right: 0; }
+  .contact-section { padding-left: 0; padding-right: 0; }
+  .top-button { max-width: 420px; margin-left: auto; margin-right: auto; }
+}
+
+@media (min-width: 1024px) {
+  /* =========================
+     PAGE HEADING
+  ========================= */
+
+  .page-heading {
+    padding-top: 72px;
+  }
+
+  .page-heading__en {
+    font-size: 32px;
+  }
+
+  .page-heading h1 {
+    margin-top: 10px;
+    font-size: 23px;
+  }
+
+
+  /* =========================
+     CHECKOUT STEP
+  ========================= */
+
+  .checkout-step {
+    width: min(520px, calc(100% - 96px));
+    margin-top: 52px;
+  }
+
+  .step {
+    min-width: 64px;
+  }
+
+  .step span {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+  }
+
+  .step p {
+    margin-top: 7px;
+    font-size: 12px;
+  }
+
+  .step-line {
+    flex: 1;
+    max-width: 100px;
+    margin-top: 17px;
+  }
+
+
+  /* =========================
+     COMPLETE MESSAGE
+  ========================= */
+
+  .complete-message {
+    width: min(620px, calc(100% - 96px));
+    margin: 0 auto;
+    padding: 76px 0 72px;
+  }
+
+  .complete-message h2 {
+    font-size: 24px;
+  }
+
+  .complete-message > p {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 2;
+  }
+
+  .complete-message > p + p {
+    margin-top: 26px;
+  }
+
+  .complete-message .demo-note {
+    margin-top: 32px;
+    font-size: 11px;
+  }
+
+
+  /* =========================
+     ORDER / DELIVERY
+  ========================= */
+
+  .order-section {
+    width: min(960px, calc(100% - 96px));
+    margin: 0 auto;
+    padding: 56px 0;
+  }
+
+  .order-section + .order-section {
+    border-top: 1px solid var(--line-color);
+  }
+
+  .order-section:nth-of-type(2) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+  }
+
+  .order-section:nth-of-type(2) .section-title {
+    grid-column: 1;
+  }
+
+  .order-section:nth-of-type(3) {
+    display: block;
+  }
+
+  .section-title {
+    margin-bottom: 28px;
+    font-size: 22px;
+  }
+
+  .order-info__row {
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 24px;
+    padding: 14px 0;
+  }
+
+  .order-info dt,
+  .order-info dd,
+  .delivery-info,
+  .delivery-date dt,
+  .delivery-date dd {
+    font-size: 14px;
+    line-height: 1.9;
+  }
+
+  .delivery-date {
+    margin-top: 28px;
+    padding-top: 24px;
+  }
+
+  .delivery-date__row {
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .delivery-date__row + .delivery-date__row {
+    margin-top: 12px;
+  }
+
+
+  /* =========================
+     SHIPPING
+  ========================= */
+
+  .shipping-section {
+    width: min(960px, calc(100% - 96px));
+    margin: 0 auto;
+    padding: 56px 0;
+  }
+
+  .shipping-section p {
+    font-size: 14px;
+    line-height: 2;
+  }
+
+  .shipping-section p + p {
+    margin-top: 8px;
+  }
+
+
+  /* =========================
+     ACTION
+  ========================= */
+
+  .complete-action {
+    width: min(960px, calc(100% - 96px));
+    margin: 0 auto;
+    padding: 64px 0 72px;
+    text-align: center;
+  }
+
+  .top-button {
+    width: 340px;
+    max-width: 100%;
+    min-height: 58px;
+    margin: 0 auto;
+    font-size: 14px;
+  }
+
+  .continue-link {
+    margin-top: 28px;
+    font-size: 13px;
+  }
+
+
+  /* =========================
+     CONTACT
+  ========================= */
+
+  .contact-section {
+    width: min(960px, calc(100% - 96px));
+    margin: 0 auto;
+    padding: 56px 0 72px;
+  }
+
+  .contact-section p {
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .contact-link {
+    margin-top: 20px;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .complete-message, .order-section, .complete-action, .contact-section { max-width: 920px; }
+}
+

@@ -161,6 +161,12 @@ textarea {
   gap: 22px;
 }
 
+.order-item + .order-item {
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line-color);
+}
+
 .order-item__image {
   width: 120px;
   height: 120px;
@@ -321,12 +327,18 @@ textarea:focus {
 }
 
 .postal-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 44px;
-  padding: 0 5px;
+  padding: 0 8px;
   border: 1px solid var(--brown-color);
   background-color: #fff;
   color: var(--brown-color);
   font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -801,3 +813,38 @@ a:focus-visible {
   }
 
 }
+
+/* =========================================================
+   RESPONSIVE 768 / 1024 / 1440
+========================================================= */
+@media (min-width: 768px) {
+  .checkout-heading { padding-top: 60px; }
+  .checkout-step { margin-top: 52px; }
+  .checkout { width: min(760px, calc(100% - 80px)); padding: 72px 0 100px; }
+  .checkout-section { padding-bottom: 70px; }
+  .checkout-section + .checkout-section { padding-top: 68px; }
+  .order-item { grid-template-columns: 140px minmax(0, 1fr); gap: 28px; }
+  .order-item__image { width: 140px; height: 140px; }
+  .form-row { gap: 18px; }
+  .postal-row { grid-template-columns: minmax(0, 1fr) 110px; gap: 12px; }
+  .payment-method { max-width: 560px; }
+  .agreement { padding: 20px 18px; }
+}
+
+@media (min-width: 1024px) {
+  .checkout { width: min(900px, calc(100% - 96px)); }
+  .checkout-heading, .checkout-step { max-width: 900px; }
+  .checkout-section h2, .billing h2 { font-size: 22px; }
+  .form-group { margin-top: 30px; }
+  input[type="text"], input[type="email"], input[type="tel"], select, textarea { min-height: 48px; }
+  .postal-button { min-height: 48px; }
+  .billing { padding-top: 68px; }
+  .confirm-button, .order-button { min-height: 58px; font-size: 15px; }
+}
+
+@media (min-width: 1440px) {
+  .checkout { max-width: 980px; }
+  .checkout-heading, .checkout-step { max-width: 980px; }
+  .checkout-section { padding-bottom: 78px; }
+}
+

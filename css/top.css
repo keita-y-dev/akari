@@ -184,6 +184,21 @@ button {
   background: transparent;
 }
 
+.button--hero,
+.button--outline {
+  transition:
+    background-color .25s ease,
+    border-color .25s ease,
+    color .25s ease;
+}
+
+.button--hero:hover,
+.button--outline:hover {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--white);
+}
+
 .button--text {
   position: relative;
   margin: 28px auto 0;
@@ -579,7 +594,7 @@ button {
 
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 1024px) {
 
   .category-grid {
     grid-template-columns: repeat(2, minmax(0, 390px));
@@ -592,3 +607,178 @@ button {
   }
 
 }
+
+/* =========================================================
+   RESPONSIVE 768 / 1024 / 1440
+========================================================= */
+@media (min-width: 768px) {
+  .pickup-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+  .pickup-card__image { width: 100%; }
+  .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 24px; }
+  .brand-story { max-width: 1200px; margin: 0 auto; }
+  .brand-story__image { width: min(72%, 760px); margin: 0 auto; aspect-ratio: 16 / 10; }
+  .brand-story__body { max-width: 680px; margin: 0 auto; padding-top: 34px; }
+  .instagram-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .newsletter-form { display: flex; align-items: stretch; max-width: 620px; margin: 0 auto; }
+  .newsletter-form input { height: 48px; }
+  .button--submit { min-width: 150px; margin: 0 0 0 12px; }
+}
+
+@media (min-width: 1024px) {
+  /*
+   * 1024px前後は、PCレイアウトへ切り替えつつ
+   * 情報が詰まって見えないよう余白と文字サイズを確保。
+   */
+  .hero__image {
+    aspect-ratio: 16 / 7.8;
+    min-height: 560px;
+    max-height: 680px;
+    object-position: center center;
+  }
+
+  .hero__content {
+    left: 72px;
+    bottom: 72px;
+  }
+
+  .hero__title {
+    font-size: 44px;
+  }
+
+  .hero__text {
+    font-size: 18px;
+    line-height: 1.9;
+  }
+
+  .section__inner {
+    padding: 88px 56px;
+  }
+
+  .section__inner--wide {
+    padding-inline: 56px;
+  }
+
+  .section-title {
+    margin-bottom: 42px;
+    font-size: 26px;
+    line-height: 1.2;
+    letter-spacing: .08em;
+  }
+
+  .section-lead {
+    margin-top: -18px;
+    margin-bottom: 32px;
+    font-size: 16px;
+  }
+
+  .category-grid {
+    width: 100%;
+    max-width: none;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  .category-card__image {
+    max-width: none;
+  }
+
+  .category-card__title {
+    margin-top: 14px;
+    margin-bottom: 6px;
+    font-size: 19px;
+  }
+
+  .category-card__list {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 42px 28px;
+  }
+
+  .pickup-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 42px;
+    margin-top: 38px;
+  }
+
+  .product-card--ranking {
+    flex-basis: calc((100% - 72px) / 4);
+  }
+
+  /*
+   * ブランドストーリーは1024pxでは横並びにせず、
+   * 見出し・画像・本文をすべて中央に揃える。
+   */
+  .brand-story .section__inner {
+    text-align: center;
+  }
+
+  .brand-story .section-title {
+    margin-bottom: 44px;
+  }
+
+  .brand-story__image {
+    width: min(72%, 760px);
+    margin: 0 auto;
+    aspect-ratio: 16 / 10;
+  }
+
+  .brand-story__body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 20px 0;
+    text-align: center;
+  }
+
+  .brand-story__title {
+    margin-bottom: 22px;
+    font-size: 20px;
+  }
+
+  .brand-story__body p {
+    margin-bottom: 18px;
+    font-size: 16px;
+    line-height: 2;
+  }
+
+  .instagram__title,
+  .newsletter__title {
+    font-size: 20px;
+  }
+
+  .instagram__text,
+  .newsletter__text {
+    font-size: 16px;
+    line-height: 2;
+  }
+
+  .instagram-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .instagram__account {
+    font-size: 15px;
+  }
+
+  .newsletter-form input {
+    font-size: 15px;
+  }
+
+  .newsletter__note {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .section__inner { max-width: 1280px; padding-top: 110px; padding-bottom: 110px; }
+  .section__inner--wide { max-width: 1360px; margin-inline: auto; }
+  .hero__content { left: calc((100vw - 1360px) / 2 + 40px); }
+  .category-grid { gap: 36px; }
+  .product-grid { gap: 48px 30px; }
+  .pickup-list { gap: 44px; }
+}
+

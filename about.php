@@ -82,6 +82,7 @@
       <div class="story-text">
         <p>
           忙しい日々の中で、お気に入りの器でお茶を飲む。
+          <br class="story-break">
           季節の花を小さな花瓶に飾る。
         </p>
 

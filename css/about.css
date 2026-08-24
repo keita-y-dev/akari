@@ -288,3 +288,259 @@ img {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* PCのみstory本文を1行分で収めるための改行 */
+.story-break {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .story-break {
+    display: block;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE 768 / 1024 / 1440
+========================================================= */
+@media (min-width: 768px) {
+  .about-heading {
+    padding-top: 60px;
+  }
+
+  .about-heading .section-label {
+    font-size: 26px;
+    line-height: 1.5;
+  }
+
+  .about-heading h1 {
+    margin-top: 8px;
+    font-size: 24px;
+    line-height: 1.7;
+  }
+
+  .about-intro,
+  .about-story,
+  .about-values,
+  .about-selection,
+  .about-cta {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ==============================
+     intro
+  ============================== */
+
+  .about-intro {
+    padding-top: 60px;
+    padding-bottom: 76px;
+  }
+
+  .about-image,
+  .story-image,
+  .selection-image {
+    width: min(620px, calc(100% - 80px));
+  }
+
+  .about-intro__text,
+  .story-text,
+  .selection-text {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-left: 40px;
+    padding-right: 40px;
+    text-align: center;
+  }
+
+  .about-intro__text {
+    padding-top: 36px;
+  }
+
+  .about-intro__text h2 {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 28px;
+    font-size: 26px;
+    line-height: 1.8;
+    text-align: center;
+  }
+
+  .about-intro__text p,
+  .story-text p,
+  .selection-text p {
+    font-size: 17px;
+    line-height: 2.2;
+    text-align: center;
+  }
+
+  /* ==============================
+     story
+  ============================== */
+
+  .about-story {
+    padding-top: 64px;
+    padding-bottom: 80px;
+  }
+
+  .story-image {
+    margin-top: 36px;
+  }
+
+  .story-text {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 36px 20px 0;
+    text-align: center;
+  }
+
+  .story-text p {
+    margin: 0;
+    color: var(--sub-text-color);
+    font-family: "Noto Serif JP", serif;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    line-height: 2.2;
+    text-align: center;
+  }
+
+  .story-text p + p {
+    margin-top: 32px;
+  }
+  
+  /* ==============================
+     values
+  ============================== */
+
+  .about-values {
+    padding-top: 64px;
+    padding-bottom: 80px;
+  }
+
+  .values-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 42px;
+  }
+
+  .value-item {
+    padding: 48px 32px 54px;
+    border-top: 1px solid var(--line-color);
+    border-right: 1px solid var(--line-color);
+    border-bottom: 1px solid var(--line-color);
+    text-align: center;
+  }
+
+  .value-item:last-child {
+    border-right: 0;
+  }
+
+  .value-number {
+    margin-bottom: 28px;
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .value-item h3 {
+    font-size: 24px;
+    line-height: 1.8;
+  }
+
+  .value-text {
+    margin: 28px 0 0;
+    font-size: 16px;
+    line-height: 2.2;
+    text-align: center;
+  }
+
+  /* ==============================
+     selection
+  ============================== */
+
+  .about-selection {
+    padding-top: 64px;
+    padding-bottom: 80px;
+  }
+
+  .selection-image {
+    margin-top: 36px;
+  }
+
+  .selection-text {
+    padding-top: 38px;
+  }
+
+  .selection-text p + p {
+    margin-top: 32px;
+  }
+
+  /* ==============================
+     CTA
+  ============================== */
+
+  .about-cta {
+    padding-top: 76px;
+    padding-bottom: 82px;
+  }
+
+  .about-cta h2 {
+    margin-bottom: 52px;
+    font-size: 24px;
+    line-height: 2.1;
+    text-align: center;
+  }
+
+  .cta-button {
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 17px;
+    line-height: 1.9;
+  }
+
+  .feature-link {
+    margin-top: 28px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 72px 48px 82px; }
+  .about-image { width: 100%; margin: 0; }
+  .about-intro__text { max-width: none; margin: 0; padding: 0; }
+  .about-intro__text h2 { margin-left: 0; text-align: center; }
+  .about-story, .about-selection { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 72px 48px; }
+  .about-story .section-heading, .about-selection .section-heading { grid-column: 1 / -1; }
+  .story-image, .selection-image { width: 100%; margin: 0; }
+  .story-text, .selection-text { max-width: none; margin: 0; padding: 0; }
+  .about-selection .selection-image { order: 3; }
+  .about-selection .selection-text { order: 2; }
+  .about-values { padding: 68px 48px 72px; }
+  .about-cta { padding: 84px 48px 90px; }
+  .value-item h3 {
+  font-size: 22px;
+  line-height: 1.8;
+  white-space: nowrap;
+  }
+  .value-text {
+  margin: 28px 0 0;
+  font-size: 16px;
+  line-height: 2.2;
+  text-align: center;
+  }
+
+  .value-item:first-child .value-text {
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (min-width: 1440px) {
+  .about-intro, .about-story, .about-values, .about-selection, .about-cta { max-width: 1280px; }
+  .about-intro, .about-story, .about-selection { gap: 88px; padding-left: 64px; padding-right: 64px; }
+  .about-values { padding-left: 64px; padding-right: 64px; }
+}
+

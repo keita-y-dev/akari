@@ -267,6 +267,19 @@ img {
   text-decoration: none;
 }
 
+.closing-button {
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.closing-button:hover {
+  background-color: var(--bg-color);
+  border-color: var(--bg-color);
+  color: var(--text-color);
+}
+
 .closing-about {
   display: inline-block;
   margin-top: 16px;
@@ -285,3 +298,181 @@ img {
 /* ==============================
    footer
 ============================== */
+
+/* =========================================================
+   RESPONSIVE 768 / 1024 / 1440
+========================================================= */
+@media (min-width: 768px) {
+  .feature-heading {
+    padding-top: 60px;
+  }
+
+  .feature-heading .section-label {
+    font-size: 26px;
+    line-height: 1.5;
+  }
+
+  .feature-heading h1 {
+    margin-top: 8px;
+    font-size: 24px;
+    line-height: 1.7;
+  }
+
+  .journal-hero,
+  .scene {
+    width: min(760px, calc(100% - 80px));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .journal-hero {
+    padding-top: 56px;
+    padding-bottom: 76px;
+  }
+
+  .journal-hero__image,
+  .scene__image {
+    height: auto;
+    aspect-ratio: 16 / 8.5;
+  }
+
+  .journal-hero__content {
+    padding-top: 36px;
+  }
+
+  .journal-title {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .journal-hero__content h2 {
+    margin-top: 8px;
+    font-size: 24px;
+    line-height: 1.8;
+  }
+
+  .journal-lead {
+    margin-top: 16px;
+    font-size: 17px;
+    line-height: 2.2;
+  }
+
+  .journal-hero__content time {
+    margin-top: 22px;
+    font-size: 14px;
+  }
+
+  .scene {
+    padding-top: 72px;
+    padding-bottom: 80px;
+  }
+
+  .scene-number {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .scene__heading h2 {
+    margin-top: 8px;
+    margin-bottom: 32px;
+    font-size: 24px;
+    line-height: 1.8;
+  }
+
+  .scene__text {
+    margin-top: 36px;
+    font-size: 17px;
+    line-height: 2.2;
+  }
+
+  .product-list {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    margin-top: 40px;
+  }
+
+  .scene__link {
+    margin-top: 40px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .feature-closing {
+    height: 400px;
+  }
+
+  .feature-closing__content {
+    padding: 0 40px;
+  }
+
+  .feature-closing__content h2 {
+    margin-bottom: 32px;
+    font-size: 24px;
+    line-height: 2.1;
+  }
+
+  .closing-button {
+    width: 190px;
+    padding: 9px 24px;
+    font-size: 14px;
+    line-height: 1.8;
+    white-space: nowrap;
+  }
+  .closing-about {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+}
+
+@media (min-width: 1024px) {
+  .scene { width: min(1080px, calc(100% - 96px)); }
+
+  .scene { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px 60px; align-items: center; padding-top: 72px; padding-bottom: 76px; }
+  .scene__heading { grid-column: 1 / -1; }
+  .scene__text { margin-top: 0; }
+  .scene--reverse {
+    grid-template-areas:
+      "heading heading"
+      "text image"
+      "products products"
+      "link link";
+  }
+
+  .scene--reverse .scene__heading {
+    grid-area: heading;
+  }
+
+  .scene--reverse .scene__image {
+    grid-area: image;
+  }
+
+  .scene--reverse .scene__text {
+    grid-area: text;
+  }
+
+  .scene--reverse .product-list {
+    grid-area: products;
+  }
+
+  .scene--reverse .scene__link {
+    grid-area: link;
+  }
+  .product-list, .scene__link { grid-column: 1 / -1; }
+  .product-list { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 900px; }
+  .feature-closing { height: 460px; }
+  .feature-closing__content h2 { font-size: 28px; }
+
+  
+}
+
+@media (min-width: 1440px) {
+  .journal-hero, .scene { max-width: 1200px; }
+  .journal-hero { gap: 80px; }
+  .scene { gap: 56px 80px; }
+  .feature-closing { height: 520px; }
+}
+
