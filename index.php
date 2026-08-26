@@ -63,10 +63,24 @@ switch ($rankingType) {
 
   <main>
     <section class="hero">
-      <img class="hero__image" src="images/top/hero.png" alt="花瓶とマグカップのある静かな暮らしの風景">
+      <picture class="hero__picture">
+        <source
+          media="(max-width: 767px)"
+          srcset="images/top/hero-sp.png"
+        >
+        <img
+          class="hero__image"
+          src="images/top/hero.png"
+          alt="花瓶とマグカップのある静かな暮らしの風景"
+        >
+      </picture>
+
       <div class="hero__content">
         <h1 class="hero__title">暮らしに、<br>小さな灯りを。</h1>
-        <p class="hero__text">毎日の風景になじむ、<br>長く愛せる暮らしの道具を集めました。</p>
+        <p class="hero__text">
+          毎日の風景になじむ、<br>
+          長く愛せる暮らしの道具を集めました。
+        </p>
         <a class="button button--hero" href="products">商品を見る</a>
       </div>
     </section>
