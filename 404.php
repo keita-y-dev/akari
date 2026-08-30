@@ -8,6 +8,8 @@ http_response_code(404);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link rel="icon" href="images/logos/favicon.svg" type="image/svg+xml">
+
   <title>ページが見つかりません | 灯々</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">

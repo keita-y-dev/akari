@@ -763,3 +763,60 @@ body.is-menu-open {
   }
 
 }
+
+/* =========================
+   Brand Logo
+========================= */
+
+.header__logo {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 132px;
+  height: 100%;
+  color: var(--common-white);
+  line-height: 1;
+  text-decoration: none;
+}
+
+.header__logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 42px;
+}
+
+.footer__logo {
+  display: flex;
+  align-items: center;
+  width: 180px;
+  max-width: 62vw;
+  margin: 0 0 18px;
+  color: inherit;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.footer__logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .header__logo { width: 148px; }
+  .header__logo img { max-height: 46px; }
+  .footer__logo { width: 200px; margin-bottom: 20px; }
+}
+
+@media (min-width: 1024px) {
+  .header__logo { width: 158px; }
+  .header__logo img { max-height: 48px; }
+  .footer__logo { width: 220px; margin-bottom: 22px; }
+}
+
+@media (min-width: 1440px) {
+  .header__logo { width: 166px; }
+  .footer__logo { width: 230px; }
+}

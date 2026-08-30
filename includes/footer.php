@@ -1,7 +1,9 @@
 <footer class="footer">
   <div class="footer__inner">
     <div class="footer__brand">
-      <p class="footer__logo">灯々</p>
+      <a class="footer__logo" href="index" aria-label="灯々（あかり） ホームへ">
+        <img src="images/logos/logo_white.svg" alt="灯々（あかり）">
+      </a>
       <p>東京都杉並区x xx xx</p>
       <a href="mailto:info@akari.example">info@akari.example</a>
     </div>

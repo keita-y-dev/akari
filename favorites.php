@@ -18,6 +18,8 @@ $products = fetchAllProductsWithImage($pdo);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link rel="icon" href="images/logos/favicon.svg" type="image/svg+xml">
+
   <title>お気に入り | 灯々</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">

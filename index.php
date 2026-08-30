@@ -52,6 +52,8 @@ switch ($rankingType) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" href="images/logos/favicon.svg" type="image/svg+xml">
   <meta name="description" content="暮らしに、小さな灯りを。生活雑貨店「灯々」のオンラインショップです。">
   <title>灯々 | 暮らしに、小さな灯りを。</title>
   <link rel="stylesheet" href="css/reset.css">

@@ -140,6 +140,7 @@ $categoryLabel = categoryLabel((string)$product['category_name']);
 <html lang="ja">
 
 <head>
+  <link rel="icon" href="images/logos/favicon.svg" type="image/svg+xml">
 
   <meta charset="UTF-8">
 

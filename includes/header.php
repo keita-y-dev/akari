@@ -6,7 +6,9 @@
         <span></span>
       </button>
 
-      <a class="header__logo" href="index">灯々</a>
+      <a class="header__logo" href="index" aria-label="灯々（あかり） ホームへ">
+        <img src="images/logos/logo_white.svg" alt="灯々（あかり）">
+      </a>
 
       <a class="header__cart" href="cart" aria-label="ショッピングカートを見る">
         <img src="images/icons/shopping-bag.svg" alt="">
