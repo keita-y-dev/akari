@@ -310,3 +310,22 @@ body {
   }
 
 }
+
+/* =========================
+   Narrow screen overflow fix
+========================= */
+
+@media (max-width: 380px) {
+  .favorites-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0;
+  }
+
+  .favorites-shop-link {
+    white-space: normal;
+  }
+}
+

@@ -1021,3 +1021,16 @@ main.is-short-content {
   .recommend { max-width: 1280px; }
 }
 
+/* =========================
+   Overflow safety
+========================= */
+
+.product-main,
+.product-gallery,
+.product-info,
+.product-information,
+.story,
+.recommend {
+  min-width: 0;
+}
+

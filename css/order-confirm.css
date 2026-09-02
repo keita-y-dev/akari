@@ -559,3 +559,22 @@ button {
   .confirmation-description, .confirmation { max-width: 980px; }
 }
 
+/* =========================
+   Narrow screen overflow fix
+========================= */
+
+@media (max-width: 380px) {
+  .checkout-step {
+    width: calc(100% - 36px);
+  }
+
+  .step {
+    min-width: 44px;
+  }
+
+  .step-line {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+}
+

@@ -903,3 +903,17 @@ input {
   .recommend { max-width: 1280px; }
 }
 
+/* =========================
+   Overflow safety
+========================= */
+
+.cart-item__top,
+.cart-item__info,
+.cart-item__bottom,
+.cart-summary,
+.cart-guide,
+.recommend,
+.recommend__slider {
+  min-width: 0;
+}
+

@@ -820,3 +820,39 @@ body.is-menu-open {
   .header__logo { width: 166px; }
   .footer__logo { width: 230px; }
 }
+
+/* =========================================================
+   HORIZONTAL OVERFLOW SAFETY
+========================================================= */
+
+html,
+body {
+  max-width: 100%;
+}
+
+body {
+  overflow-x: clip;
+}
+
+@supports not (overflow-x: clip) {
+  body {
+    overflow-x: hidden;
+  }
+}
+
+main,
+section,
+.header,
+.header__inner,
+.footer,
+.footer__inner,
+.global-nav__inner {
+  min-width: 0;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+}
+

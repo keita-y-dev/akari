@@ -109,45 +109,43 @@ switch ($rankingType) {
       <div class="section__inner">
         <h2 class="section-title">CATEGORY</h2>
 
+        <?php
+          $categoryCards = [
+            [
+              'slug' => 'kitchen',
+              'name' => 'Kitchen',
+              'image' => 'images/category/kitchen.png',
+              'alt' => 'Kitchenカテゴリーのイラスト',
+              'items' => ['マグカップ', 'プレート', 'カトラリー'],
+            ],
+            [
+              'slug' => 'interior',
+              'name' => 'Interior',
+              'image' => 'images/category/interior.png',
+              'alt' => 'Interiorカテゴリーのイラスト',
+              'items' => ['フラワーベース', 'キャンドルホルダー', 'オブジェ'],
+            ],
+            [
+              'slug' => 'fabric',
+              'name' => 'Fabric',
+              'image' => 'images/category/fabric.png',
+              'alt' => 'Fabricカテゴリーのイラスト',
+              'items' => ['リネンクロス', 'クッションカバー', 'ブランケット'],
+            ],
+            [
+              'slug' => 'aroma',
+              'name' => 'Aroma',
+              'image' => 'images/category/aroma.png',
+              'alt' => 'Aromaカテゴリーのイラスト',
+              'items' => ['アロマキャンドル', 'ディフューザー'],
+            ],
+          ];
+        ?>
+
         <div class="category-grid">
-          <article class="category-card">
-            <img class="category-card__image" src="images/category/kitchen.png" alt="Kitchenカテゴリーのイラスト">
-            <h3 class="category-card__title">Kitchen</h3>
-            <ul class="category-card__list">
-              <li>マグカップ</li>
-              <li>プレート</li>
-              <li>カトラリー</li>
-            </ul>
-          </article>
-
-          <article class="category-card">
-            <img class="category-card__image" src="images/category/interior.png" alt="Interiorカテゴリーのイラスト">
-            <h3 class="category-card__title">Interior</h3>
-            <ul class="category-card__list">
-              <li>フラワーベース</li>
-              <li>キャンドルホルダー</li>
-              <li>オブジェ</li>
-            </ul>
-          </article>
-
-          <article class="category-card">
-            <img class="category-card__image" src="images/category/fabric.png" alt="Fabricカテゴリーのイラスト">
-            <h3 class="category-card__title">Fabric</h3>
-            <ul class="category-card__list">
-              <li>リネンクロス</li>
-              <li>クッションカバー</li>
-              <li>ブランケット</li>
-            </ul>
-          </article>
-
-          <article class="category-card">
-            <img class="category-card__image" src="images/category/aroma.png" alt="Aromaカテゴリーのイラスト">
-            <h3 class="category-card__title">Aroma</h3>
-            <ul class="category-card__list">
-              <li>アロマキャンドル</li>
-              <li>ディフューザー</li>
-            </ul>
-          </article>
+          <?php foreach ($categoryCards as $categoryCard): ?>
+            <?php include __DIR__ . '/includes/category-card.php'; ?>
+          <?php endforeach; ?>
         </div>
 
         <a class="button button--outline" href="products">すべてのカテゴリーを見る</a>

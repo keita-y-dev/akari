@@ -544,3 +544,22 @@ img {
   .about-values { padding-left: 64px; padding-right: 64px; }
 }
 
+/* =========================
+   Narrow screen overflow fix
+========================= */
+
+@media (max-width: 480px) {
+  .about-intro__text {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .about-intro__text h2 {
+    width: auto;
+    max-width: 100%;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+}
+

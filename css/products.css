@@ -357,3 +357,20 @@ img {
   .products-about { max-width: 1200px; }
 }
 
+/* =========================
+   Narrow screen overflow fix
+========================= */
+
+@media (max-width: 380px) {
+  .products-toolbar {
+    gap: 12px;
+  }
+
+  .sort-select {
+    min-width: 0;
+    width: 138px;
+    padding-right: 28px;
+    padding-left: 14px;
+  }
+}
+
