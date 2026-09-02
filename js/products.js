@@ -336,6 +336,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* ==============================
+     INITIAL CATEGORY FROM URL
+  ============================== */
+
+  const requestedCategory =
+    new URLSearchParams(
+      window.location.search
+    ).get("category");
+
+
+  if (requestedCategory) {
+
+    const requestedTab =
+      [...tabs].find((tab) => {
+
+        return (
+          tab.dataset.category ===
+          requestedCategory
+        );
+
+      });
+
+
+    if (requestedTab) {
+
+      currentCategory =
+        requestedCategory;
+
+
+      tabs.forEach((tab) => {
+
+        tab.classList.toggle(
+          "is-active",
+          tab === requestedTab
+        );
+
+      });
+
+    }
+
+  }
+
+
+  /* ==============================
      INITIAL
   ============================== */
 
